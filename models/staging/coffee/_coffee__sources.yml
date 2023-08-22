@@ -1,0 +1,49 @@
+version: 2
+
+sources:
+  - name: coffee
+    meta:
+      external_location: "s3://slunsford-analytics/airbyte/coffee_log/{name}/*/*.parquet"
+    tables:
+      - name: coffees
+        columns:
+          - name: _airtable_id
+            tests:
+              - unique
+              - not_null
+          - name: name
+            tests:
+              - not_null
+      - name: flavors
+        columns:
+          - name: _airtable_id
+            tests:
+              - unique
+              - not_null
+          - name: flavor
+            tests:
+              - not_null
+      - name: origins
+        columns:
+          - name: _airtable_id
+            tests:
+              - unique
+              - not_null
+          - name: name
+            tests:
+              - not_null
+      - name: ratings
+        columns:
+          - name: _airtable_id
+            tests:
+              - unique
+              - not_null
+          - name: coffee
+            tests:
+              - not_null
+          - name: date
+            tests:
+              - not_null
+          - name: rating
+            tests:
+              - not_null
