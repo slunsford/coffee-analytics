@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@main
-      - uses: actions/setup-python
+      - uses: actions/setup-python@v1
         with:
           python-version: "3.11.x"
       - name: Install dependencies
