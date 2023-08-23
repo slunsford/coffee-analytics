@@ -1,0 +1,16 @@
+## GitHub profile
+
+coffee:
+  outputs:
+    prod:
+      type: duckdb
+      path: "md:coffee"
+      threads: 4
+      extensions:
+        - httpfs
+        - parquet
+      settings:
+      s3_region: eu-central-1
+      s3_access_key_id: "${{ secrets.DUCKDB_S3_KEY_ID }}"
+      s3_secret_access_key: "${{ secrets.DUCKDB_S3_SECRET_KEY }}"
+  target: prod
