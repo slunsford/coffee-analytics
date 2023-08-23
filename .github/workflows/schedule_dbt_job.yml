@@ -10,17 +10,10 @@ on:
       # run on push to development branch
       - main
 env:
-<<<<<<< Updated upstream
-  dbt_profiles_dir: ./.github/
-  motherduck_token: ${{ secrets.motherduck_token }}
-  duckdb_s3_key_id: ${{ secrets.duckdb_s3_key_id }}
-  duckdb_s3_secret_key: ${{ secrets.duckdb_s3_secret_key }}
-=======
-  DBT_PROFILES_DIR: .github
+  DBT_PROFILES_DIR: ".github"
   motherduck_token: ${{ secrets.motherduck_token }}
   DUCKDB_S3_KEY_ID: ${{ secrets.DUCKDB_S3_KEY_ID }}
   DUCKDB_S3_SECRET_KEY: ${{ secrets.DUCKDB_S3_SECRET_KEY }}
->>>>>>> Stashed changes
 
 jobs:
   schedule_dbt_job:
@@ -39,8 +32,4 @@ jobs:
           dbt deps
       # dbt related commands here - run use --target prod/dev to run for specific environments
       - name: Run dbt models
-<<<<<<< Updated upstream
-        run: dbt build
-=======
         run: dbt build --target prod
->>>>>>> Stashed changes
