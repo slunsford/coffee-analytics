@@ -1,0 +1,35 @@
+name: schedule_dbt_job
+
+on:
+  schedule:
+    # run at 7AM every single day
+    # https://crontab.guru <-- for generating CRON expression
+    - cron: "0 7 * * *"
+  push:
+    branches:
+      # run on push to development branch
+      - main
+env:
+  dbt_profiles_dir: ./.github/
+  motherduck_token: ${{ secrets.motherduck_token }}
+  duckdb_s3_key_id: ${{ secrets.duckdb_s3_key_id }}
+  duckdb_s3_secret_key: ${{ secrets.duckdb_s3_secret_key }}
+
+jobs:
+  schedule_dbt_job:
+    name: schedule_dbt_job
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@main
+      - uses: actions/setup-python@v1
+        with:
+          python-version: "3.11.x"
+      - name: Install dependencies
+        run: |
+          pip install dbt-duckdb==1.6
+          dbt deps
+      # dbt related commands here - run use --target prod/dev to run for specific environments
+      - name: Run dbt models
+        run: dbt build
