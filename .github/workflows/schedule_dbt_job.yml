@@ -14,8 +14,8 @@ on:
 env:
   DBT_PROFILES_DIR: ".github"
   motherduck_token: ${{ secrets.motherduck_token }}
-  DUCKDB_S3_KEY_ID: ${{ secrets.DUCKDB_S3_KEY_ID }}
-  DUCKDB_S3_SECRET_KEY: ${{ secrets.DUCKDB_S3_SECRET_KEY }}
+  DBT_ENV_SECRET_S3_KEY_ID: ${{ secrets.DBT_ENV_SECRET_S3_KEY_ID }}
+  DBT_ENV_SECRET_S3_SECRET_KEY: ${{ secrets.DBT_ENV_SECRET_S3_SECRET_KEY }}
 
 jobs:
   schedule_dbt_job:
