@@ -1,0 +1,101 @@
+version: 2
+
+models:
+  - name: coffees
+    columns:
+      - name: coffee_id
+        tests:
+          - unique
+          - not_null
+      - name: coffee_name
+        tests:
+          - not_null
+      - name: roaster
+        tests:
+          - not_null
+      - name: country
+        tests:
+          - not_null
+      - name: world_region
+        tests:
+          - not_null
+      - name: country_region
+      - name: varietal
+      - name: caffeine_content
+        tests:
+          - not_null
+      - name: roast_darkness
+      - name: process
+      - name: elevation_min
+      - name: elevation_max
+      - name: elevation
+        tests:
+          - not_null
+      - name: flavor_profile_key
+        tests:
+          - not_null
+      - name: date_added
+        tests:
+          - not_null
+      - name: first_rating_date
+      - name: most_recent_rating_date
+      - name: most_recent_rating
+      - name: average_rating
+      - name: weighted_avg_rating
+      - name: number_of_ratings
+        tests:
+          - not_null
+
+  - name: flavor_profiles
+    columns:
+      - name: flavor_profile_key
+        tests:
+          - not_null
+      - name: flavor_id
+        tests:
+          - not_null
+
+  - name: flavors
+    columns:
+      - name: flavor_id
+        tests:
+          - unique
+          - not_null
+      - name: flavor
+        tests:
+          - not_null
+      - name: flavor_category
+        tests:
+          - not_null
+      - name: average_rating
+      - name: first_rating_date
+      - name: most_recent_rating_date
+      - name: weighted_avg_rating
+      - name: number_of_ratings
+        tests:
+          - not_null
+
+  - name: ratings
+    columns:
+      - name: rating_id
+        tests:
+          - unique
+          - not_null
+      - name: coffee_id
+        tests:
+          - not_null
+      - name: rating_date
+        tests:
+          - not_null
+      - name: rating
+        tests:
+          - not_null
+      - name: rating_age
+        tests:
+          - not_null
+      - name: weight
+        tests:
+          - not_null
+      - name: weighted_rating
+        tests:
+          - not_null

@@ -1,0 +1,76 @@
+version: 2
+
+models:
+  - name: stg_airtable_coffee__coffees
+    columns:
+      - name: coffee_id
+        tests:
+          - unique
+          - not_null
+      - name: coffee_name
+        tests:
+          - not_null
+      - name: roaster
+        tests:
+          - not_null
+      - name: origin_id
+      - name: country_region
+      - name: varietal
+      - name: caffeine_content
+        tests:
+          - not_null
+      - name: roast_darkness
+      - name: process
+      - name: elevation_min
+      - name: elevation_max
+      - name: flavor_ids
+        tests:
+          - not_null
+      - name: date_added
+        tests:
+          - not_null
+      - name: _airtable_created_time
+        tests:
+          - not_null
+  - name: stg_airtable_coffee__flavors
+    columns:
+      - name: flavor_id
+        tests:
+          - unique
+          - not_null
+      - name: flavor_category
+        tests:
+          - not_null
+      - name: _airtable_created_time
+        tests:
+          - not_null
+  - name: stg_airtable_coffee__origins
+    columns:
+      - name: origin_id
+        tests:
+          - unique
+          - not_null
+      - name: country_name
+        tests:
+          - not_null
+      - name: _airtable_created_time
+        tests:
+          - not_null
+  - name: stg_airtable_coffee__ratings
+    columns:
+      - name: rating_id
+        tests:
+          - unique
+          - not_null
+      - name: coffee_id
+        tests:
+          - not_null
+      - name: rating_date
+        tests:
+          - not_null
+      - name: rating
+        tests:
+          - not_null
+      - name: _airtable_created_time
+        tests:
+          - not_null
