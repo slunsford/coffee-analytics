@@ -1,0 +1,118 @@
+version: 2
+
+models:
+  - name: int_coffees_with_flavor_profile_key
+    columns:
+      - name: coffee_id
+        tests:
+          - unique
+          - not_null
+      - name: coffee_name
+        tests:
+          - not_null
+      - name: roaster
+        tests:
+          - not_null
+      - name: origin_id
+      - name: country_region
+      - name: varietal
+      - name: caffeine_content
+        tests:
+          - not_null
+      - name: roast_darkness
+      - name: process
+      - name: elevation_min
+      - name: elevation_max
+      - name: flavor_ids
+        tests:
+          - not_null
+      - name: flavor_profile_key
+        tests:
+          - not_null
+      - name: date_added
+        tests:
+          - not_null
+
+  - name: int_coffees_joined_to_origins
+    columns:
+      - name: coffee_id
+        tests:
+          - unique
+          - not_null
+      - name: roaster
+        tests:
+          - not_null
+      - name: origin_id
+      - name: country
+        tests:
+          - not_null
+      - name: world_region
+        tests:
+          - not_null
+      - name: country_region
+      - name: varietal
+      - name: caffeine_content
+        tests:
+          - not_null
+      - name: roast_darkness
+      - name: process
+      - name: elevation_min
+      - name: elevation_max
+      - name: flavor_ids
+        tests:
+          - not_null
+      - name: flavor_profile_key
+        tests:
+          - not_null
+      - name: date_added
+        tests:
+          - not_null
+
+  - name: int_weighted_ratings
+    columns:
+      - name: rating_id
+        tests:
+          - unique
+          - not_null
+      - name: coffee_id
+        tests:
+          - not_null
+      - name: rating_date
+        tests:
+          - not_null
+      - name: rating
+        tests:
+          - not_null
+      - name: rating_age
+        tests:
+          - not_null
+      - name: weight
+        tests:
+          - not_null
+      - name: weighted_rating
+        tests:
+          - not_null
+
+  - name: int_ratings_by_flavor
+    columns:
+      - name: rating_id
+        tests:
+          - not_null
+      - name: flavor_id
+        tests:
+          - not_null
+      - name: rating_date
+        tests:
+          - not_null
+      - name: rating
+        tests:
+          - not_null
+      - name: rating_age
+        tests:
+          - not_null
+      - name: weight
+        tests:
+          - not_null
+      - name: weighted_rating
+        tests:
+          - not_null

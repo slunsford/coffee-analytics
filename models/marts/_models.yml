@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg_airtable_coffee__coffees
+  - name: coffees
     columns:
       - name: coffee_id
         tests:
@@ -13,7 +13,12 @@ models:
       - name: roaster
         tests:
           - not_null
-      - name: origin_id
+      - name: country
+        tests:
+          - not_null
+      - name: world_region
+        tests:
+          - not_null
       - name: country_region
       - name: varietal
       - name: caffeine_content
@@ -23,40 +28,54 @@ models:
       - name: process
       - name: elevation_min
       - name: elevation_max
-      - name: flavor_ids
+      - name: elevation
+        tests:
+          - not_null
+      - name: flavor_profile_key
         tests:
           - not_null
       - name: date_added
         tests:
           - not_null
-      - name: _airtable_created_time
+      - name: first_rating_date
+      - name: most_recent_rating_date
+      - name: most_recent_rating
+      - name: average_rating
+      - name: weighted_avg_rating
+      - name: number_of_ratings
         tests:
           - not_null
-  - name: stg_airtable_coffee__flavors
+
+  - name: flavor_profiles
+    columns:
+      - name: flavor_profile_key
+        tests:
+          - not_null
+      - name: flavor_id
+        tests:
+          - not_null
+
+  - name: flavors
     columns:
       - name: flavor_id
         tests:
           - unique
           - not_null
+      - name: flavor
+        tests:
+          - not_null
       - name: flavor_category
         tests:
           - not_null
-      - name: _airtable_created_time
+      - name: average_rating
+      - name: first_rating_date
+      - name: most_recent_rating_date
+      - name: weighted_avg_rating
+      - name: number_of_ratings
         tests:
           - not_null
-  - name: stg_airtable_coffee__origins
-    columns:
-      - name: origin_id
-        tests:
-          - unique
-          - not_null
-      - name: country_name
-        tests:
-          - not_null
-      - name: _airtable_created_time
-        tests:
-          - not_null
-  - name: stg_airtable_coffee__ratings
+
+  - name: ratings
     columns:
       - name: rating_id
         tests:
@@ -71,6 +90,12 @@ models:
       - name: rating
         tests:
           - not_null
-      - name: _airtable_created_time
+      - name: rating_age
+        tests:
+          - not_null
+      - name: weight
+        tests:
+          - not_null
+      - name: weighted_rating
         tests:
           - not_null
