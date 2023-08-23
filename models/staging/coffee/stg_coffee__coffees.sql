@@ -4,7 +4,7 @@ with source as ( select * from {{ source('coffee', 'coffees') }} ),
          select _airtable_id as coffee_id,
                 name,
                 roaster,
-                regexp_extract(origin, 'rec\w+') as origin_id,
+                origin[1] as origin_id,
                 -- country,
                 region as country_region,
                 varietal,
@@ -26,7 +26,7 @@ with source as ( select * from {{ source('coffee', 'coffees') }} ),
                 -- rating_date_star_,
                 -- average_rating,
                 -- ratings,
-                created as date_added,
+                created.member0 as date_added,
                 _airtable_created_time
            from source
      )
