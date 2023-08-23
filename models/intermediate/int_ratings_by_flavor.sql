@@ -1,7 +1,7 @@
 with
 
-flavor_profiles as (
-	select * from {{ ref('coffee_flavor_profiles_bridge') }}
+bridge as (
+	select * from {{ ref('flavor_profiles') }}
 ),
 
 coffees as (
@@ -14,13 +14,13 @@ ratings as (
 
 flavor_ratings as (
 	select ratings.rating_id,
-		   flavor_profiles.flavor_id,
+		   bridge.flavor_id,
 		   ratings.rating,
 		   ratings.rating_date,
 		   ratings.rating_age,
 		   ratings.weight,
 		   ratings.weighted_rating
-	  from flavor_profiles
+	  from bridge
 	  join coffees
 	 using (flavor_profile_key)
 	  join ratings

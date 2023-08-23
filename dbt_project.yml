@@ -31,8 +31,9 @@ clean-targets: # directories to be removed by `dbt clean`
 models:
   coffee_analytics:
     staging:
-      +materialized: table
+      materialized: table
     intermediate:
-      +materialized: view
+      materialized: view
     marts:
-      +materialized: table
+      materialized: table
+      +schema: "marts"
