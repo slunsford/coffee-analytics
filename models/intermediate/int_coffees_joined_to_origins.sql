@@ -5,7 +5,7 @@ coffees as (
 ),
 
 origins as (
-	select * from {{ ref('stg_coffee__origins') }}
+	select * from {{ ref('stg_airtable_coffee__origins') }}
 ),
 
 coffees_and_origins_joined as (

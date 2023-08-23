@@ -1,4 +1,4 @@
-with source as ( select * from {{ source('coffee', 'origins') }} ),
+with source as ( select * from {{ source('airtable_coffee', 'origins') }} ),
 
      renamed as (
          select _airtable_id as origin_id,

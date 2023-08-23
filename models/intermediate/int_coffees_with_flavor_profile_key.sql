@@ -1,7 +1,7 @@
 with
 
 coffees as (
-	select * from {{ ref('stg_coffee__coffees') }}
+	select * from {{ ref('stg_airtable_coffee__coffees') }}
 ),
 
 coffees_with_flavor_profile_key as (

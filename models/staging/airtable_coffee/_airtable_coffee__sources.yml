@@ -1,7 +1,7 @@
 version: 2
 
 sources:
-  - name: coffee
+  - name: airtable_coffee
     meta:
       external_location: "s3://slunsford-analytics/airbyte/coffee_log/{name}/*/*.parquet"
     tables:
