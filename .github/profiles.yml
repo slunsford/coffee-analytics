@@ -5,12 +5,13 @@ coffee:
     prod:
       type: duckdb
       path: "md:coffee"
+      schema: prod
       threads: 1
       extensions:
         - httpfs
         - parquet
       settings:
-      s3_region: eu-central-1
-      s3_access_key_id: "${{ env_var(DUCKDB_S3_KEY_ID) }}"
-      s3_secret_access_key: "${{ env_var(DUCKDB_S3_SECRET_KEY) }}"
+        s3_region: eu-central-1
+        s3_access_key_id: "${{ env_var(DUCKDB_S3_KEY_ID) }}"
+        s3_secret_access_key: "${{ env_var(DUCKDB_S3_SECRET_KEY) }}"
   target: prod
