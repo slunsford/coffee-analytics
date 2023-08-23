@@ -9,6 +9,8 @@ on:
     branches:
       # run on push to development branch
       - main
+  workflow_dispatch:
+
 env:
   DBT_PROFILES_DIR: ".github"
   motherduck_token: ${{ secrets.motherduck_token }}
