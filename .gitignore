@@ -4,4 +4,3 @@ dbt_packages/
 logs/
 .nova
 .DS_Store
-/.profiles.yml
