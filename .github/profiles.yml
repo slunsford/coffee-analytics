@@ -5,7 +5,7 @@ coffee:
     prod:
       type: duckdb
       path: "md:coffee"
-      threads: 4
+      threads: 1
       extensions:
         - httpfs
         - parquet
