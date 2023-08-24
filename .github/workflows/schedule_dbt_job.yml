@@ -52,3 +52,6 @@ jobs:
         uses: actions/upload-pages-artifact@v2.0.0
         with:
           path: "target/"
+
+      - name: Deploy GitHub Pages site
+        uses: actions/deploy-pages@v1.2.9
