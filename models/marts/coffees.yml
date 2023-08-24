@@ -1,0 +1,71 @@
+version: 2
+
+models:
+  - name: coffees
+    description: "Dimension table for individual coffee products"
+    columns:
+      - name: coffee_id
+        description: "Primary key (record ID from Airtable)"
+        tests:
+          - unique
+          - not_null
+      - name: coffee_name
+        description: "Name of the coffee"
+        tests:
+          - not_null
+      - name: roaster
+        description: "Roaster"
+        tests:
+          - not_null
+      - name: country
+        description: "Country of origin"
+        tests:
+          - not_null
+      - name: world_region
+        description: "Continent/world region of origin"
+        tests:
+          - not_null
+      - name: country_region
+        description: "Locality within country of origin"
+      - name: varietal
+      - name: caffeine_content
+        description: "Decaf/regular"
+        tests:
+          - accepted_values:
+              values: ["Decaf", "Regular"]
+      - name: roast_darkness
+        description: "Light/medium/dark"
+      - name: process
+        description: "Coffee cleaning/processing method"
+      - name: elevation_min
+        description: "Minimum elevation (meters)"
+      - name: elevation_max
+        description: "Maximum elevation (meters)"
+      - name: elevation
+        description: "Elevation range"
+        tests:
+          - not_null
+      - name: flavor_profile_key
+        description: "Foreign key for `flavor_profiles`"
+        tests:
+          - relationships:
+              to: ref('flavor_profiles')
+              field: flavor_profile_key
+      - name: date_added
+        description: "Date coffee added to log"
+        tests:
+          - not_null
+      - name: first_rating_date
+        description: "Date of first rating"
+      - name: most_recent_rating_date
+        description: "Date of most recent rating"
+      - name: most_recent_rating
+        description: "Value of most recent rating"
+      - name: average_rating
+        description: "Overall average rating"
+      - name: weighted_avg_rating
+        description: "Weighted average rating by recency"
+      - name: number_of_ratings
+        description: "Count of ratings"
+        tests:
+          - not_null

@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: ratings
+    description: "Fact table for ratings of coffees"
+    columns:
+      - name: rating_id
+        description: "Primary key (record ID from Airtable)"
+        tests:
+          - unique
+          - not_null
+      - name: coffee_id
+        description: "Foreign key for `coffees`"
+        tests:
+          - relationships:
+              to: ref('coffees')
+              field: coffee_id
+      - name: rating_date
+        description: "Date the coffee was rated"
+        tests:
+          - not_null
+      - name: rating
+        description: "Rating given"
+        tests:
+          - not_null
+      - name: rating_age
+        description: "Days since rating"
+        tests:
+          - not_null
+      - name: weight
+        description: "Recency-based weight given to rating (half-life of 365 days)"
+        tests:
+          - not_null
+      - name: weighted_rating
+        description: "Rating with weighting applied"
+        tests:
+          - not_null

@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: flavors
+    description: "Outrigger/dimension table with flavors used in tasting notes of coffees"
+    columns:
+      - name: flavor_id
+        description: "Primary key (record ID from Airtable)"
+        tests:
+          - unique
+          - relationships:
+              to: ref('flavor_profiles')
+              field: flavor_id
+      - name: flavor
+        description: "Description of the flavor"
+        tests:
+          - not_null
+      - name: flavor_category
+        description: "Category of the flavor"
+        tests:
+          - not_null
+      - name: average_rating
+        description: "Overall average rating"
+      - name: first_rating_date
+        description: "Date of first rating"
+      - name: most_recent_rating_date
+        description: "Date of most recent rating"
+      - name: weighted_avg_rating
+        description: "Weighted average rating by recency"
+      - name: number_of_ratings
+        description: "Count of ratings"
+        tests:
+          - not_null
