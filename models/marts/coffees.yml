@@ -51,7 +51,7 @@ models:
           - relationships:
               to: ref('flavor_profiles')
               field: flavor_profile_key
-      - name: date_added
+      - name: added_at
         description: "Date coffee added to log"
         tests:
           - not_null

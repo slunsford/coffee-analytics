@@ -56,7 +56,7 @@ coffees_with_ratings as (
            coffees.elevation_max,
            coalesce(elevations.elevation, 'Unknown') as elevation,
            coffees.flavor_profile_key,
-           coffees.date_added,
+           coffees.added_at,
            agg_ratings.first_rating_date,
            agg_ratings.most_recent_rating_date,
            latest_ratings.most_recent_rating,

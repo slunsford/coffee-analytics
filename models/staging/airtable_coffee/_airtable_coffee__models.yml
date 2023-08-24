@@ -29,7 +29,7 @@ models:
       - name: flavor_profile_key
         tests:
           - not_null
-      - name: date_added
+      - name: added_at
         tests:
           - not_null
       - name: _airtable_created_time

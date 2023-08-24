@@ -27,7 +27,7 @@ with source as ( select * from {{ source('airtable_coffee', 'coffees') }} ),
                 -- rating_date_star_,
                 -- average_rating,
                 -- ratings,
-                created.member0 as date_added,
+                created.member0 as added_at,
                 _airtable_created_time
            from source
      )
