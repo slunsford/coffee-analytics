@@ -58,7 +58,7 @@ jobs:
         with:
           path: "target/"
 
-  deploy:
+  deploy_pages:
     # Add a dependency to the build job
     needs: schedule_dbt_job
 
