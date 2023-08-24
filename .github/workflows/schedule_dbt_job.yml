@@ -4,12 +4,18 @@ on:
   schedule:
     # run at 7AM every single day
     # https://crontab.guru <-- for generating CRON expression
-    - cron: "0 7 * * *"
+    - cron: "15 0 * * *"
   push:
     branches:
       # run on push to main branch
       - main
   workflow_dispatch:
+
+# Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+permissions:
+  contents: read
+  pages: write # to deploy to Pages
+  id-token: write # to verify the deployment originates from an appropriate source
 
 env:
   DBT_PROFILES_DIR: ".github"
@@ -25,13 +31,45 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@main
-      - uses: actions/setup-python@v1
+
+      - name: Setup Python
+        uses: actions/setup-python@v4.7.0
         with:
           python-version: "3.11.x"
+
       - name: Install dependencies
         run: |
           pip install dbt-duckdb==1.6
           dbt deps
       # dbt related commands here - run use --target prod/dev to run for specific environments
-      - name: Run dbt models
+      - name: Build dbt models
         run: dbt build --target prod
+
+      - name: Generate docs
+        run: dbt docs generate
+
+      # Configure Pages
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v3.0.6
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v2.0.0
+        with:
+          path: "target/"
+
+  deploy_pages:
+    # Add a dependency to the build job
+    needs: schedule_dbt_job
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # Specify runner + deployment step
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1.2.9
