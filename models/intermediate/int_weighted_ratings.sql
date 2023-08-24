@@ -6,7 +6,7 @@ ratings as (
 
 rating_ages as (
 	select *,
-		   date_diff('day', rating_date, current_date) as rating_age
+		   date_diff('day', rated_at, current_date) as rating_age
 	  from ratings
 ),
 

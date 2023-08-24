@@ -16,7 +16,7 @@ flavor_ratings as (
 	select ratings.rating_id,
 		   bridge.flavor_id,
 		   ratings.rating,
-		   ratings.rating_date,
+		   ratings.rated_at,
 		   ratings.rating_age,
 		   ratings.weight,
 		   ratings.weighted_rating

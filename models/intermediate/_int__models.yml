@@ -10,7 +10,7 @@ models:
       - name: coffee_id
         tests:
           - not_null
-      - name: rating_date
+      - name: rated_at
         tests:
           - not_null
       - name: rating
@@ -34,7 +34,7 @@ models:
       - name: flavor_id
         tests:
           - not_null
-      - name: rating_date
+      - name: rated_at
         tests:
           - not_null
       - name: rating

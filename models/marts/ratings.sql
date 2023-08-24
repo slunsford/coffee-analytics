@@ -7,7 +7,7 @@ ratings as (
 final as (
      select rating_id,
             coffee_id,
-            rating_date,
+            rated_at,
             rating,
             rating_age,
             weight,
