@@ -1,4 +1,4 @@
-name: schedule_dbt_job
+name: deploy_dbt_and_docs
 
 on:
   schedule:
@@ -17,16 +17,18 @@ permissions:
   pages: write # to deploy to Pages
   id-token: write # to verify the deployment originates from an appropriate source
 
-env:
-  DBT_PROFILES_DIR: ".github"
-  motherduck_token: ${{ secrets.motherduck_token }}
-  DBT_ENV_SECRET_S3_KEY_ID: ${{ secrets.DBT_ENV_SECRET_S3_KEY_ID }}
-  DBT_ENV_SECRET_S3_SECRET_KEY: ${{ secrets.DBT_ENV_SECRET_S3_SECRET_KEY }}
-
 jobs:
-  schedule_dbt_job:
-    name: schedule_dbt_job
+  deploy_dbt:
+    name: deploy_dbt
     runs-on: ubuntu-latest
+
+    environment: dbt-prod
+
+    env:
+      DBT_PROFILES_DIR: ".github"
+      motherduck_token: ${{ secrets.motherduck_token }}
+      DBT_ENV_SECRET_S3_KEY_ID: ${{ secrets.DBT_ENV_SECRET_S3_KEY_ID }}
+      DBT_ENV_SECRET_S3_SECRET_KEY: ${{ secrets.DBT_ENV_SECRET_S3_SECRET_KEY }}
 
     steps:
       - name: Check out
@@ -60,7 +62,7 @@ jobs:
 
   deploy_pages:
     # Add a dependency to the build job
-    needs: schedule_dbt_job
+    needs: deploy_dbt
 
     # Deploy to the github-pages environment
     environment:
