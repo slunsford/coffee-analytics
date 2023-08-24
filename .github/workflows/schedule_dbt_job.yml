@@ -42,8 +42,11 @@ jobs:
       - name: Generate docs
         run: dbt docs generate
 
-      - name: Create GitHub Pages artifact
-        run: tar -zcvf github-pages target
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v3.0.6
+        with:
+          token: ${{ secrets.PAGES_ACCESS_TOKEN }}
+          enablement: true
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v2.0.0
