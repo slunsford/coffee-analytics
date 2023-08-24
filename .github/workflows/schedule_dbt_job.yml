@@ -25,9 +25,12 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@main
-      - uses: actions/setup-python@v1
+
+      - name: Setup Python
+        uses: actions/setup-python@v4.7.0
         with:
           python-version: "3.11.x"
+
       - name: Install dependencies
         run: |
           pip install dbt-duckdb==1.6
@@ -35,3 +38,14 @@ jobs:
       # dbt related commands here - run use --target prod/dev to run for specific environments
       - name: Run dbt models
         run: dbt build --target prod
+
+      - name: Generate docs
+        run: dbt docs generate
+
+      - name: Create GitHub Pages artifact
+        run: tar -zcvf github-pages target
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v2.0.0
+        with:
+          path: "target/"
