@@ -5,7 +5,7 @@ bridge as (
 ),
 
 coffees as (
-	select * from {{ ref('int_coffees_with_flavor_profile_key') }}
+	select * from {{ ref('stg_airtable_coffee__coffees') }}
 ),
 
 ratings as (
@@ -16,7 +16,7 @@ flavor_ratings as (
 	select ratings.rating_id,
 		   bridge.flavor_id,
 		   ratings.rating,
-		   ratings.rating_date,
+		   ratings.rated_at,
 		   ratings.rating_age,
 		   ratings.weight,
 		   ratings.weighted_rating

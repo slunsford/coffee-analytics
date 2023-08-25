@@ -1,7 +1,11 @@
 with
 
 coffees as (
-    select * from {{ ref('int_coffees_joined_to_origins') }}
+    select * from {{ ref('stg_airtable_coffee__coffees') }}
+),
+
+origins as (
+  select * from {{ ref('stg_airtable_coffee__origins') }}
 ),
 
 ratings as (
@@ -20,8 +24,8 @@ agg_ratings as (
     select coffee_id,
            avg(rating) as average_rating,
            sum(weighted_rating) / sum(weight) as weighted_avg_rating,
-           min(rating_date) as first_rating_date,
-           max(rating_date) as most_recent_rating_date,
+           min(rated_at) as first_rated_at,
+           max(rated_at) as last_rated_at,
            count(rating_id) as number_of_ratings
       from ratings
   group by 1
@@ -31,8 +35,8 @@ latest_ratings as (
     select coffee_id,
            rating as most_recent_rating
       from ratings
-     where rating_date in (
-           select most_recent_rating_date
+     where rated_at in (
+           select last_rated_at
              from agg_ratings
      )
 ),
@@ -41,8 +45,8 @@ coffees_with_ratings as (
     select coffees.coffee_id,
            coffees.coffee_name,
            coffees.roaster,
-           coffees.country,
-           coffees.world_region,
+           coalesce(origins.country_name, 'Blend') as country,
+           coalesce(origins.world_region, 'Blend') as world_region,
            coffees.country_region,
            coffees.varietal,
            coffees.caffeine_content,
@@ -50,11 +54,11 @@ coffees_with_ratings as (
            coffees.process,
            coffees.elevation_min,
            coffees.elevation_max,
-           coalesce(elevations.elevation, 'Unknown')    as elevation,
+           coalesce(elevations.elevation, 'Unknown') as elevation,
            coffees.flavor_profile_key,
-           coffees.date_added,
-           agg_ratings.first_rating_date,
-           agg_ratings.most_recent_rating_date,
+           coffees.added_at,
+           agg_ratings.first_rated_at,
+           agg_ratings.last_rated_at,
            latest_ratings.most_recent_rating,
            agg_ratings.average_rating,
            agg_ratings.weighted_avg_rating,
@@ -62,6 +66,8 @@ coffees_with_ratings as (
       from coffees
  left join elevations
         on coffees.coffee_id = elevations.coffee_id
+ left join origins
+        on coffees.origin_id = origins.origin_id
  left join agg_ratings
         on coffees.coffee_id = agg_ratings.coffee_id
  left join latest_ratings

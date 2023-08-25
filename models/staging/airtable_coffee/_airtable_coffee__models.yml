@@ -26,12 +26,16 @@ models:
       - name: flavor_ids
         tests:
           - not_null
-      - name: date_added
+      - name: flavor_profile_key
+        tests:
+          - not_null
+      - name: added_at
         tests:
           - not_null
       - name: _airtable_created_time
         tests:
           - not_null
+
   - name: stg_airtable_coffee__flavors
     columns:
       - name: flavor_id
@@ -44,6 +48,7 @@ models:
       - name: _airtable_created_time
         tests:
           - not_null
+
   - name: stg_airtable_coffee__origins
     columns:
       - name: origin_id
@@ -56,6 +61,7 @@ models:
       - name: _airtable_created_time
         tests:
           - not_null
+
   - name: stg_airtable_coffee__ratings
     columns:
       - name: rating_id
@@ -65,7 +71,7 @@ models:
       - name: coffee_id
         tests:
           - not_null
-      - name: rating_date
+      - name: rated_at
         tests:
           - not_null
       - name: rating

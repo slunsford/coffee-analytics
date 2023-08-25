@@ -21,9 +21,9 @@ models:
           - not_null
       - name: average_rating
         description: "Overall average rating"
-      - name: first_rating_date
+      - name: first_rated_at
         description: "Date of first rating"
-      - name: most_recent_rating_date
+      - name: last_rated_at
         description: "Date of most recent rating"
       - name: weighted_avg_rating
         description: "Weighted average rating by recency"
