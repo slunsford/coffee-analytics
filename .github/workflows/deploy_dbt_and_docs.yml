@@ -23,7 +23,7 @@ jobs:
     name: deploy_dbt
     runs-on: ubuntu-latest
 
-    environment: dbt-prod
+    environment: dbt_prod
 
     env:
       DBT_PROFILES_DIR: ".github"
