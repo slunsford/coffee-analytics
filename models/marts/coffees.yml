@@ -55,9 +55,9 @@ models:
         description: "Date coffee added to log"
         tests:
           - not_null
-      - name: first_rated_at
+      - name: first_rated_date
         description: "Date of first rating"
-      - name: last_rated_at
+      - name: last_rated_date
         description: "Date of most recent rating"
       - name: most_recent_rating
         description: "Value of most recent rating"
