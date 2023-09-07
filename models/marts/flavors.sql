@@ -12,8 +12,8 @@ flavor_ratings as (
 	select flavor_id,
 		   avg(rating) as average_rating,
 		   sum(weighted_rating) / sum(weight) as weighted_avg_rating,
-		   min(rated_at) as first_rated_at,
-		   max(rated_at) as last_rated_at,
+		   min(rated_date) as first_rated_date,
+		   max(rated_date) as last_rated_date,
 		   count(rating_id) as number_of_ratings
 	  from ratings
   group by 1
@@ -24,8 +24,8 @@ flavors_with_ratings as (
 		   flavors.flavor,
 		   flavors.flavor_category,
 		   flavor_ratings.average_rating,
-		   flavor_ratings.first_rated_at,
-		   flavor_ratings.last_rated_at,
+		   flavor_ratings.first_rated_date,
+		   flavor_ratings.last_rated_date,
 		   flavor_ratings.weighted_avg_rating,
 		   coalesce(flavor_ratings.number_of_ratings, 0) as number_of_ratings
 	  from flavors
