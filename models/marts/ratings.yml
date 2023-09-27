@@ -15,7 +15,7 @@ models:
           - relationships:
               to: ref('coffees')
               field: coffee_id
-      - name: rated_at
+      - name: rated_date
         description: "Date the coffee was rated"
         tests:
           - not_null

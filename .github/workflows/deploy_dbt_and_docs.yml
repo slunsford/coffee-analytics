@@ -1,4 +1,4 @@
-name: deploy_dbt_and_docs
+name: Deploy dbt and Docs
 
 on:
   schedule:
