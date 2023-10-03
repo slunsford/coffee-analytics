@@ -1,7 +1,7 @@
 name: Test-build dbt
 
 on:
-  pull_request:
+  push:
     branches-ignore:
       - main
   workflow_dispatch:
