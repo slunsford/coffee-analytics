@@ -18,7 +18,7 @@ coffee:
         type: duckdb
         path: "md:coffee"
         schema: test
-        threads: 1
+        threads: 4
         extensions:
           - httpfs
           - parquet
