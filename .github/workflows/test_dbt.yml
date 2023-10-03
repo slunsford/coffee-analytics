@@ -1,0 +1,38 @@
+name: Test-build dbt
+
+on:
+  push:
+    branches-ignore:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test_dbt:
+    name: Test-build dbt
+    runs-on: ubuntu-latest
+
+    environment: dbt_test
+
+    env:
+      DBT_PROFILES_DIR: ".github"
+      motherduck_token: ${{ secrets.motherduck_token }}
+      DBT_ENV_SECRET_S3_KEY_ID: ${{ secrets.DBT_ENV_SECRET_S3_KEY_ID }}
+      DBT_ENV_SECRET_S3_SECRET_KEY: ${{ secrets.DBT_ENV_SECRET_S3_SECRET_KEY }}
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@main
+
+      - name: Setup Python
+        uses: actions/setup-python@v4.7.0
+        with:
+          python-version: "3.11.x"
+
+      - name: Install dependencies
+        run: |
+          pip install duckdb==0.8.1
+          pip install dbt-duckdb==1.6
+          dbt deps
+      # dbt related commands here - run use --target prod/dev to run for specific environments
+      - name: Build dbt models
+        run: dbt build --target test
