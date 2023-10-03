@@ -14,4 +14,16 @@ coffee:
         s3_region: eu-central-1
         s3_access_key_id: "{{ env_var('DBT_ENV_SECRET_S3_KEY_ID') }}"
         s3_secret_access_key: "{{ env_var('DBT_ENV_SECRET_S3_SECRET_KEY') }}"
+    test:
+        type: duckdb
+        path: "md:coffee"
+        schema: dbt_test
+        threads: 1
+        extensions:
+          - httpfs
+          - parquet
+        settings:
+          s3_region: eu-central-1
+          s3_access_key_id: "{{ env_var('DBT_ENV_SECRET_S3_KEY_ID') }}"
+          s3_secret_access_key: "{{ env_var('DBT_ENV_SECRET_S3_SECRET_KEY') }}"
   target: prod

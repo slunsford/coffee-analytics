@@ -1,4 +1,4 @@
-name: Test dbt
+name: Test-build dbt
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   test_dbt:
-    name: Test dbt
+    name: Test-build dbt
     runs-on: ubuntu-latest
 
     environment: dbt_test
@@ -34,5 +34,5 @@ jobs:
           pip install dbt-duckdb==1.6
           dbt deps
       # dbt related commands here - run use --target prod/dev to run for specific environments
-      - name: Test dbt models
-        run: dbt test
+      - name: Build dbt models
+        run: dbt build --target test
