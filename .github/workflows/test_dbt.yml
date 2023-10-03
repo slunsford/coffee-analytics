@@ -2,6 +2,7 @@ name: Test-build dbt
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize, edited]
     branches-ignore:
       - main
   workflow_dispatch:
