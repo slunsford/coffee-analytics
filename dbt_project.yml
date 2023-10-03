@@ -39,3 +39,5 @@ models:
     marts:
       +materialized: table
       # +schema: "marts"
+      report_views:
+        +materialized: view
