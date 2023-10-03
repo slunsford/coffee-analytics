@@ -1,7 +1,7 @@
 name: Test-build dbt
 
 on:
-  push:
+  pull_request:
     branches-ignore:
       - main
 
