@@ -15,11 +15,14 @@ models:
           - not_null
       - name: origin_id
       - name: country_region
-      - name: varietal
+      - name: availability
+        tests:
+          - not_null
       - name: caffeine_content
         tests:
           - not_null
       - name: roast_darkness
+      - name: varietal
       - name: process
       - name: elevation_min
       - name: elevation_max

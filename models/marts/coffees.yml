@@ -27,7 +27,8 @@ models:
           - not_null
       - name: country_region
         description: "Locality within country of origin"
-      - name: varietal
+      - name: availability
+        description: "Current availability for purchase"
       - name: caffeine_content
         description: "Decaf/regular"
         tests:
@@ -35,6 +36,8 @@ models:
               values: ["Decaf", "Regular"]
       - name: roast_darkness
         description: "Light/medium/dark"
+      - name: varietal
+        description: "Varietal"
       - name: process
         description: "Coffee cleaning/processing method"
       - name: elevation_min

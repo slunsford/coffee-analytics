@@ -4,6 +4,7 @@
         roaster         as "Roaster",
         country         as "Country",
         world_region    as "World Region",
+        availability    as "Availability",
         rating          as "Rating",
         rated_date      as "Rated Date",
         weight          as "Weight",
