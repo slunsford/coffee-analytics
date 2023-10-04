@@ -62,12 +62,13 @@ jobs:
           path: "target/"
 
   deploy_docs:
+    name: Deploy docs
     # Add a dependency to the build job
     needs: deploy_dbt
 
     # Deploy to the github-pages environment
     environment:
-      name: Deploy docs
+      name: dbt_docs
       url: ${{ steps.deployment.outputs.page_url }}
 
     # Specify runner + deployment step
