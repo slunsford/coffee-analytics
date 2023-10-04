@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   deploy_dbt:
-    name: deploy_dbt
+    name: Deploy dbt to prod
     runs-on: ubuntu-latest
 
     environment: dbt_prod
@@ -67,7 +67,7 @@ jobs:
 
     # Deploy to the github-pages environment
     environment:
-      name: dbt_docs
+      name: Deploy docs
       url: ${{ steps.deployment.outputs.page_url }}
 
     # Specify runner + deployment step
