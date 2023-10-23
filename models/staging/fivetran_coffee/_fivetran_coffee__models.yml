@@ -1,0 +1,85 @@
+version: 2
+
+models:
+  - name: stg_fivetran_coffee__coffees
+    columns:
+      - name: coffee_id
+        tests:
+          - unique
+          - not_null
+      - name: coffee_name
+        tests:
+          - not_null
+      - name: roaster
+        tests:
+          - not_null
+      - name: origin_id
+      - name: country_region
+      - name: availability
+        tests:
+          - not_null
+      - name: caffeine_content
+        tests:
+          - not_null
+      - name: roast_darkness
+      - name: varietal
+      - name: process
+      - name: elevation_min
+      - name: elevation_max
+      - name: flavor_ids
+        tests:
+          - not_null
+      - name: flavor_profile_key
+        tests:
+          - not_null
+      - name: added_at
+        tests:
+          - not_null
+      - name: _fivetran_synced
+        tests:
+          - not_null
+
+  - name: stg_fivetran_coffee__flavors
+    columns:
+      - name: flavor_id
+        tests:
+          - unique
+          - not_null
+      - name: flavor_category
+        tests:
+          - not_null
+      - name: _fivetran_synced
+        tests:
+          - not_null
+
+  - name: stg_fivetran_coffee__origins
+    columns:
+      - name: origin_id
+        tests:
+          - unique
+          - not_null
+      - name: country_name
+        tests:
+          - not_null
+      - name: _fivetran_synced
+        tests:
+          - not_null
+
+  - name: stg_fivetran_coffee__ratings
+    columns:
+      - name: rating_id
+        tests:
+          - unique
+          - not_null
+      - name: coffee_id
+        tests:
+          - not_null
+      - name: rated_date
+        tests:
+          - not_null
+      - name: rating
+        tests:
+          - not_null
+      - name: _fivetran_synced
+        tests:
+          - not_null
