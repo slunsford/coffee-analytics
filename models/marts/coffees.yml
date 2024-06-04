@@ -6,24 +6,24 @@ models:
     columns:
       - name: coffee_id
         description: "Primary key (record ID from Airtable)"
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: coffee_name
         description: "Name of the coffee"
-        tests:
+        data_tests:
           - not_null
       - name: roaster
         description: "Roaster"
-        tests:
+        data_tests:
           - not_null
       - name: country
         description: "Country of origin"
-        tests:
+        data_tests:
           - not_null
       - name: world_region
         description: "Continent/world region of origin"
-        tests:
+        data_tests:
           - not_null
       - name: country_region
         description: "Locality within country of origin"
@@ -31,7 +31,7 @@ models:
         description: "Current availability for purchase"
       - name: caffeine_content
         description: "Decaf/regular"
-        tests:
+        data_tests:
           - accepted_values:
               values: ["Decaf", "Regular"]
       - name: roast_darkness
@@ -46,17 +46,17 @@ models:
         description: "Maximum elevation (meters)"
       - name: elevation
         description: "Elevation range"
-        tests:
+        data_tests:
           - not_null
       - name: flavor_profile_key
         description: "Foreign key for `flavor_profiles`"
-        tests:
+        data_tests:
           - relationships:
               to: ref('flavor_profiles')
               field: flavor_profile_key
       - name: added_at
         description: "Date coffee added to log"
-        tests:
+        data_tests:
           - not_null
       - name: first_rated_date
         description: "Date of first rating"
@@ -70,5 +70,5 @@ models:
         description: "Weighted average rating by recency"
       - name: number_of_ratings
         description: "Count of ratings"
-        tests:
+        data_tests:
           - not_null

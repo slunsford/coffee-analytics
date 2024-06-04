@@ -6,18 +6,18 @@ models:
     columns:
       - name: flavor_id
         description: "Primary key (record ID from Airtable)"
-        tests:
+        data_tests:
           - unique
           - relationships:
               to: ref('flavor_profiles')
               field: flavor_id
       - name: flavor
         description: "Description of the flavor"
-        tests:
+        data_tests:
           - not_null
       - name: flavor_category
         description: "Category of the flavor"
-        tests:
+        data_tests:
           - not_null
       - name: average_rating
         description: "Overall average rating"
@@ -29,5 +29,5 @@ models:
         description: "Weighted average rating by recency"
       - name: number_of_ratings
         description: "Count of ratings"
-        tests:
+        data_tests:
           - not_null

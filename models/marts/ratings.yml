@@ -6,32 +6,32 @@ models:
     columns:
       - name: rating_id
         description: "Primary key (record ID from Airtable)"
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: coffee_id
         description: "Foreign key for `coffees`"
-        tests:
+        data_tests:
           - relationships:
               to: ref('coffees')
               field: coffee_id
       - name: rated_date
         description: "Date the coffee was rated"
-        tests:
+        data_tests:
           - not_null
       - name: rating
         description: "Rating given"
-        tests:
+        data_tests:
           - not_null
       - name: rating_age
         description: "Days since rating"
-        tests:
+        data_tests:
           - not_null
       - name: weight
         description: "Recency-based weight given to rating (half-life of 365 days)"
-        tests:
+        data_tests:
           - not_null
       - name: weighted_rating
         description: "Rating with weighting applied"
-        tests:
+        data_tests:
           - not_null
