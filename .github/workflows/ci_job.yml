@@ -1,14 +1,14 @@
-name: Test-build dbt
+name: CI job
 
 on:
-  push:
+  pull_request:
     branches-ignore:
       - main
   workflow_dispatch:
 
 jobs:
-  test_dbt:
-    name: Test-build dbt
+  build_dbt:
+    name: Build dbt in test environment
     runs-on: ubuntu-latest
 
     environment: dbt_test
