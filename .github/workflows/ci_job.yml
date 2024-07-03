@@ -2,7 +2,7 @@ name: CI job
 
 on:
   pull_request:
-    branches-ignore:
+    branches:
       - main
   workflow_dispatch:
 
