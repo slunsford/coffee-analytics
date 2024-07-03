@@ -4,48 +4,48 @@ models:
   - name: int_weighted_ratings
     columns:
       - name: rating_id
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: coffee_id
-        tests:
+        data_tests:
           - not_null
       - name: rated_date
-        tests:
+        data_tests:
           - not_null
       - name: rating
-        tests:
+        data_tests:
           - not_null
       - name: rating_age
-        tests:
+        data_tests:
           - not_null
       - name: weight
-        tests:
+        data_tests:
           - not_null
       - name: weighted_rating
-        tests:
+        data_tests:
           - not_null
 
   - name: int_ratings_by_flavor
     columns:
       - name: rating_id
-        tests:
+        data_tests:
           - not_null
       - name: flavor_id
-        tests:
+        data_tests:
           - not_null
       - name: rated_date
-        tests:
+        data_tests:
           - not_null
       - name: rating
-        tests:
+        data_tests:
           - not_null
       - name: rating_age
-        tests:
+        data_tests:
           - not_null
       - name: weight
-        tests:
+        data_tests:
           - not_null
       - name: weighted_rating
-        tests:
+        data_tests:
           - not_null
