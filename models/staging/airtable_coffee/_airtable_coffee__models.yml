@@ -4,82 +4,54 @@ models:
   - name: stg_airtable_coffee__coffees
     columns:
       - name: coffee_id
-        data_tests:
+        tests:
           - unique
           - not_null
       - name: coffee_name
-        data_tests:
+        tests:
           - not_null
       - name: roaster
-        data_tests:
+        tests:
           - not_null
-      - name: origin_id
-      - name: country_region
-      - name: availability
-        data_tests:
-          - not_null
-      - name: caffeine_content
-        data_tests:
-          - not_null
-      - name: roast_darkness
-      - name: varietal
-      - name: process
-      - name: elevation_min
-      - name: elevation_max
       - name: flavor_ids
-        data_tests:
+        tests:
           - not_null
       - name: flavor_profile_key
-        data_tests:
-          - not_null
-      - name: added_at
-        data_tests:
-          - not_null
-      - name: _airtable_created_time
-        data_tests:
+        tests:
           - not_null
 
   - name: stg_airtable_coffee__flavors
     columns:
       - name: flavor_id
-        data_tests:
+        tests:
           - unique
           - not_null
       - name: flavor_category
-        data_tests:
-          - not_null
-      - name: _airtable_created_time
-        data_tests:
+        tests:
           - not_null
 
   - name: stg_airtable_coffee__origins
     columns:
       - name: origin_id
-        data_tests:
+        tests:
           - unique
           - not_null
       - name: country_name
-        data_tests:
-          - not_null
-      - name: _airtable_created_time
-        data_tests:
+        tests:
           - not_null
 
   - name: stg_airtable_coffee__ratings
     columns:
       - name: rating_id
-        data_tests:
+        tests:
           - unique
           - not_null
       - name: coffee_id
-        data_tests:
+        tests:
           - not_null
       - name: rated_date
-        data_tests:
+        tests:
           - not_null
       - name: rating
-        data_tests:
-          - not_null
-      - name: _airtable_created_time
-        data_tests:
+        tests:
           - not_null

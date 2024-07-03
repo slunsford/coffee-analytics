@@ -3,47 +3,55 @@ version: 2
 sources:
   - name: airtable_coffee
     meta:
-      external_location: "s3://slunsford-analytics/airbyte/coffee_log/{name}/*/*.parquet"
+      external_location: "iceberg_scan('s3://slunsford-analytics/fivetran/airtable_coffee_log_appd0whajb9an0gjl/{name}/metadata/{manifest}.metadata.json')"
     tables:
       - name: coffees
+        meta:
+          manifest: 00003-faa5f35d-5055-43dd-aeb7-3b04df90929b
         columns:
-          - name: _airtable_id
-            data_tests:
+          - name: id
+            tests:
               - unique
               - not_null
           - name: name
-            data_tests:
+            tests:
               - not_null
       - name: flavors
+        meta:
+          manifest: 00002-0b039b29-b642-46e5-a6af-fe8b469a58b0
         columns:
-          - name: _airtable_id
-            data_tests:
+          - name: id
+            tests:
               - unique
               - not_null
           - name: flavor
-            data_tests:
+            tests:
               - not_null
       - name: origins
+        meta:
+          manifest: 00001-dcaa9440-88e6-4bdb-bc42-8e36141cb7c1
         columns:
-          - name: _airtable_id
-            data_tests:
+          - name: id
+            tests:
               - unique
               - not_null
           - name: name
-            data_tests:
+            tests:
               - not_null
       - name: ratings
+        meta:
+          manifest: 00002-0ec6c30f-f8b6-4663-9f37-3931f47c95ee
         columns:
-          - name: _airtable_id
-            data_tests:
+          - name: id
+            tests:
               - unique
               - not_null
           - name: coffee
-            data_tests:
+            tests:
               - not_null
           - name: date
-            data_tests:
+            tests:
               - not_null
           - name: rating
-            data_tests:
+            tests:
               - not_null

@@ -1,13 +1,13 @@
 with source as ( select * from {{ source('airtable_coffee', 'origins') }} ),
 
      renamed as (
-         select _airtable_id as origin_id,
+         select id as origin_id,
                 name as country_name,
                 -- flag,
                 region as world_region,
                 -- coffees,
                 -- rating,
-                _airtable_created_time
+                _fivetran_synced
            from source
      )
 

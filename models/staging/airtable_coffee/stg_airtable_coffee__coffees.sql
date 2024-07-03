@@ -1,7 +1,7 @@
 with source as ( select * from {{ source('airtable_coffee', 'coffees') }} ),
 
      renamed as (
-         select _airtable_id as coffee_id,
+         select id as coffee_id,
                 name as coffee_name,
                 roaster,
                 origin[1] as origin_id,
@@ -20,7 +20,7 @@ with source as ( select * from {{ source('airtable_coffee', 'coffees') }} ),
                 flavors as flavor_ids,
                 md5(array_to_string(flavors, '_')) as flavor_profile_key,
                 created.member0 as added_at,
-                _airtable_created_time
+                _fivetran_synced
            from source
      )
 
