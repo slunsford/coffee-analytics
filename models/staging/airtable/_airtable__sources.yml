@@ -8,42 +8,42 @@ sources:
       - name: coffees
         columns:
           - name: id
-            tests:
+            data_tests:
               - unique
               - not_null
           - name: name
-            tests:
+            data_tests:
               - not_null
       - name: flavors
         columns:
           - name: id
-            tests:
+            data_tests:
               - unique
               - not_null
           - name: flavor
-            tests:
+            data_tests:
               - not_null
       - name: origins
         columns:
           - name: id
-            tests:
+            data_tests:
               - unique
               - not_null
           - name: name
-            tests:
+            data_tests:
               - not_null
       - name: ratings
         columns:
           - name: id
-            tests:
+            data_tests:
               - unique
               - not_null
           - name: coffee
-            tests:
+            data_tests:
               - not_null
           - name: date
-            tests:
+            data_tests:
               - not_null
           - name: rating
-            tests:
+            data_tests:
               - not_null

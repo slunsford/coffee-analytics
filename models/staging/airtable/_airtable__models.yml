@@ -4,54 +4,54 @@ models:
   - name: stg_airtable__coffees
     columns:
       - name: coffee_id
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: coffee_name
-        tests:
+        data_tests:
           - not_null
       - name: roaster
-        tests:
+        data_tests:
           - not_null
       - name: flavor_ids
-        tests:
+        data_tests:
           - not_null
       - name: flavor_profile_key
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_airtable__flavors
     columns:
       - name: flavor_id
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: flavor_category
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_airtable__origins
     columns:
       - name: origin_id
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: country_name
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_airtable__ratings
     columns:
       - name: rating_id
-        tests:
+        data_tests:
           - unique
           - not_null
       - name: coffee_id
-        tests:
+        data_tests:
           - not_null
       - name: rated_date
-        tests:
+        data_tests:
           - not_null
       - name: rating
-        tests:
+        data_tests:
           - not_null
