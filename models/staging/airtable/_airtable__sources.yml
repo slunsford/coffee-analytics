@@ -4,6 +4,7 @@ sources:
   - name: airtable
     database: fivetran
     schema: airtable_coffee_log_appd0whajb9an0gjl
+    loader: fivetran
     tables:
       - name: coffees
         columns:
