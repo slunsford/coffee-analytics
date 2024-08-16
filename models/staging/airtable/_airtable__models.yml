@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg_airtable_coffee__coffees
+  - name: stg_airtable__coffees
     columns:
       - name: coffee_id
         tests:
@@ -20,7 +20,7 @@ models:
         tests:
           - not_null
 
-  - name: stg_airtable_coffee__flavors
+  - name: stg_airtable__flavors
     columns:
       - name: flavor_id
         tests:
@@ -30,7 +30,7 @@ models:
         tests:
           - not_null
 
-  - name: stg_airtable_coffee__origins
+  - name: stg_airtable__origins
     columns:
       - name: origin_id
         tests:
@@ -40,7 +40,7 @@ models:
         tests:
           - not_null
 
-  - name: stg_airtable_coffee__ratings
+  - name: stg_airtable__ratings
     columns:
       - name: rating_id
         tests:
