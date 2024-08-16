@@ -10,6 +10,7 @@
         rated_date      as "Rated Date",
         weight          as "Weight",
         weighted_rating as "Weighted Rating"
+        
    from {{ ref('flavors') }}
    join {{ ref('flavor_profiles') }}
   using (flavor_id)

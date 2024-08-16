@@ -5,6 +5,7 @@ ratings as (
 ),
 
 final as (
+    
      select rating_id,
             coffee_id,
             brew_method,
@@ -13,7 +14,9 @@ final as (
             rating_age,
             weight,
             weighted_rating
+            
        from ratings
+       
 )
 
 select * from final

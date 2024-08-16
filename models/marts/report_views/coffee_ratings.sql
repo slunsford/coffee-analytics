@@ -8,6 +8,7 @@
         rated_date      as "Rated Date",
         weight          as "Weight",
         weighted_rating as "Weighted Rating"
+        
    from {{ ref('coffees') }}
    join {{ ref('ratings') }}
   using (coffee_id)

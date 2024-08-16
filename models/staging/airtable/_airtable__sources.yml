@@ -1,13 +1,13 @@
 version: 2
 
 sources:
-  - name: airtable_coffee
-    meta:
-      external_location: "s3://slunsford-analytics/airbyte/coffee_log/{name}/*/*.parquet"
+  - name: airtable
+    database: fivetran
+    schema: airtable_coffee_log_appd0whajb9an0gjl
     tables:
       - name: coffees
         columns:
-          - name: _airtable_id
+          - name: id
             data_tests:
               - unique
               - not_null
@@ -16,7 +16,7 @@ sources:
               - not_null
       - name: flavors
         columns:
-          - name: _airtable_id
+          - name: id
             data_tests:
               - unique
               - not_null
@@ -25,7 +25,7 @@ sources:
               - not_null
       - name: origins
         columns:
-          - name: _airtable_id
+          - name: id
             data_tests:
               - unique
               - not_null
@@ -34,7 +34,7 @@ sources:
               - not_null
       - name: ratings
         columns:
-          - name: _airtable_id
+          - name: id
             data_tests:
               - unique
               - not_null

@@ -32,7 +32,7 @@ models:
   coffee_analytics:
     staging:
       +materialized: table
-      airtable_coffee:
+      airtable:
         +tags: s3
     intermediate:
       +materialized: view

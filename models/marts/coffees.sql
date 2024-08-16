@@ -1,11 +1,11 @@
 with
 
 coffees as (
-    select * from {{ ref('stg_airtable_coffee__coffees') }}
+    select * from {{ ref('stg_airtable__coffees') }}
 ),
 
 origins as (
-  select * from {{ ref('stg_airtable_coffee__origins') }}
+    select * from {{ ref('stg_airtable__origins') }}
 ),
 
 ratings as (
@@ -13,35 +13,45 @@ ratings as (
 ),
 
 elevations as (
+  
     select coffee_id,
            case when elevation_max > elevation_min then elevation_min || '–' || elevation_max || 'm'
                 else elevation_min || 'm'
             end as elevation
+            
       from coffees
+      
 ),
 
 agg_ratings as (
+  
     select coffee_id,
            avg(rating) as average_rating,
            sum(weighted_rating) / sum(weight) as weighted_avg_rating,
            min(rated_date) as first_rated_date,
            max(rated_date) as last_rated_date,
            count(rating_id) as number_of_ratings
+           
       from ratings
   group by 1
+  
 ),
 
 latest_ratings as (
+  
     select coffee_id,
            rating as most_recent_rating
+           
       from ratings
      where rated_date in (
            select last_rated_date
              from agg_ratings
      )
+     
 ),
 
 coffees_with_ratings as (
+  
     select coffees.coffee_id,
            coffees.coffee_name,
            coffees.roaster,
@@ -51,7 +61,7 @@ coffees_with_ratings as (
            coffees.availability,
            coffees.caffeine_content,
            coffees.roast_darkness,
-           coffees.varietal,
+           coffees.varietals,
            coffees.process,
            coffees.elevation_min,
            coffees.elevation_max,
@@ -64,6 +74,7 @@ coffees_with_ratings as (
            agg_ratings.average_rating,
            agg_ratings.weighted_avg_rating,
            coalesce(agg_ratings.number_of_ratings, 0) as number_of_ratings
+           
       from coffees
  left join elevations
         on coffees.coffee_id = elevations.coffee_id
@@ -73,6 +84,7 @@ coffees_with_ratings as (
         on coffees.coffee_id = agg_ratings.coffee_id
  left join latest_ratings
         on coffees.coffee_id = latest_ratings.coffee_id
+        
 )
 
 select * from coffees_with_ratings
