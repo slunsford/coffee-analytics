@@ -24,7 +24,7 @@ renamed as (
             cast(coalesce(elevation_max_, elevation_min_) as integer) as elevation_max,
             flavors as flavor_ids,
             md5(array_to_string(flavors, '_')) as flavor_profile_key,
-            created.member0 as added_at,
+            created as added_at,
             _fivetran_synced
             
        from source
