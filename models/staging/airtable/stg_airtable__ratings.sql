@@ -8,7 +8,7 @@ renamed as (
     
      select id as rating_id,
             date as rated_date,
-            coffee[1] as coffee_id,
+            regexp_extract(coffee, 'rec\w+') as coffee_id,
             brew_method,
             rating,
             _fivetran_synced

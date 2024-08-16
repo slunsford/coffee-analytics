@@ -61,7 +61,7 @@ coffees_with_ratings as (
            coffees.availability,
            coffees.caffeine_content,
            coffees.roast_darkness,
-           coffees.varietal,
+           coffees.varietals,
            coffees.process,
            coffees.elevation_min,
            coffees.elevation_max,
