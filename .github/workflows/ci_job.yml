@@ -16,8 +16,6 @@ jobs:
     env:
       DBT_PROFILES_DIR: ".github"
       motherduck_token: ${{ secrets.motherduck_token }}
-      DBT_ENV_SECRET_S3_KEY_ID: ${{ secrets.DBT_ENV_SECRET_S3_KEY_ID }}
-      DBT_ENV_SECRET_S3_SECRET_KEY: ${{ secrets.DBT_ENV_SECRET_S3_SECRET_KEY }}
 
     steps:
       - name: Check out
