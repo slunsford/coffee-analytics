@@ -2,7 +2,7 @@ name: Deploy dbt and Docs
 
 on:
   schedule:
-    - cron: "30 */6 * * *"
+    - cron: "30 5 * * *" # Run at 5:30 UTC every day
   push:
     branches:
       # run on push to main branch
