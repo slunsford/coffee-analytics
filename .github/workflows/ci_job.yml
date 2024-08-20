@@ -11,7 +11,7 @@ jobs:
     name: Build dbt in test environment
     runs-on: ubuntu-latest
 
-    environment: dbt_test
+    environment: test
 
     env:
       DBT_PROFILES_DIR: ".github"
