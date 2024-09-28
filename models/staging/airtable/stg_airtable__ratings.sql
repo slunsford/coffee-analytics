@@ -10,6 +10,7 @@ renamed as (
             {{ extract_id('coffee') }} as coffee_id,
             date as rated_date,
             rating,
+            rating = 'Liked' as is_liked,
             brew_method,
             _fivetran_synced
             

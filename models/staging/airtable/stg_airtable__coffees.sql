@@ -26,8 +26,8 @@ renamed as (
             cast(coalesce(elevation_max_, elevation_min_) as integer) as elevation_max,
             {{ extract_ids('flavors') }} as flavor_ids,
             {{ dbt_utils.generate_surrogate_key(['flavor_ids']) }} as flavor_profile_key,
-            rating,
-            rated_date,
+            -- rating,
+            -- rated_date,
             created as added_at,
             _fivetran_synced
             

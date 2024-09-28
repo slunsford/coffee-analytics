@@ -22,6 +22,10 @@ models:
       #     - relationships:
       #         to: ref('flavor_category_groups')
       #         field: flavor_category_group_key
+      - name: primary_flavor_category
+        description: First category listed
+        data_tests:
+          - not_null
       - name: flavor_categories
         description: Comma separated list of flavor categories
         data_tests:

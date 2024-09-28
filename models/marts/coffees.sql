@@ -52,8 +52,6 @@ join_to_origins_and_roasters as (
            elevation_max,
            elevation,
            flavor_profile_key,
-           rating,
-           rated_date,
            added_at,
            
       from join_to_elevations

@@ -34,8 +34,12 @@ join_to_coffees as (
             coffee_id,
             flavor_profile_key,
             brew_method,
-            ratings.rated_date,
-            ratings.rating,
+            rated_date,
+            rating,
+            is_liked,
+            case when is_liked then 1
+                 else -1
+                 end as rating_value,
             is_current
             
        from join_to_current_ratings as ratings
