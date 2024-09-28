@@ -7,10 +7,11 @@ source as (
 renamed as (
     
      select id as rating_id,
+            {{ extract_id('coffee') }} as coffee_id,
             date as rated_date,
-            regexp_extract(coffee, 'rec\w+') as coffee_id,
-            brew_method,
             rating,
+            rating = 'Liked' as is_liked,
+            brew_method,
             _fivetran_synced
             
        from source

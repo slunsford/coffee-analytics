@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: airtable
     database: fivetran
-    schema: airtable_coffee_log_appd0whajb9an0gjl
+    schema: airtable_coffee_log_appq9juutomoyniem
     loader: fivetran
     tables:
       - name: coffees
@@ -48,3 +48,13 @@ sources:
           - name: rating
             data_tests:
               - not_null
+      - name: roasters
+        columns:
+          - name: id
+            data_tests:
+              - unique
+              - not_null
+          - name: name
+            data_tests:
+              - not_null
+          
