@@ -8,83 +8,60 @@ origins as (
     select * from {{ ref('stg_airtable__origins') }}
 ),
 
-ratings as (
-    select * from {{ ref('int_weighted_ratings') }}
+roasters as (
+    select * from {{ ref('stg_airtable__roasters') }}
 ),
 
 elevations as (
   
-    select coffee_id,
-           case when elevation_max > elevation_min then elevation_min || '–' || elevation_max || 'm'
-                else elevation_min || 'm'
-            end as elevation
-            
-      from coffees
+     select coffee_id,
+            case when elevation_max > elevation_min then elevation_min || '–' || elevation_max || 'm'
+                 else elevation_min || 'm'
+             end as elevation
+             
+       from coffees
       
 ),
 
-agg_ratings as (
+join_to_elevations as (
   
-    select coffee_id,
-           avg(rating) as average_rating,
-           sum(weighted_rating) / sum(weight) as weighted_avg_rating,
-           min(rated_date) as first_rated_date,
-           max(rated_date) as last_rated_date,
-           count(rating_id) as number_of_ratings
-           
-      from ratings
-  group by 1
-  
-),
-
-latest_ratings as (
-  
-    select coffee_id,
-           rating as most_recent_rating
-           
-      from ratings
-     where rated_date in (
-           select last_rated_date
-             from agg_ratings
-     )
+     select * replace(coalesce(elevation, 'Unknown') as elevation)
      
+       from coffees
+  left join elevations
+      using (coffee_id)
+      
 ),
 
-coffees_with_ratings as (
+join_to_origins_and_roasters as (
   
-    select coffees.coffee_id,
-           coffees.coffee_name,
-           coffees.roaster,
-           coalesce(origins.country_name, '[Blend]') as country,
-           coalesce(origins.world_region, '[Blend]') as world_region,
-           coffees.country_region,
-           coffees.availability,
-           coffees.caffeine_content,
-           coffees.roast_darkness,
-           coffees.varietals,
-           coffees.process,
-           coffees.elevation_min,
-           coffees.elevation_max,
-           coalesce(elevations.elevation, 'Unknown') as elevation,
-           coffees.flavor_profile_key,
-           coffees.added_at,
-           agg_ratings.first_rated_date,
-           agg_ratings.last_rated_date,
-           latest_ratings.most_recent_rating,
-           agg_ratings.average_rating,
-           agg_ratings.weighted_avg_rating,
-           coalesce(agg_ratings.number_of_ratings, 0) as number_of_ratings
+    select coffee_id,
+           coffee_name,
+           roaster_id,
+           roaster_name as roaster,
+           origin_id,
+           coalesce(country_name, '[Blend]') as country,
+           coalesce(world_region, '[Blend]') as world_region,
+           country_region,
+           availability,
+           caffeine_content,
+           roast_darkness,
+           varietals,
+           process,
+           elevation_min,
+           elevation_max,
+           elevation,
+           flavor_profile_key,
+           rating,
+           rated_date,
+           added_at,
            
-      from coffees
- left join elevations
-        on coffees.coffee_id = elevations.coffee_id
+      from join_to_elevations
  left join origins
-        on coffees.origin_id = origins.origin_id
- left join agg_ratings
-        on coffees.coffee_id = agg_ratings.coffee_id
- left join latest_ratings
-        on coffees.coffee_id = latest_ratings.coffee_id
+     using (origin_id)
+ left join roasters
+     using (roaster_id)
         
 )
 
-select * from coffees_with_ratings
+select * from join_to_origins_and_roasters

@@ -1,4 +1,8 @@
- select flavor          as "Flavor",
+ {{ config(
+     enabled = false
+ ) }}
+ 
+select flavor          as "Flavor",
         flavor_category as "Flavor Category",
         coffee_name     as "Coffee",
         roaster         as "Roaster",
@@ -8,8 +12,6 @@
         brew_method     as "Brew Method",
         rating          as "Rating",
         rated_date      as "Rated Date",
-        weight          as "Weight",
-        weighted_rating as "Weighted Rating"
         
    from {{ ref('flavors') }}
    join {{ ref('flavor_profiles') }}

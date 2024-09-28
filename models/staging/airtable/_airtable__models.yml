@@ -10,7 +10,7 @@ models:
       - name: coffee_name
         data_tests:
           - not_null
-      - name: roaster
+      - name: roaster_id
         data_tests:
           - not_null
       - name: flavor_ids
@@ -26,7 +26,7 @@ models:
         data_tests:
           - unique
           - not_null
-      - name: flavor_category
+      - name: flavor_categories
         data_tests:
           - not_null
 
@@ -53,5 +53,15 @@ models:
         data_tests:
           - not_null
       - name: rating
+        data_tests:
+          - not_null
+
+  - name: stg_airtable__roasters
+    columns:
+      - name: roaster_id
+        data_tests:
+          - unique
+          - not_null
+      - name: roaster_name
         data_tests:
           - not_null

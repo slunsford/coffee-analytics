@@ -2,36 +2,36 @@ version: 2
 
 models:
   - name: ratings
-    description: "Fact table for ratings of coffees"
+    description: Fact table for ratings of coffees
     columns:
       - name: rating_id
-        description: "Primary key (record ID from Airtable)"
+        description: Primary key (record ID from Airtable)
         data_tests:
           - unique
           - not_null
       - name: coffee_id
-        description: "Foreign key for `coffees`"
+        description: Unique identifier and FK for `coffees`
         data_tests:
           - relationships:
               to: ref('coffees')
               field: coffee_id
+      - name: flavor_profile_key
+        description: Foreign key for `flavor_profile_key`
+        data_tests:
+          - relationships:
+              to: ref('flavor_profiles')
+              field: flavor_profile_key
+      - name: brew_method
+        description: Brew method, e.g. AeroPress, Etkin, etc.
       - name: rated_date
-        description: "Date the coffee was rated"
+        description: Date the coffee was rated
         data_tests:
           - not_null
       - name: rating
-        description: "Rating given"
+        description: Rating given
         data_tests:
           - not_null
-      - name: rating_age
-        description: "Days since rating"
-        data_tests:
-          - not_null
-      - name: weight
-        description: "Recency-based weight given to rating (half-life of 365 days)"
-        data_tests:
-          - not_null
-      - name: weighted_rating
-        description: "Rating with weighting applied"
+      - name: is_current
+        description: Indicates whether this is the most recent rating for this coffee
         data_tests:
           - not_null
