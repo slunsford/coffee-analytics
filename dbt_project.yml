@@ -24,8 +24,8 @@ models:
   coffee_analytics:
     staging:
       +schema: stg
-    intermediate:
-      +schema: int
+    # intermediate:
+    #   +schema: int
     marts:
       +materialized: table
       # +schema: "marts"

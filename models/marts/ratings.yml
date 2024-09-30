@@ -31,6 +31,16 @@ models:
         description: Rating given
         data_tests:
           - not_null
+      - name: is_liked
+        description: Indicates whether the coffee is liked
+        data_tests:
+          - not_null
+      - name: rating_value
+        description: Numeric value assigned to the rating (for calculating net ratings, etc.)
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [1, -1]
       - name: is_current
         description: Indicates whether this is the most recent rating for this coffee
         data_tests:

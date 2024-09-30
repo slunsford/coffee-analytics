@@ -1,0 +1,121 @@
+models:
+- name: coffee_ratings
+  description: Combined model with ratings by coffee
+  data_tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - coffee_id
+          - rating_id
+          
+  columns:
+    - name: coffee_id
+      data_type: varchar
+      description: Unique identifier and FK for `coffees`
+
+    - name: rating_id
+      data_type: varchar
+      description: Primary key (record ID from Airtable)
+      
+    - name: coffee_name
+      data_type: varchar
+      description: Name of the coffee
+
+    - name: roaster_id
+      data_type: varchar
+      description: Unique identifier for the roaster
+
+    - name: roaster
+      data_type: varchar
+      description: Roaster
+
+    - name: origin_id
+      data_type: varchar
+      description: Unique identifier for the origin
+
+    - name: country
+      data_type: varchar
+      description: Country of origin
+
+    - name: world_region
+      data_type: varchar
+      description: Continent/world region of origin
+
+    - name: country_region
+      data_type: varchar
+      description: Locality within country of origin
+
+    - name: is_available
+      data_type: boolean
+      description: Indicates whether the coffee is currently available for purchase
+
+    - name: availability
+      data_type: varchar
+      description: Current availability for purchase
+
+    - name: is_decaf
+      data_type: boolean
+      description: Indicates whether the coffee is decaf
+
+    - name: caffeine_content
+      data_type: varchar
+      description: Labels the coffee as decaf or regular
+
+    - name: roast_darkness
+      data_type: varchar
+      description: Light/medium/dark
+
+    - name: varietals
+      data_type: varchar
+      description: Varietals
+
+    - name: process
+      data_type: varchar
+      description: Coffee cleaning/processing method
+
+    - name: elevation_min
+      data_type: integer
+      description: Minimum elevation (meters)
+
+    - name: elevation_max
+      data_type: integer
+      description: Maximum elevation (meters)
+
+    - name: elevation
+      data_type: varchar
+      description: Elevation range
+
+    - name: flavor_profile_key
+      data_type: varchar
+      description: Foreign key for `flavor_profile_key`
+
+    - name: is_favorite
+      data_type: boolean
+      description: Indicates whether the coffee was marked as a favorite
+
+    - name: brew_method
+      data_type: varchar
+      description: "Brew method, e.g. AeroPress, Etkin, etc."
+      
+    - name: rating
+      data_type: varchar
+      description: Rating given
+
+    - name: is_liked
+      data_type: boolean
+      description: Indicates whether the coffee is liked
+
+    - name: rating_value
+      data_type: integer
+      description: Numeric value assigned to the rating (for calculating net ratings, etc.)
+
+    - name: rated_date
+      data_type: date
+      description: Date the coffee was rated
+
+    - name: added_at
+      data_type: timestamp with time zone
+      description: Date coffee added to log
+
+    - name: is_current
+      data_type: boolean
+      description: Indicates whether this is the most recent rating for this coffee
