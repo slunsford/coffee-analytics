@@ -43,7 +43,9 @@ join_to_origins_and_roasters as (
            coalesce(country_name, '[Blend]') as country,
            coalesce(world_region, '[Blend]') as world_region,
            country_region,
+           is_available,
            availability,
+           is_decaf,
            caffeine_content,
            roast_darkness,
            varietals,
@@ -52,6 +54,7 @@ join_to_origins_and_roasters as (
            elevation_max,
            elevation,
            flavor_profile_key,
+           is_favorite,
            added_at,
            
       from join_to_elevations

@@ -13,10 +13,14 @@ models:
         description: Name of the coffee
         data_tests:
           - not_null
+      - name: roaster_id
+        description: Unique identifier for the roaster
       - name: roaster
         description: Roaster
         data_tests:
           - not_null
+      - name: origin_id
+        description: Unique identifier for the origin
       - name: country
         description: Country of origin
         data_tests:
@@ -27,19 +31,34 @@ models:
           - not_null
       - name: country_region
         description: Locality within country of origin
+      - name: is_available
+        description: Indicates whether the coffee is currently available for purchase
+        data_tests:
+          - not_null
       - name: availability
         description: Current availability for purchase
-      - name: caffeine_content
-        description: Decaf/regular
         data_tests:
+          - not_null
+      - name: is_decaf
+        description: Indicates whether the coffee is decaf
+        data_tests:
+          - not_null
+      - name: caffeine_content
+        description: Labels the coffee as decaf or regular
+        data_tests:
+          - not_null
           - accepted_values:
               values: ["Decaf", "Regular"]
       - name: roast_darkness
         description: Light/medium/dark
-      - name: varietal
-        description: Varietal
+        data_tests:
+          - not_null
+      - name: varietals
+        description: Varietals
       - name: process
         description: Coffee cleaning/processing method
+        data_tests:
+          - not_null
       - name: elevation_min
         description: Minimum elevation (meters)
       - name: elevation_max
@@ -51,14 +70,15 @@ models:
       - name: flavor_profile_key
         description: Foreign key for `flavor_profiles`
         data_tests:
+          - not_null
           - relationships:
               to: ref('flavor_profiles')
               field: flavor_profile_key
+      - name: is_favorite
+        description: Indicates whether the coffee was marked as a favorite
+        data_tests:
+          - not_null
       - name: added_at
         description: Date coffee added to log
         data_tests:
           - not_null
-      - name: rating
-        description: Value of most recent rating
-      - name: rated_date
-        description: Date of most recent rating
