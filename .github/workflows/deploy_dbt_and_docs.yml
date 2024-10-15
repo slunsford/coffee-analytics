@@ -37,7 +37,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install "duckdb>=1.0,<2.0"
+          pip install "duckdb=${{ vars.duckdb_version }}"
           pip install dbt-core dbt-duckdb
           dbt deps
       # dbt related commands here - run use --target prod/dev to run for specific environments
