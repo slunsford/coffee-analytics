@@ -8,26 +8,6 @@ coffees as (
     select * from {{ ref('stg_airtable__coffees') }}
 ),
 
-get_current_ratings as (
-    
-    {{ dbt_utils.deduplicate('ratings',
-        partition_by = 'coffee_id',
-        order_by = 'rated_date desc'
-    ) }}
-    
-),
-
-join_to_current_ratings as (
-    
-     select ratings.*,
-            (get_current_ratings.rating_id is not null) as is_current
-            
-       from ratings
-  left join get_current_ratings
-      using (rating_id)
-       
-),
-
 join_to_coffees as (
     
      select rating_id,
@@ -40,9 +20,9 @@ join_to_coffees as (
             case when is_liked then 1
                  else -1
                  end as rating_value,
-            is_current
+            row_number() over (partition by coffee_id order by rated_date desc) = 1 as is_current
             
-       from join_to_current_ratings as ratings
+       from ratings
        join coffees
       using (coffee_id)
        
