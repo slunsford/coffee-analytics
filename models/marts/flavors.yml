@@ -2,12 +2,13 @@ version: 2
 
 models:
   - name: flavors
-    description: Outrigger/dimension table with flavors used in tasting notes of coffees
+    description: Dimension table with flavors used in tasting notes of coffees
     columns:
       - name: flavor_id
         description: Primary key (record ID from Airtable)
         data_tests:
           - unique
+          - not_null
           - relationships:
               to: ref('flavor_profiles')
               field: flavor_id
@@ -15,13 +16,13 @@ models:
         description: Description of the flavor
         data_tests:
           - not_null
-      # - name: flavor_category_group_key
-      #   description: FK for `flavor_category_groups` bridge
-      #   data_tests:
-      #     - not_null
-      #     - relationships:
-      #         to: ref('flavor_category_groups')
-      #         field: flavor_category_group_key
+      - name: flavor_category_group_key
+        description: FK for `flavor_categories`, corresponding to one or more categories for the flavor, e.g. `Fruity` or `Floral`
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('flavor_categories')
+              field: flavor_category_group_key
       - name: primary_flavor_category
         description: First category listed
         data_tests:
