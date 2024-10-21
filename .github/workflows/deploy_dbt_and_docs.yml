@@ -45,7 +45,7 @@ jobs:
         run: dbt build --target prod
 
       - name: Deploy Evidence
-        run: curl -X POST 'https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/7a5a9050-2bc2-4535-9b97-56467a42b791'
+        run: curl -X POST '${{ secrets.evidence_deploy_hook_url }}'
         
       - name: Generate docs
         run: dbt docs generate
