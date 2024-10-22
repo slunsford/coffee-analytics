@@ -48,7 +48,7 @@ select flavor_category,
  where flavor_category != 'Uncategorized'
  group by all
 ```
-### Flavor Categories
+# Flavor Categories
 
 <BarChart
     data={ratings_by_flavor_category}
