@@ -17,9 +17,8 @@ join_to_coffees as (
             rated_date,
             rating,
             is_liked,
-            case when is_liked then 1
-                 else -1
-                 end as rating_value,
+            case when is_liked then '👍🏻' else '👎🏻' end as rating_emoji,
+            case when is_liked then 1 else -1 end as rating_value,
             row_number() over (partition by coffee_id order by rated_date desc) = 1 as is_current
             
        from ratings

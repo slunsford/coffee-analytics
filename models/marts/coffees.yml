@@ -78,6 +78,12 @@ models:
         description: Indicates whether the coffee was marked as a favorite
         data_tests:
           - not_null
+      - name: favorite_emoji
+        description: Star emoji marker for favorites
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [⭐️, '']
       - name: added_at
         description: Date coffee added to log
         data_tests:

@@ -35,6 +35,12 @@ models:
         description: Indicates whether the coffee is liked
         data_tests:
           - not_null
+      - name: rating_emoji
+        description: Thumbs up/thumbs down emoji representation of the rating
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [👍🏻, 👎🏻]
       - name: rating_value
         description: Numeric value assigned to the rating (for calculating net ratings, etc.)
         data_tests:
