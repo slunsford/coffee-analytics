@@ -3,23 +3,20 @@ title: Coffees, Roasters, and Origins
 queries:
   - roasters_list.sql
   - countries_list.sql
+  - rating_dates.sql
 ---
 
-<Dropdown name=year>
-    <DropdownOption value=% valueLabel="[All Years]"/>
-    <DropdownOption value=2021/>
-    <DropdownOption value=2022/>
-    <DropdownOption value=2023/>
-    <DropdownOption value=2024/>
+{@partial "define-colors.md"}
+
+<Dropdown data={roasters_list} name=roaster value=roaster>
+    <DropdownOption value="%" valueLabel="[All Roasters]"/>
 </Dropdown>
 
 <Dropdown data={countries_list} name=country value=country>
     <DropdownOption value="%" valueLabel="[All Countries]"/>
 </Dropdown>
 
-<Dropdown data={roasters_list} name=roaster value=roaster>
-    <DropdownOption value="%" valueLabel="[All Roasters]"/>
-</Dropdown>
+{@partial "date-picker.md"}
 
 ```sql coffee_ratings
 select *
@@ -29,44 +26,11 @@ select *
  where is_current
    and roaster like '${inputs.roaster.value}'
    and country like '${inputs.country.value}'
-   and date_part('year', rated_date) like '${inputs.year.value}'
+   and rated_date between '${inputs.dates.start}' and date_add('${inputs.dates.end}'::date, interval 1 day)
+       -- For some reason the end date is being set one day before the end of the range in the picker
  order by coffee_name
 ```
     
-```sql ratings_by_roaster
-select roaster,
-       rating,
-       sum(rating_value) as ratings,
-  from ${coffee_ratings}
- group by all
-```
-    
-```sql ratings_by_process
-select process,
-       rating,
-       sum(rating_value) as ratings,
-  from ${coffee_ratings}
- where process != 'Unknown'
- group by all
-```
-    
-```sql net_score_by_country
-select country,
-       count(*) as ratings,
-       sum(rating_value) as net_rating,
-       net_rating/ratings*100 as net_score,
-  from ${coffee_ratings}
- group by all
-```
-    
-```sql ratings_by_country
-select country,
-       rating,
-       sum(rating_value) as ratings,
-  from ${coffee_ratings}
- group by all
-```
-
 ```sql coffee_counts
 select count(distinct coffee_id) as coffees,
        count(distinct roaster_id) as roasters,
@@ -77,8 +41,8 @@ select count(distinct coffee_id) as coffees,
 
 <BigValue 
   data={coffee_counts} 
-  value=coffees
-  link='#coffees'
+  value=roasters
+  link='#roasters--processes'
 />
 
 <BigValue 
@@ -89,13 +53,21 @@ select count(distinct coffee_id) as coffees,
 
 <BigValue 
   data={coffee_counts} 
-  value=roasters
-  link='#roasters--processes'
+  value=coffees
+  link='#coffees'
 />
 
 
 # Roasters & Processes
 
+```sql ratings_by_roaster
+select roaster,
+       rating,
+       sum(rating_value) as ratings,
+  from ${coffee_ratings}
+ group by all
+```
+    
 <BarChart
     data={ratings_by_roaster}
     title="Ratings by Roaster"
@@ -103,7 +75,17 @@ select count(distinct coffee_id) as coffees,
     y=ratings
     series=rating
     swapXY=true
+    colorPalette={chartColors}
 />
+
+```sql ratings_by_process
+select process,
+       rating,
+       sum(rating_value) as ratings,
+  from ${coffee_ratings}
+ where process != 'Unknown'
+ group by all
+```
 
 <BarChart
     data={ratings_by_process}
@@ -112,26 +94,55 @@ select count(distinct coffee_id) as coffees,
     y=ratings
     series=rating
     swapXY=true
+    colorPalette={chartColors}
 />
 
 # Origins
 
+```sql ratings_by_country
+with pivoted as (
+ pivot ${coffee_ratings}
+    on lower(rating)
+ using count(*),
+ group by country
+)
+
+select * replace (-disliked as disliked),
+       liked - disliked as net_liked,
+       liked + disliked as coffees_rated,
+       liked/coffees_rated as liked_pct,
+  from pivoted
+ order by net_liked desc, liked desc
+```
+
 <AreaMap 
-    data={net_score_by_country} 
-    title="Net Score by Country"
+    data={ratings_by_country} 
+    title="% Liked by Country"
     areaCol=country
     geoJsonUrl=https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_admin_0_countries.geojson
     geoId=name
-    value=net_score
+    value=liked_pct
+    valueFmt=pct0
+    legendType=scalar
+    legendFmt=pct0
+    colorPalette={colorGradient}
+    tooltip={[
+        {id: 'country', fmt: 'id', showColumnName: false, valueClass: 'text-xl font-semibold'},
+        {id: 'liked_pct', title: '% Liked', fmt: 'pct0', fieldClass: 'text-[grey]', valueClass: 'text-[#236aa4] font-bold'},
+        {id: 'liked', fieldClass: 'text-[grey]', valueClass: 'text-[#236aa4]'},
+        {id: 'disliked', fieldClass: 'text-[grey]', valueClass: 'text-[#a45c23]'},
+        {id: 'coffees_rated', fieldClass: 'text-[grey]'},
+    ]}
 />
 
 <BarChart
     data={ratings_by_country}
     title="Ratings by Country"
     x=country
-    y=ratings
-    series=rating
+    y={['liked','disliked']}
     swapXY=true
+    colorPalette={chartColors}
+    sort=false
 />
 
 # Coffees

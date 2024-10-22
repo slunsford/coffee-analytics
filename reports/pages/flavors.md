@@ -1,20 +1,11 @@
 ---
-title: Flavor Ratings
+title: Flavor Profiles
 queries:
   - flavor_categories_list.sql
+  - rating_dates.sql
 ---
 
-<Dropdown name=year>
-    <DropdownOption value=% valueLabel="[All Years]"/>
-    <DropdownOption value=2021/>
-    <DropdownOption value=2022/>
-    <DropdownOption value=2023/>
-    <DropdownOption value=2024/>
-</Dropdown>
-
-<Dropdown data={flavor_categories_list} name=flavor_category value=flavor_category>
-    <DropdownOption value="%" valueLabel="[All Categories]"/>
-</Dropdown>
+{@partial "define-colors.md"}
 
 ```sql flavors_list
 select distinct flavor
@@ -23,9 +14,15 @@ select distinct flavor
  order by 1
 ```
 
+<Dropdown data={flavor_categories_list} name=flavor_category value=flavor_category>
+    <DropdownOption value="%" valueLabel="[All Categories]"/>
+</Dropdown>
+
 <Dropdown data={flavors_list} name=flavor value=flavor>
     <DropdownOption value="%" valueLabel="[All Flavors]"/>
 </Dropdown>
+
+{@partial "date-picker.md"}
 
 ```sql flavor_ratings
 select *
@@ -51,14 +48,7 @@ select flavor_category,
  where flavor_category != 'Uncategorized'
  group by all
 ```
-
-```sql ratings_by_flavor
-select flavor,
-       rating,
-       sum(rating_value) as ratings,
-  from ${flavor_ratings}
- group by all
-```
+### Flavor Categories
 
 <BarChart
     data={ratings_by_flavor_category}
@@ -67,7 +57,17 @@ select flavor,
     y=ratings
     series=rating
     swapXY=true
+    colorPalette={chartColors}
 />
+
+```sql ratings_by_flavor
+select flavor,
+       rating,
+       sum(rating_value) as ratings,
+  from ${flavor_ratings}
+ group by all
+```
+# Flavors
 
 <BarChart
     data={ratings_by_flavor}
@@ -76,5 +76,6 @@ select flavor,
     y=ratings
     series=rating
     swapXY=true
+    colorPalette={chartColors}
 />
 
