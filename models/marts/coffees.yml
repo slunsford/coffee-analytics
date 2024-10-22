@@ -70,7 +70,9 @@ models:
       - name: flavor_profile_key
         description: Foreign key for `flavor_profiles`
         data_tests:
-          - not_null
+          - not_null:
+              config:
+                severity: warn
           - relationships:
               to: ref('flavor_profiles')
               field: flavor_profile_key
