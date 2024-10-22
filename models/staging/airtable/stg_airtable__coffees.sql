@@ -25,7 +25,7 @@ renamed as (
             coalesce(elevation_min_, elevation_max_)::integer as elevation_min,
             coalesce(elevation_max_, elevation_min_)::integer as elevation_max,
             {{ extract_ids('flavors') }} as flavor_ids,
-            {{ dbt_utils.generate_surrogate_key(['flavor_ids']) }} as flavor_profile_key,
+            case when flavor_ids is not null then {{ dbt_utils.generate_surrogate_key(['flavor_ids']) }} end as flavor_profile_key,
             coalesce(favorite, false) as is_favorite,
             -- rating,
             -- rated_date,
