@@ -9,7 +9,7 @@
   title="lunsford.coffee"
   hideBreadcrumbs=false
   builtWithEvidence=true
-  githubRepo="https://github.com/slunsford/coffee_analytics"
+  githubRepo="https://github.com/slunsford/coffee-analytics"
 >
   <slot slot="content" />
 </EvidenceDefaultLayout>
