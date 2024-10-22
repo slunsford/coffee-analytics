@@ -47,6 +47,7 @@ join_to_origins_and_roasters as (
            availability,
            is_decaf,
            caffeine_content,
+           case when is_decaf then '😴' else '😵‍💫' end as caffeine_emoji,
            roast_darkness,
            varietals,
            process,
@@ -55,6 +56,7 @@ join_to_origins_and_roasters as (
            elevation,
            flavor_profile_key,
            is_favorite,
+           case when is_favorite then '⭐️' else '' end as favorite_emoji,
            added_at,
            
       from join_to_elevations

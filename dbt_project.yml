@@ -28,5 +28,5 @@ models:
       +schema: int
     marts:
       +materialized: table
-      report_views:
-        +materialized: view
+      # report_views:
+      #   +materialized: view
