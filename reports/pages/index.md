@@ -118,27 +118,15 @@ select process,
 # Origins
 
 ```sql ratings_by_country
-with pivoted as (
-      pivot ${coffee_ratings}
-         on lower(rating)
-      using sum(rating_value),
-      group by country
-),
-
-totals as (
-     select country,
-            sum(rating_value) as net_liked,
-            count(*) as coffees_rated
-       from ${coffee_ratings}
-   group by all
-)
-
- select *,
-        liked/coffees_rated as liked_pct,
-   from pivoted
-   join totals
-  using (country)
-  order by net_liked desc, liked desc
+select country,
+       count_if(is_liked) as liked,
+       -count_if(not is_liked) as disliked,
+       liked + disliked as net_liked,
+       count(*) as coffees_rated,
+       liked/coffees_rated as liked_pct,
+  from ${coffee_ratings}
+ group by all
+ order by net_liked desc, liked desc
 ```
 
 <AreaMap 
