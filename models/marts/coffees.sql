@@ -1,7 +1,7 @@
 with
 
 coffees as (
-    from {{ ref('stg_airtable__coffees') }}
+    from {{ ref('int_coffees_filtered_by_rated') }}
 ),
 
 origins as (
@@ -64,7 +64,7 @@ join_to_origins_and_roasters as (
      using (origin_id)
  left join roasters
      using (roaster_id)
-        
+             
 )
 
 from join_to_origins_and_roasters
