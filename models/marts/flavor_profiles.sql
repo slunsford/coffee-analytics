@@ -1,17 +1,7 @@
 with
 
-coffees as (
-	  select * from {{ ref('stg_airtable__coffees') }}
-),
-
 flavor_profiles as (
-  
-	select distinct flavor_profile_key,
-		   unnest(flavor_ids) as flavor_id
-       
-	  from coffees
-	 where flavor_ids is not null
-   
+    from {{ ref('int_flavor_profiles_unnested') }}
 )
 
-select * from flavor_profiles
+from flavor_profiles

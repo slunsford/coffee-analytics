@@ -1,21 +1,21 @@
 models:
-- name: flavor_categories
-  description: Outrigger table with flavor categories
-  data_tests:
-    - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - flavor_category_group_key
-          - flavor_category
-          
-  columns:
-    - name: flavor_category_group_key
-      data_type: varchar
-      description: Key for each combination of flavor categories
-      data_tests:
-        - not_null
-
-    - name: flavor_category
-      data_type: varchar
-      description: Name of the flavor category
-      data_tests:
-        - not_null
+  - name: flavor_categories
+    description: Outrigger table with flavor categories
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - flavor_category_group_key
+            - flavor_category
+            
+    columns:
+      - name: flavor_category_group_key
+        data_type: varchar
+        description: Key for each combination of flavor categories
+        data_tests:
+          - not_null
+  
+      - name: flavor_category
+        data_type: varchar
+        description: Name of the flavor category
+        data_tests:
+          - not_null
