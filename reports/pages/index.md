@@ -1,6 +1,7 @@
 ---
 title: Coffees, Roasters, and Origins
 queries:
+  - coffees_list.sql
   - roasters_list.sql
   - countries_list.sql
   - rating_dates.sql
@@ -8,13 +9,29 @@ queries:
 
 {@partial "define-colors.md"}
 
-<Dropdown data={roasters_list} name=roaster value=roaster>
-    <DropdownOption value="%" valueLabel="[All Roasters]"/>
-</Dropdown>
+<Dropdown
+    data={roasters_list}
+    name=roasters
+    value=roaster
+    multiple=true
+    selectAllByDefault=true
+/>
 
-<Dropdown data={countries_list} name=country value=country>
-    <DropdownOption value="%" valueLabel="[All Countries]"/>
-</Dropdown>
+<Dropdown
+    data={countries_list}
+    name=countries
+    value=country
+    multiple=true
+    selectAllByDefault=true
+/>
+
+<Dropdown
+    data={coffees_list}
+    name=coffees
+    value=coffee_name
+    multiple=true
+    selectAllByDefault=true
+/>
 
 {@partial "date-picker.md"}
 
@@ -23,10 +40,12 @@ queries:
   join md.ratings
  using (coffee_id)
  where is_current
-   and roaster like '${inputs.roaster.value}'
-   and country like '${inputs.country.value}'
-   and rated_date between '${inputs.dates.start}' and date_add('${inputs.dates.end}'::date, interval 1 day)
-       -- For some reason the end date is being set one day before the end of the range in the picker
+   and coffee_name in ${inputs.coffees.value}
+   and roaster in ${inputs.roasters.value}
+   and country in ${inputs.countries.value}
+   and rated_date between date_add('${inputs.dates.start}'::date, interval 1 day)
+                      and date_add('${inputs.dates.end}'::date, interval 1 day)
+       -- For some reason the dates are being set one day before the start/end dates in the picker
  order by coffee_name
 ```
     
@@ -100,18 +119,26 @@ select process,
 
 ```sql ratings_by_country
 with pivoted as (
- pivot ${coffee_ratings}
-    on lower(rating)
- using count(*),
- group by country
+      pivot ${coffee_ratings}
+         on lower(rating)
+      using sum(rating_value),
+      group by country
+),
+
+totals as (
+     select country,
+            sum(rating_value) as net_liked,
+            count(*) as coffees_rated
+       from ${coffee_ratings}
+   group by all
 )
 
-select * replace (-disliked as disliked),
-       liked - disliked as net_liked,
-       liked + disliked as coffees_rated,
-       liked/coffees_rated as liked_pct,
-  from pivoted
- order by net_liked desc, liked desc
+ select *,
+        liked/coffees_rated as liked_pct,
+   from pivoted
+   join totals
+  using (country)
+  order by net_liked desc, liked desc
 ```
 
 <AreaMap 
@@ -122,8 +149,6 @@ select * replace (-disliked as disliked),
     geoId=name
     value=liked_pct
     valueFmt=pct0
-    legendType=scalar
-    legendFmt=pct0
     colorPalette={colorGradient}
     tooltip={[
         {id: 'country', fmt: 'id', showColumnName: false, valueClass: 'text-xl font-semibold'},
