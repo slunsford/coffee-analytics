@@ -7,33 +7,32 @@ queries:
 
 {@partial "define-colors.md"}
 
-```sql flavors_list
-select distinct flavor
-  from md.flavors
- where flavor_categories like '%${inputs.flavor_category.value}%'
- order by 1
-```
-
-<Dropdown data={flavor_categories_list} name=flavor_category value=flavor_category>
-    <DropdownOption value="%" valueLabel="[All Categories]"/>
-</Dropdown>
-
-<Dropdown data={flavors_list} name=flavor value=flavor>
-    <DropdownOption value="%" valueLabel="[All Flavors]"/>
-</Dropdown>
+<Dropdown
+    data={flavor_categories_list}
+    name=flavor_categories
+    value=flavor_category
+    multiple=true
+    selectAllByDefault=true
+/>
 
 {@partial "date-picker.md"}
 
 ```sql flavor_ratings
+with filter_flavor_categories as (
+     select distinct flavor_category_group_key
+       from md.flavor_categories
+      where flavor_category in ${inputs.flavor_categories.value}    
+)
+
   from md.flavors
   join md.flavor_profiles
  using (flavor_id)
   join md.ratings
  using (flavor_profile_key)
  where is_current
-   and flavor like '${inputs.flavor.value}'
-   and flavor_categories like '%${inputs.flavor_category.value}%'
-   and date_part('year', rated_date) like '${inputs.year.value}'
+   and flavor_category_group_key in (from filter_flavor_categories)
+   and rated_date between date_add('${inputs.dates.start}'::date, interval 1 day)
+                      and date_add('${inputs.dates.end}'::date, interval 1 day)
  order by flavor
 ```
 
