@@ -1,0 +1,9 @@
+models:
+- name: int_coffees_filtered_by_rated
+  description: Filters coffees to those with ratings
+  columns:
+    - name: coffee_id
+      description: Primary key (record ID from Airtable)
+      data_tests:
+        - unique
+        - not_null

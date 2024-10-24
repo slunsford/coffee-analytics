@@ -1,7 +1,7 @@
 with
 
 coffees as (
-    from {{ ref('stg_airtable__coffees') }}
+    from {{ ref('int_coffees_filtered_by_rated') }}
 ),
 
 flavor_profiles as (
