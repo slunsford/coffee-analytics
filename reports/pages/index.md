@@ -19,7 +19,6 @@ queries:
 {@partial "date-picker.md"}
 
 ```sql coffee_ratings
-select *
   from md.coffees
   join md.ratings
  using (coffee_id)

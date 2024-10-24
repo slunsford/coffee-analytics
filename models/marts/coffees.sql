@@ -1,15 +1,15 @@
 with
 
 coffees as (
-    select * from {{ ref('stg_airtable__coffees') }}
+    from {{ ref('stg_airtable__coffees') }}
 ),
 
 origins as (
-    select * from {{ ref('stg_airtable__origins') }}
+    from {{ ref('stg_airtable__origins') }}
 ),
 
 roasters as (
-    select * from {{ ref('stg_airtable__roasters') }}
+    from {{ ref('stg_airtable__roasters') }}
 ),
 
 elevations as (
@@ -67,4 +67,4 @@ join_to_origins_and_roasters as (
         
 )
 
-select * from join_to_origins_and_roasters
+from join_to_origins_and_roasters

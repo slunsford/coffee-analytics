@@ -1,11 +1,11 @@
 with
 
 ratings as (
-    select * from {{ ref('stg_airtable__ratings') }}
+    from {{ ref('stg_airtable__ratings') }}
 ),
 
 coffees as (
-    select * from {{ ref('stg_airtable__coffees') }}
+    from {{ ref('stg_airtable__coffees') }}
 ),
 
 join_to_coffees as (
@@ -27,4 +27,4 @@ join_to_coffees as (
        
 )
 
-select * from join_to_coffees
+from join_to_coffees

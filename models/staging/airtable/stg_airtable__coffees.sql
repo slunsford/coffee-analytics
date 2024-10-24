@@ -1,7 +1,7 @@
 with
 
 source as (
-    select * from {{ source('airtable', 'coffees') }}
+    from {{ source('airtable', 'coffees') }}
 ),
 
 renamed as (
@@ -36,4 +36,4 @@ renamed as (
        
 )
 
-select * from renamed
+from renamed

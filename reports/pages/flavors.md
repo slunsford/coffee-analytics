@@ -25,7 +25,6 @@ select distinct flavor
 {@partial "date-picker.md"}
 
 ```sql flavor_ratings
-select *
   from md.flavors
   join md.flavor_profiles
  using (flavor_id)
