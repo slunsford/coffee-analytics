@@ -21,4 +21,4 @@ select_columns as (
        
 )
 
-select * from select_columns
+from select_columns
