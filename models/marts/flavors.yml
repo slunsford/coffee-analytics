@@ -1,5 +1,3 @@
-version: 2
-
 models:
   - name: flavors
     description: Dimension table with flavors used in tasting notes of coffees

@@ -1,11 +1,12 @@
-version: 2
-
 models:
   - name: flavor_profiles
     description: Bridge table representing unique combinations of flavors
     data_tests:
-      - unique:
-          column_name: "(flavor_profile_key || '-' || flavor_id)"
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - flavor_profile_key
+          - flavor_id
+          
     columns:
       - name: flavor_profile_key
         description: Surrogate key corresponding to multiple flavors and used as a foreign key in `coffees`
@@ -14,7 +15,7 @@ models:
               to: ref('coffees')
               field: flavor_profile_key
       - name: flavor_id
-        description: Foreign key for `flavors`
+        description: Unique identifier for the flavor
         data_tests:
           - relationships:
               to: ref('flavors')

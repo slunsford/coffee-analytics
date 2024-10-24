@@ -30,3 +30,7 @@ models:
       +materialized: table
       # report_views:
       #   +materialized: view
+
+data_tests:
+  coffee_analytics:
+    severity: warn

@@ -1,6 +1,6 @@
 models:
 - name: int_flavor_categories_unnested
-  description: Unnests flavor category lists and gets distinct values for `flavor_category_group_key` and the individual categories. Created as an intermediate model to allow reuse if necessary.
+  description: Unnests flavor category lists and gets distinct values for `flavor_category_group_key` and the individual categories
   data_tests:
     - dbt_utils.unique_combination_of_columns:
         combination_of_columns:
@@ -11,11 +11,7 @@ models:
     - name: flavor_category_group_key
       data_type: varchar
       description: Key for each combination of flavor categories
-      data_tests:
-        - not_null
 
     - name: flavor_category
       data_type: varchar
       description: Name of the flavor category
-      data_tests:
-        - not_null

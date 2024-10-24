@@ -1,0 +1,14 @@
+models:
+  - name: int_flavor_profiles_unnested
+    description: Unnests flavor_id lists and gets distinct values for `flavor_profile_key` and the individual flavor IDs
+    data_tests:
+    - dbt_utils.unique_combination_of_columns:
+        combination_of_columns:
+          - flavor_profile_key
+          - flavor_id
+      
+    columns:
+      - name: flavor_profile_key
+        description: Surrogate key corresponding to combination of flavors
+      - name: flavor_id
+        description: Unique identifier for the flavor

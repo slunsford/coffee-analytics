@@ -1,7 +1,11 @@
 with
 
 flavors as (
-    select * from {{ ref('stg_airtable__flavors') }}
+    from {{ ref('stg_airtable__flavors') }}
+),
+
+flavor_profiles as (
+    from {{ ref('int_flavor_profiles_unnested') }}
 ),
 
 select_columns as (
@@ -13,6 +17,7 @@ select_columns as (
             list_aggregate(flavor_categories, 'string_agg', ', ') as flavor_categories
             
        from flavors
+      where flavor_id in (select distinct flavor_id from flavor_profiles)
        
 )
 
