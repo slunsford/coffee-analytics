@@ -158,13 +158,14 @@ select country,
 
 <DataTable
     data={coffee_ratings}
-    groupBy='roaster'
+    rows=50
     sortable
     subtotals
     totalRow
     rowShading>
     
     <Column id='coffee_name' totalAgg=countDistinct totalFmt='0 "coffees"'/>
+    <Column id='roaster' totalAgg=countDistinct totalFmt='0 "roasters"'/>
     <Column id='country' colGroup='Origin' totalAgg=countDistinct totalFmt='0 "countries"'/>
     <Column id='world_region' colGroup='Origin'/>
     <!-- <Column id='country_region' colGroup='Origin'/> -->
