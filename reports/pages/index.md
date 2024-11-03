@@ -37,10 +37,7 @@ queries:
 
 ```sql coffee_ratings
   from md.coffees
-  join md.ratings
- using (coffee_id)
- where is_current
-   and coffee_name in ${inputs.coffees.value}
+ where coffee_name in ${inputs.coffees.value}
    and roaster in ${inputs.roasters.value}
    and country in ${inputs.countries.value}
    and rated_date between date_add('${inputs.dates.start}'::date, interval 1 day)
@@ -81,7 +78,7 @@ select count(distinct coffee_id) as coffees,
 ```sql ratings_by_roaster
 select roaster,
        rating,
-       sum(rating_value) as ratings,
+       count(*) as ratings,
   from ${coffee_ratings}
  group by all
 ```
@@ -99,7 +96,7 @@ select roaster,
 ```sql ratings_by_process
 select process,
        rating,
-       sum(rating_value) as ratings,
+       count(*) as ratings,
   from ${coffee_ratings}
  where process != 'Unknown'
  group by all
@@ -120,8 +117,8 @@ select process,
 ```sql ratings_by_country
 select country,
        count_if(is_liked) as liked,
-       -count_if(not is_liked) as disliked,
-       liked + disliked as net_liked,
+       count_if(not is_liked) as disliked,
+       liked - disliked as net_liked,
        count(*) as coffees_rated,
        liked/coffees_rated as liked_pct,
   from ${coffee_ratings}
@@ -162,10 +159,13 @@ select country,
 <DataTable
     data={coffee_ratings}
     groupBy='roaster'
+    sortable
+    subtotals
+    totalRow
     rowShading>
     
-    <Column id='coffee_name'/>
-    <Column id='country' colGroup='Origin'/>
+    <Column id='coffee_name' totalAgg=countDistinct totalFmt='0 "coffees"'/>
+    <Column id='country' colGroup='Origin' totalAgg=countDistinct totalFmt='0 "countries"'/>
     <Column id='world_region' colGroup='Origin'/>
     <!-- <Column id='country_region' colGroup='Origin'/> -->
     <Column id='favorite_emoji' title='Favorite' align='center' colGroup='Rating'/>

@@ -17,7 +17,8 @@ renamed as (
                   end as availability,
             favorite = 'Yes' as is_favorite,
             rating,
-            rated_date,
+            rating = 'Liked' as is_liked,
+            case when rating is not null then coalesce(rated_date, modified_date::date) end as rated_date,
             decaf = 'Yes' as is_decaf,
             case when decaf then 'Decaf'
                             else 'Regular'

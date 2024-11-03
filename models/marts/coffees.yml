@@ -11,14 +11,6 @@ models:
         description: Name of the coffee
         data_tests:
           - not_null
-      - name: roaster_id
-        description: Unique identifier for the roaster
-        data_tests:
-          - not_null
-      - name: roaster
-        description: Roaster
-        data_tests:
-          - not_null
       - name: origin_id
         description: Unique identifier for the country of origin
       - name: country
@@ -27,10 +19,30 @@ models:
         description: Continent/world region of origin
       - name: country_region
         description: Locality within country of origin
+      - name: roaster_id
+        description: Unique identifier for the roaster
+        data_tests:
+          - not_null
+      - name: roaster
+        description: Roaster
+        data_tests:
+          - not_null
       - name: is_available
         description: Indicates whether the coffee is currently available for purchase
       - name: availability
         description: Current availability for purchase
+      - name: is_favorite
+        description: Indicates whether the coffee was marked as a favorite
+      - name: favorite_emoji
+        description: Star emoji marker for favorites
+      - name: rating
+        description: Whether the coffee was liked or disliked
+      - name: is_liked
+        description: Indicates whether the coffee is liked
+        data_tests:
+          - not_null
+      - name: rated_date
+        description: The date the coffee was last rated
       - name: is_decaf
         description: Indicates whether the coffee is decaf
       - name: caffeine_content
@@ -53,9 +65,5 @@ models:
           - relationships:
               to: ref('flavor_profiles')
               field: flavor_profile_key
-      - name: is_favorite
-        description: Indicates whether the coffee was marked as a favorite
-      - name: favorite_emoji
-        description: Star emoji marker for favorites
       - name: added_at
         description: Date coffee added to log
