@@ -3,7 +3,7 @@ models:
     description: Dimension table for individual coffee products
     columns:
       - name: coffee_id
-        description: Primary key (record ID from Airtable)
+        description: Unique identifier for the coffee
         data_tests:
           - unique
           - not_null
@@ -20,7 +20,7 @@ models:
         data_tests:
           - not_null
       - name: origin_id
-        description: Unique identifier for the origin
+        description: Unique identifier for the country of origin
       - name: country
         description: Country of origin
       - name: world_region

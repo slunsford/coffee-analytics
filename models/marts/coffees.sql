@@ -1,15 +1,7 @@
 with
 
 coffees as (
-    from {{ ref('int_coffees_filtered_by_rated') }}
-),
-
-origins as (
-    from {{ ref('stg_airtable__origins') }}
-),
-
-roasters as (
-    from {{ ref('stg_airtable__roasters') }}
+    from {{ ref('int_coffees_joined_to_fks') }}
 ),
 
 elevations as (
@@ -33,14 +25,14 @@ join_to_elevations as (
       
 ),
 
-join_to_origins_and_roasters as (
+renamed as (
   
     select coffee_id,
            coffee_name,
            roaster_id,
-           roaster_name as roaster,
+           roaster,
            origin_id,
-           coalesce(country_name, '[Blend]') as country,
+           coalesce(country, '[Blend]') as country,
            coalesce(world_region, '[Blend]') as world_region,
            country_region,
            is_available,
@@ -58,13 +50,10 @@ join_to_origins_and_roasters as (
            is_favorite,
            case when is_favorite then '⭐️' else '' end as favorite_emoji,
            added_at,
+           modified_at
            
       from join_to_elevations
- left join origins
-     using (origin_id)
- left join roasters
-     using (roaster_id)
              
 )
 
-from join_to_origins_and_roasters
+from renamed
