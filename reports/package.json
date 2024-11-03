@@ -1,6 +1,6 @@
 {
   "name": "lunsford.coffee",
-  "version": "0.0.1",
+  "version": "1.1.0",
   "scripts": {
     "build": "evidence build",
     "build:strict": "evidence build:strict",
