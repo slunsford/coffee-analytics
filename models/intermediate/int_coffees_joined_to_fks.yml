@@ -1,0 +1,22 @@
+models:
+- name: int_coffees_joined_to_fks
+  description: Filters coffees to those with ratings
+  columns:
+    - name: coffee_id
+      description: Unique identifier for the coffee
+      data_tests:
+        - unique
+        - not_null
+    - name: roaster_id
+      description: Unique identifier for the roaster
+      data_tests:
+        - relationships:
+            field: roaster_id
+            to: ref('stg_collections__roasters')
+    - name: origin_id
+      description: Unique identifier for the country of origin
+      data_tests:
+        - relationships:
+            field: origin_id
+            to: ref('stg_collections__origins')
+

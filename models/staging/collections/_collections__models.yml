@@ -1,0 +1,43 @@
+models:
+  - name: stg_collections__coffees
+    columns:
+      - name: coffee_id
+        data_tests:
+          - unique
+          - not_null
+      - name: coffee_name
+        data_tests:
+          - not_null
+      - name: roaster
+        data_tests:
+          - not_null
+
+  - name: stg_collections__flavors
+    columns:
+      - name: flavor_id
+        data_tests:
+          - unique
+          - not_null
+      - name: flavor_categories
+        data_tests:
+          - not_null
+
+  - name: stg_collections__origins
+    columns:
+      - name: origin_id
+        data_tests:
+          - unique
+          - not_null
+      - name: country
+        data_tests:
+          - not_null
+
+  - name: stg_collections__roasters
+    columns:
+      - name: roaster_id
+        data_tests:
+          - unique
+          - not_null
+      - name: roaster_name
+        data_tests:
+          - not_null

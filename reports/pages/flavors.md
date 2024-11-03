@@ -27,10 +27,9 @@ with filter_flavor_categories as (
   from md.flavors
   join md.flavor_profiles
  using (flavor_id)
-  join md.ratings
+  join md.coffees
  using (flavor_profile_key)
- where is_current
-   and flavor_category_group_key in (from filter_flavor_categories)
+ where flavor_category_group_key in (from filter_flavor_categories)
    and rated_date between date_add('${inputs.dates.start}'::date, interval 1 day)
                       and date_add('${inputs.dates.end}'::date, interval 1 day)
  order by flavor
@@ -39,7 +38,7 @@ with filter_flavor_categories as (
 ```sql ratings_by_flavor_category
 select flavor_category,
        rating,
-       sum(rating_value) as ratings,
+       count(*) as ratings,
   from ${flavor_ratings}
   join md.flavor_categories
  using (flavor_category_group_key)
@@ -61,7 +60,7 @@ select flavor_category,
 ```sql ratings_by_flavor
 select flavor,
        rating,
-       sum(rating_value) as ratings,
+       count(*) as ratings,
   from ${flavor_ratings}
  group by all
 ```

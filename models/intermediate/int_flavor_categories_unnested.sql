@@ -1,7 +1,7 @@
 with
 
 flavors as (
-    from {{ ref('stg_airtable__flavors') }}
+    from {{ ref('stg_collections__flavors') }}
 ),
 
 flavor_profiles as (
@@ -11,7 +11,7 @@ flavor_profiles as (
 unnest_categories as (
   
      select distinct flavor_category_group_key,
-            unnest(flavor_categories) as flavor_category
+            unnest(flavor_categories_list) as flavor_category
             
        from flavors
       where flavor_id in (select distinct flavor_id from flavor_profiles)
