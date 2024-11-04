@@ -1,11 +1,16 @@
 ---
 title: Flavor Profiles
 queries:
-  - flavor_categories_list.sql
-  - rating_dates.sql
 ---
 
+```sql flavor_categories_list
+select distinct flavor_category as flavor_category
+  from md.flavor_categories
+ order by 1
+```
+
 {@partial "define-colors.md"}
+{@partial "date-picker.md"}
 
 <Dropdown
     data={flavor_categories_list}
@@ -14,8 +19,6 @@ queries:
     multiple=true
     selectAllByDefault=true
 />
-
-{@partial "date-picker.md"}
 
 ```sql flavor_ratings
 with filter_flavor_categories as (

@@ -51,7 +51,7 @@ final as (
             case when is_decaf then '😴' else '😵‍💫' end as caffeine_emoji,
             roast_darkness,
             varietals,
-            process,
+            coalesce(process, '[Unknown]') as process,
             elevation_min,
             elevation_max,
             elevation,
