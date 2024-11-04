@@ -103,7 +103,6 @@ select process,
        rating,
        count(*) as ratings,
   from ${coffee_ratings}
- where process != 'Unknown'
  group by all
 ```
 

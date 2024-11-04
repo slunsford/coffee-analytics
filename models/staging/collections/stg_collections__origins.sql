@@ -6,7 +6,7 @@ source as (
 
 renamed as (
   
-     select short_id as origin_id,
+     select origin_id,
             country,
             -- flag,
             region as world_region,

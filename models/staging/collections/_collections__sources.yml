@@ -6,7 +6,7 @@ sources:
     tables:
       - name: coffees
         columns:
-          - name: short_id
+          - name: coffee_id
             data_tests:
               - unique
               - not_null
@@ -15,7 +15,7 @@ sources:
               - not_null
       - name: flavors
         columns:
-          - name: short_id
+          - name: flavor_id
             data_tests:
               - unique
               - not_null
@@ -24,7 +24,7 @@ sources:
               - not_null
       - name: origins
         columns:
-          - name: short_id
+          - name: origin_id
             data_tests:
               - unique
               - not_null
@@ -33,7 +33,7 @@ sources:
               - not_null
       - name: roasters
         columns:
-          - name: short_id
+          - name: roaster_id
             data_tests:
               - unique
               - not_null
