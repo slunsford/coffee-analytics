@@ -6,7 +6,7 @@ sources:
     tables:
       - name: coffees
         columns:
-          - name: short_id
+          - name: coffee_id
             data_tests:
               - unique
               - not_null
