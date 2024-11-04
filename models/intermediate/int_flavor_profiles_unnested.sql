@@ -1,7 +1,7 @@
 with
 
 coffees as (
-    from {{ ref('int_coffees_joined_to_fks') }}
+    from {{ ref('stg_collections__coffees') }}
 ),
 
 flavors as (

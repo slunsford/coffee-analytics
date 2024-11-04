@@ -6,10 +6,11 @@ source as (
 
 renamed as (
     
-     select short_id as coffee_id,
+     select coffee_id,
             name as coffee_name,
-            origin as country,
+            origin_id,
             region as country_region,
+            roaster_id,
             roaster,
             available = 'Yes' as is_available,
             case when available then 'Available'
@@ -23,9 +24,9 @@ renamed as (
             case when decaf then 'Decaf'
                             else 'Regular'
                   end as caffeine_content,
-            coalesce(roast, 'Unknown') as roast_darkness,
+            roast as roast_darkness,
             varietals,
-            coalesce(process, 'Unknown') as process,
+            process,
             coalesce(elevation_min, elevation_max) as elevation_min,
             coalesce(elevation_max, elevation_min) as elevation_max,
             case when flavors is not null then {{ dbt_utils.generate_surrogate_key(['flavors']) }} end as flavor_profile_key,

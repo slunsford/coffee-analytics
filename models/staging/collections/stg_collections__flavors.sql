@@ -6,7 +6,7 @@ source as (
 
 renamed as (
     
-     select short_id as flavor_id,
+     select flavor_id,
             flavor,
             categories as flavor_categories,
             coalesce(string_split(categories, ', '), ['Uncategorized']) as flavor_categories_list,
