@@ -1,11 +1,16 @@
 ---
 title: Flavor Profiles
 queries:
-  - flavor_categories_list.sql
-  - rating_dates.sql
 ---
 
+```sql flavor_categories_list
+select distinct flavor_category as flavor_category
+  from md.flavor_categories
+ order by 1
+```
+
 {@partial "define-colors.md"}
+{@partial "date-picker.md"}
 
 <Dropdown
     data={flavor_categories_list}
@@ -14,8 +19,6 @@ queries:
     multiple=true
     selectAllByDefault=true
 />
-
-{@partial "date-picker.md"}
 
 ```sql flavor_ratings
 with filter_flavor_categories as (
@@ -35,6 +38,10 @@ with filter_flavor_categories as (
  order by flavor
 ```
 
+# Flavor Categories
+
+### Ratings by Flavor Category
+
 ```sql ratings_by_flavor_category
 select flavor_category,
        rating,
@@ -45,17 +52,19 @@ select flavor_category,
  where flavor_category != 'Uncategorized'
  group by all
 ```
-# Flavor Categories
 
 <BarChart
     data={ratings_by_flavor_category}
-    title="Ratings by Flavor Category"
     x=flavor_category
     y=ratings
     series=rating
     swapXY=true
     colorPalette={chartColors}
 />
+
+# Flavors
+
+### Ratings by Flavor
 
 ```sql ratings_by_flavor
 select flavor,
@@ -64,11 +73,9 @@ select flavor,
   from ${flavor_ratings}
  group by all
 ```
-# Flavors
 
 <BarChart
     data={ratings_by_flavor}
-    title="Ratings by Flavor"
     x=flavor
     y=ratings
     series=rating
