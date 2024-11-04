@@ -6,7 +6,7 @@ source as (
 
 renamed as (
 
-     select short_id as roaster_id,
+     select roaster_id,
             name as roaster_name,
             website,
             modified_date as modified_at
