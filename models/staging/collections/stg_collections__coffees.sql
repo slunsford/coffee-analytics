@@ -1,7 +1,26 @@
+{{ config(
+    materialized = 'ephemeral'
+) }}
+
 with
 
 source as (
     from {{ source('collections', 'coffees') }}
+),
+
+parse_timestamps as (
+    
+     select * replace (
+        {%- set comma = joiner(",") %}
+        {%- for ts in ('created', 'creation_date', 'modified_date') %}{{ comma() }}
+            strptime(
+                replace({{ ts }}, ' ', ' '), -- Replace weird whitespace character
+                '%m/%-d/%Y %-I:%M %p'
+            ) as {{ ts }}
+        {%- endfor %}
+            )
+    
+       from source
 ),
 
 renamed as (
@@ -13,19 +32,12 @@ renamed as (
             roaster_id,
             roaster,
             available = 'Yes' as is_available,
-            case when available then 'Available'
-                                else 'Unavailable'
-                  end as availability,
             favorite = 'Yes' as is_favorite,
             rating,
-            rating = 'Liked' as is_liked,
             case when rating is not null then coalesce(rated_date, modified_date::date) end as rated_date,
             decaf = 'Yes' as is_decaf,
-            case when decaf then 'Decaf'
-                            else 'Regular'
-                  end as caffeine_content,
             roast as roast_darkness,
-            varietals,
+            string_split(varietals, ', ') as varietals,
             process,
             coalesce(elevation_min, elevation_max) as elevation_min,
             coalesce(elevation_max, elevation_min) as elevation_max,
@@ -34,7 +46,7 @@ renamed as (
             coalesce(created, creation_date) as added_at,
             modified_date as modified_at
             
-       from source
+       from parse_timestamps
       where rating is not null
        
 )

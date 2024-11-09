@@ -33,6 +33,9 @@ models:
       # report_views:
       #   +materialized: view
 
+snapshots:
+  +schema: snapshots
+
 data_tests:
   coffee_analytics:
     severity: warn

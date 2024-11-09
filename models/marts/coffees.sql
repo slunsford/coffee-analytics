@@ -1,7 +1,7 @@
 with
 
 coffees as (
-    from {{ ref('stg_collections__coffees') }}
+    from {{ ref('int_coffees_filtered_to_current') }}
 ),
 
 origins as (
@@ -40,14 +40,18 @@ final as (
             roaster_id,
             roaster,
             is_available,
-            availability,
+            case when is_available then 'Available'
+                                   else 'Unavailable'
+                  end as availability,
             is_favorite,
             case when is_favorite then '⭐️' else '' end as favorite_emoji,
             rating,
             rating = 'Liked' as is_liked,
             rated_date,
             is_decaf,
-            caffeine_content,
+            case when is_decaf then 'Decaf'
+                               else 'Regular'
+                  end as caffeine_content,
             case when is_decaf then '😴' else '😵‍💫' end as caffeine_emoji,
             roast_darkness,
             varietals,

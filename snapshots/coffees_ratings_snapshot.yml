@@ -1,0 +1,10 @@
+snapshots:
+- name: coffees_ratings_snapshot
+  relation: ref('stg_collections__coffees')
+  config:
+    strategy: check
+    unique_key: coffee_id
+    check_cols: [rating]
+    updated_at: modified_at
+    invalidate_hard_deletes: true
+  
