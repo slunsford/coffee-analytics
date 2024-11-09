@@ -1,34 +1,34 @@
-{{ config(
-    enabled = false
-) }}
-
 with
 
-ratings as (
-    from {{ ref('stg_airtable__ratings') }}
-),
-
-coffees as (
-    from {{ ref('stg_airtable__coffees') }}
-),
-
-join_to_coffees as (
+unite_sources as (
     
-     select rating_id,
-            coffee_id,
+    {{ dbt_utils.union_relations(
+        relations = [ref('coffees_ratings_snapshot'), ref('int_airtable_ratings_joined_to_coffees')],
+        include = ['coffee_id', 'flavor_profile_key', 'rated_date', 'rating', 'modified_at']
+    ) }}
+     
+),
+
+dedupe_ratings as (
+    
+    {{ dbt_utils.deduplicate(
+        relation = 'unite_sources',
+        partition_by = 'coffee_id, rated_date',
+        order_by = 'modified_at desc'
+    ) }}
+),
+
+final as (
+    
+     select coffee_id,
             flavor_profile_key,
-            brew_method,
             rated_date,
             rating,
-            is_liked,
-            case when is_liked then '👍🏻' else '👎🏻' end as rating_emoji,
-            case when is_liked then 1 else -1 end as rating_value,
+            rating = 'Liked' as is_liked,
             row_number() over (partition by coffee_id order by rated_date desc) = 1 as is_current
             
-       from ratings
-       join coffees
-      using (coffee_id)
+       from dedupe_ratings
        
 )
 
-from join_to_coffees
+from final

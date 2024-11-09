@@ -24,8 +24,6 @@ models:
   coffee_analytics:
     staging:
       +schema: stg
-      airtable:
-        enabled: false
     intermediate:
       +schema: int
     marts:

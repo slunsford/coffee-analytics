@@ -1,3 +1,7 @@
+{{ config (
+    enabled = false
+) }}
+
 with
 
 source as (
