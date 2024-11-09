@@ -83,3 +83,4 @@ select flavor,
     colorPalette={chartColors}
 />
 
+<LastRefreshed/>
