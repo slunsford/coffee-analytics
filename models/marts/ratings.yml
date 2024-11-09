@@ -1,12 +1,12 @@
 models:
   - name: ratings
     description: Fact table for ratings of coffees
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - coffee_id
+            - rated_date
     columns:
-      - name: rating_id
-        description: Primary key (record ID from Airtable)
-        data_tests:
-          - unique
-          - not_null
       - name: coffee_id
         description: Unique identifier and FK for `coffees`
         data_tests:
@@ -19,8 +19,6 @@ models:
           - relationships:
               to: ref('flavor_profiles')
               field: flavor_profile_key
-      - name: brew_method
-        description: Brew method, e.g. AeroPress, Etkin, etc.
       - name: rated_date
         description: Date the coffee was rated
         data_tests:
@@ -33,18 +31,6 @@ models:
         description: Indicates whether the coffee is liked
         data_tests:
           - not_null
-      - name: rating_emoji
-        description: Thumbs up/thumbs down emoji representation of the rating
-        data_tests:
-          - not_null
-          - accepted_values:
-              values: [👍🏻, 👎🏻]
-      - name: rating_value
-        description: Numeric value assigned to the rating (for calculating net ratings, etc.)
-        data_tests:
-          - not_null
-          - accepted_values:
-              values: [1, -1]
       - name: is_current
         description: Indicates whether this is the most recent rating for this coffee
         data_tests:

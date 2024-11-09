@@ -1,0 +1,8 @@
+models:
+  - name: int_airtable_ratings_joined_to_coffees
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - coffee_id
+            - rated_date
+            

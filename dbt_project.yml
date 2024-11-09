@@ -24,14 +24,15 @@ models:
   coffee_analytics:
     staging:
       +schema: stg
-      airtable:
-        enabled: false
     intermediate:
       +schema: int
     marts:
       +materialized: table
       # report_views:
       #   +materialized: view
+
+snapshots:
+  +schema: snapshots
 
 data_tests:
   coffee_analytics:
