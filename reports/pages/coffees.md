@@ -22,3 +22,5 @@ title: Coffees
     <Column id='process'/>
     <Column id='availability'/>
 </DataTable>
+
+<LastRefreshed/>
