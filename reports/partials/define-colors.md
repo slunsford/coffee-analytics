@@ -1,7 +1,7 @@
 <script>
     let chartColors = [
         '#236aa4',
-        '#a45c23',
+        '#f5b549',
         '#45a1bf',
     ]
     
