@@ -1,6 +1,6 @@
 ```sql rating_dates
 select distinct rated_date
-  from md.coffees
+  from md.ratings
 ```
 
 <DateRange

@@ -47,12 +47,61 @@ select roaster,
     
 <BarChart
     data={ratings_by_roaster}
+    connectGroup="roasters"
     x=roaster
     y=ratings
     series=rating
     swapXY=true
     colorPalette={chartColors}
 />
+
+### Yearly % Liked by Roaster
+
+```sql historical_ratings_by_roaster
+select roaster,
+       date_trunc('year', rated_date) as date_year,
+       year(rated_date)::string as year,
+       count_if(is_liked) as liked,
+       count_if(not is_liked) as disliked,
+       liked - disliked as net_liked,
+       count(*) as ratings,
+       liked/ratings as liked_pct,
+  from ${filtered_ratings}
+ group by all
+ order by year, roaster
+```
+
+```sql roasters_list
+select distinct roaster
+  from ${historical_ratings_by_roaster}
+ order by all
+```
+
+<LineChart
+    data={historical_ratings_by_roaster}
+    connectGroup="roasters"
+    x=year
+    y=liked_pct
+    yMax=1
+    yFmt=pct0
+    series=roaster
+    seriesOrder={roasters_list}
+    sort=false
+    markers=true
+/>
+
+<!-- <BubbleChart
+    data={historical_ratings_by_roaster}
+    connectGroup="roasters"
+    x=year
+    y=liked_pct
+    yMax=1
+    yFmt=pct0
+    yAxisTitle='% Liked'
+    size=ratings
+    series=roaster
+    sort=false
+/> -->
 
 # Processes
 
@@ -65,6 +114,12 @@ select process,
   from ${filtered_coffees}
  where process not like '%Unknown%'
  group by all
+```
+
+```sql processes_list
+select distinct process
+  from ${historical_ratings_by_process}
+ order by all
 ```
 
 <BarChart
@@ -82,25 +137,42 @@ select process,
 ```sql historical_ratings_by_process
 select process,
        date_trunc('year', rated_date) as date_year,
-       year(rated_date) as year,
+       year(rated_date)::string as year,
        count_if(is_liked) as liked,
        count_if(not is_liked) as disliked,
        liked - disliked as net_liked,
-       count(*) as coffees_rated,
-       liked/coffees_rated as liked_pct,
-  from ${filtered_coffees}
+       count(*) as ratings,
+       liked/ratings as liked_pct,
+  from ${filtered_ratings}
  where process not like '%Unknown%'
  group by all
+ order by year, process
 ```
 
 <LineChart
     data={historical_ratings_by_process}
     connectGroup="processes"
-    x=date_year
+    x=year
     y=liked_pct
     yMax=1
+    yFmt=pct0
     series=process
+    sort=false
+    markers=true
 />
+
+<!-- <BubbleChart
+    data={historical_ratings_by_process}
+    connectGroup="processes"
+    x=year
+    y=liked_pct
+    yMax=1
+    yFmt=pct0
+    yAxisTitle='% Liked'
+    size=ratings
+    series=process
+    sort=false
+/> -->
 
 # Origins
 
