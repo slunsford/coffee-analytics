@@ -1,6 +1,6 @@
 The combined [dbt](https://www.getdbt.com/)/[Evidence](https://evidence.dev/) project for Sean's coffee ratings log.
 
-- [dbt project documentation](https://slunsford.github.io/coffee_analytics)
+- [dbt project documentation](https://slunsford.github.io/coffee-analytics)
 - [Evidence report](https://lunsford.coffee/)
 
 
