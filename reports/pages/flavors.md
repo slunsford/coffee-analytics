@@ -24,7 +24,7 @@ select distinct flavor_category as flavor_category
 with filter_flavor_categories as (
      select distinct flavor_category_group_key
        from md.flavor_categories
-      where flavor_category in ${inputs.flavor_categories.value}    
+      where flavor_category in ${inputs.flavor_categories.value}
 )
 
   from md.flavors
@@ -45,12 +45,14 @@ with filter_flavor_categories as (
 ```sql ratings_by_flavor_category
 select flavor_category,
        rating,
+       rating_value,
        count(*) as ratings,
   from ${flavor_ratings}
   join md.flavor_categories
  using (flavor_category_group_key)
  where flavor_category != 'Uncategorized'
  group by all
+ order by rating_value desc
 ```
 
 <BarChart
@@ -60,6 +62,7 @@ select flavor_category,
     series=rating
     swapXY=true
     colorPalette={chartColors}
+    sort=false
 />
 
 # Flavors
@@ -69,9 +72,11 @@ select flavor_category,
 ```sql ratings_by_flavor
 select flavor,
        rating,
+       rating_value,
        count(*) as ratings,
   from ${flavor_ratings}
  group by all
+ order by rating_value desc
 ```
 
 <BarChart
@@ -81,6 +86,7 @@ select flavor,
     series=rating
     swapXY=true
     colorPalette={chartColors}
+    sort=false
 />
 
 <LastRefreshed/>
