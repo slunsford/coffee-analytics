@@ -4,7 +4,7 @@ snapshots:
   config:
     strategy: check
     unique_key: coffee_id
-    check_cols: [rating, rating_value]
+    check_cols: [rating, rating_value, rated_date]
     updated_at: modified_at
     invalidate_hard_deletes: true
 
