@@ -9,7 +9,7 @@ source as (
 ),
 
 parse_timestamps as (
-    
+
      select * replace (
         {%- set comma = joiner(",") %}
         {%- for ts in ('created', 'creation_date', 'modified_date') %}{{ comma() }}
@@ -19,12 +19,12 @@ parse_timestamps as (
             ) as {{ ts }}
         {%- endfor %}
             )
-    
+
        from source
 ),
 
 renamed as (
-    
+
      select coffee_id,
             name as coffee_name,
             origin_id,
@@ -32,8 +32,11 @@ renamed as (
             roaster_id,
             roaster,
             available = 'Yes' as is_available,
-            favorite = 'Yes' as is_favorite,
             rating,
+            case rating when 'Great' then 1
+                        when 'Fine' then 0
+                        when 'Bad' then -1
+                        end as rating_value,
             case when rating is not null then coalesce(rated_date, modified_date::date) end as rated_date,
             decaf = 'Yes' as is_decaf,
             roast as roast_darkness,
@@ -45,10 +48,10 @@ renamed as (
             string_split(flavors, '; ') as flavors,
             coalesce(created, creation_date) as added_at,
             modified_date as modified_at
-            
+
        from parse_timestamps
       where rating is not null
-       
+
 )
 
 from renamed
