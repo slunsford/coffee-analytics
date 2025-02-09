@@ -1,5 +1,5 @@
 ```sql coffee_ratings_history
-select coffees.* exclude (rated_date, rating, is_liked),
+select coffees.* exclude (rated_date, rating, rating_value, is_liked, is_disliked),
        ratings.* exclude (coffee_id, flavor_profile_key)
   from md.coffees
   join md.ratings
@@ -10,7 +10,7 @@ select coffees.* exclude (rated_date, rating, is_liked),
 select roaster,
        country,
        process,
-       -- rating,
+       rating,
        count(distinct coffee_id) as coffees
   from ${coffee_ratings_history}
  where rated_date between date_add('${inputs.dates.start}'::date, interval 1 day)
@@ -18,8 +18,8 @@ select roaster,
  group by all
 ```
 
-<DimensionGrid 
-    data={dimensions} 
+<DimensionGrid
+    data={dimensions}
     name=selected_dimensions
     metric='sum(coffees)'
     multiple
