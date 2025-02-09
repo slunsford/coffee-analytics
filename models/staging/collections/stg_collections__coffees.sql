@@ -33,10 +33,7 @@ renamed as (
             roaster,
             available = 'Yes' as is_available,
             rating,
-            case rating when 'Great' then 1
-                        when 'Fine' then 0
-                        when 'Bad' then -1
-                        end as rating_value,
+            {{ rating_value('rating') }} as rating_value,
             case when rating is not null then coalesce(rated_date, modified_date::date) end as rated_date,
             decaf = 'Yes' as is_decaf,
             roast as roast_darkness,

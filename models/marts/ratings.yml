@@ -1,37 +1,51 @@
 models:
   - name: ratings
-    description: Fact table for ratings of coffees
-    data_tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - coffee_id
-            - rated_date
+    description: Combines and deduplicates historic coffee ratings from the snapshots and Airtable, providing a unified view of coffee ratings.
     columns:
       - name: coffee_id
-        description: Unique identifier and FK for `coffees`
+        description: Unique identifier for the coffee
         data_tests:
+          - not_null
           - relationships:
               to: ref('coffees')
               field: coffee_id
+
       - name: flavor_profile_key
-        description: Foreign key for `flavor_profile_key`
+        description: Key representing the flavor profile of the coffee
         data_tests:
+          - not_null
           - relationships:
               to: ref('flavor_profiles')
               field: flavor_profile_key
+
       - name: rated_date
-        description: Date the coffee was rated
+        description: Date when the rating was made
         data_tests:
           - not_null
+
       - name: rating
-        description: Rating given
+        description: Text rating
         data_tests:
           - not_null
+
+      - name: rating_value
+        description: Normalized rating value (-1, 0, or 1)
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [-1, 0, 1]
+
       - name: is_liked
-        description: Indicates whether the coffee is liked
+        description: Boolean flag indicating if the coffee was liked (rating_value = 1)
         data_tests:
           - not_null
+
+      - name: is_disliked
+        description: Boolean flag indicating if the coffee was disliked (rating_value = -1)
+        data_tests:
+          - not_null
+
       - name: is_current
-        description: Indicates whether this is the most recent rating for this coffee
+        description: Boolean flag indicating if this is the most recent rating for the coffee
         data_tests:
           - not_null

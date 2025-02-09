@@ -43,11 +43,10 @@ final as (
             case when is_available then 'Available'
                                    else 'Unavailable'
                   end as availability,
-            is_favorite,
-            case when is_favorite then '⭐️' else '' end as favorite_emoji,
             rating,
-            rating = 'Liked' as is_liked,
-            rating = 'Bad' as is_loved,
+            rating_value,
+            rating_value = 1 as is_liked,
+            rating_value = -1 as is_disliked,
             rated_date,
             is_decaf,
             case when is_decaf then 'Decaf'
