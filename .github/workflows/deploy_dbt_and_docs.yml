@@ -46,7 +46,7 @@ jobs:
 
       - name: Deploy Evidence
         run: curl -X POST '${{ secrets.evidence_deploy_hook_url }}'
-        
+
       - name: Generate docs
         run: dbt docs generate
 
@@ -76,3 +76,14 @@ jobs:
       - name: Deploy docs to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  deploy_evidence:
+    name: Deploy Evidence to DigitalOcean
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Deploy the app
+      uses: digitalocean/app_action/deploy@v2
+      with:
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
