@@ -7,17 +7,17 @@ title: Roasters & Origins
 {@partial "coffee-filters.md"}
 
 ```sql coffee_counts
-select count(distinct coffee_id) as coffees,
+select count(distinct country) as countries,
        count(distinct roaster_id) as roasters,
-       count(distinct country) as countries,
+       count(distinct coffee_id) as coffees,
   from ${filtered_coffees}
  group by all
 ```
 
 <BigValue
   data={coffee_counts}
-  value=roasters
-  link='#roasters--processes'
+  value=coffees
+  link='#coffees'
 />
 
 <BigValue
@@ -28,9 +28,57 @@ select count(distinct coffee_id) as coffees,
 
 <BigValue
   data={coffee_counts}
-  value=coffees
-  link='#coffees'
+  value=roasters
+  link='#roasters--processes'
 />
+
+# Coffee Flow
+
+```sql coffee_sankey
+select country,
+       roaster,
+       count(distinct coffee_id) as coffees
+  from ${filtered_coffees}
+ group by all
+```
+
+```sql coffee_sankey_with_process
+select country as source,
+       process as target,
+       count(distinct coffee_id) as coffees
+  from ${filtered_coffees}
+ group by all
+
+union all
+
+select process as source,
+       roaster as target,
+       count(distinct coffee_id) as coffees
+  from ${filtered_coffees}
+ group by all
+```
+
+
+<Tabs>
+  <Tab label="Origins &rarr; Roasters">
+    <SankeyDiagram
+      data={coffee_sankey}
+      sourceCol=country
+      targetCol=roaster
+      valueCol=coffees
+      linkColor=gradient
+    />
+  </Tab>
+  <Tab label="Origins &rarr; Processes &rarr; Roasters">
+    <SankeyDiagram
+      data={coffee_sankey_with_process}
+      sourceCol=source
+      targetCol=target
+      valueCol=coffees
+      linkColor=gradient
+    />
+  </Tab>
+</Tabs>
 
 
 # Roasters

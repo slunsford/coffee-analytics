@@ -7,8 +7,8 @@ select coffees.* exclude (rated_date, rating, rating_value, is_liked, is_dislike
 ```
 
 ```sql dimensions
-select roaster,
-       country,
+select country,
+       roaster,
        process,
        rating,
        count(distinct coffee_id) as coffees
