@@ -1,0 +1,35 @@
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+envs:
+- key: EVIDENCE_SOURCE__md__database
+  scope: RUN_AND_BUILD_TIME
+  value: coffee
+features:
+- buildpack-stack=ubuntu-22
+ingress:
+  rules:
+  - component:
+      name: coffee-analytics-reports
+    match:
+      path:
+        prefix: /
+name: lunsford-coffee
+region: fra
+static_sites:
+- build_command: npm run sources && npm run build:strict
+  environment_slug: node-js
+  envs:
+  # - key: EVIDENCE_VAR__schema
+  #   scope: BUILD_TIME
+  #   value: prod
+  - key: EVIDENCE_SOURCE__md__token
+    scope: BUILD_TIME
+    type: SECRET
+    value: ${motherduck_token}
+  github:
+    branch: digitalocean
+    repo: slunsford/coffee-analytics
+  name: coffee-analytics-reports
+  output_dir: build
+  source_dir: reports

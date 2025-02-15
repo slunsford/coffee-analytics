@@ -43,6 +43,8 @@ jobs:
       uses: actions/checkout@v4
     - name: Deploy the app
       uses: digitalocean/app_action/deploy@v2
+      env:
+        EVIDENCE_VAR__schema: test
       with:
         app_name: lunsford-coffee
         deploy_pr_preview: true
