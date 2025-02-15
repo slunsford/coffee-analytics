@@ -45,6 +45,6 @@ jobs:
       uses: digitalocean/app_action/deploy@v2
       with:
         app_name: lunsford-coffee
-        deploy_pr_preview: true
+        deploy_pr_preview: "true"
         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
