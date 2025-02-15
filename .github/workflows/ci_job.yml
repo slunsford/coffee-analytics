@@ -35,16 +35,10 @@ jobs:
       - name: Build dbt models
         run: dbt build --target test
 
-  deploy_evidence:
-    name: Preview Evidence on DigitalOcean
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    - name: Deploy the app
-      uses: digitalocean/app_action/deploy@v2
-      with:
-        app_name: lunsford-coffee
-        deploy_pr_preview: "true"
-        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Preview Evidence on DigitalOcean
+        uses: digitalocean/app_action/deploy@v2
+        with:
+          app_name: lunsford-coffee
+          deploy_pr_preview: "true"
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 

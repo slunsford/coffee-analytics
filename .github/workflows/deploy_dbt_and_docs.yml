@@ -57,6 +57,12 @@ jobs:
         with:
           path: "target/"
 
+      - name: Deploy Evidence to DigitalOcean
+        uses: digitalocean/app_action/deploy@v2
+        with:
+          app_name: lunsford-coffee
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
   deploy_docs:
     name: Deploy docs
     # Add a dependency to the build job
@@ -73,15 +79,3 @@ jobs:
       - name: Deploy docs to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-  deploy_evidence:
-    name: Deploy Evidence to DigitalOcean
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    - name: Deploy the app
-      uses: digitalocean/app_action/deploy@v2
-      with:
-        app_name: lunsford-coffee
-        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
