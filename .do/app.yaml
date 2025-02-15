@@ -20,15 +20,15 @@ static_sites:
 - build_command: npm run sources && npm run build:strict
   environment_slug: node-js
   envs:
-  # - key: EVIDENCE_VAR__schema
-  #   scope: BUILD_TIME
-  #   value: prod
+  - key: EVIDENCE_VAR__schema
+    scope: BUILD_TIME
+    value: ${EVIDENCE_VAR__schema}
   - key: EVIDENCE_SOURCE__md__token
     scope: BUILD_TIME
     type: SECRET
     value: ${motherduck_token}
   github:
-    branch: digitalocean
+    branch: main
     repo: slunsford/coffee-analytics
   name: coffee-analytics-reports
   output_dir: build
