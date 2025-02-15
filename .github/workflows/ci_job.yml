@@ -34,3 +34,11 @@ jobs:
       # dbt related commands here - run use --target prod/dev to run for specific environments
       - name: Build dbt models
         run: dbt build --target test
+
+      - name: Preview Evidence on DigitalOcean
+        uses: digitalocean/app_action/deploy@v2
+        with:
+          app_name: lunsford-coffee
+          deploy_pr_preview: "true"
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
