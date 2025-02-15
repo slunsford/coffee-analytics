@@ -44,9 +44,6 @@ jobs:
       - name: Build dbt models
         run: dbt build --target prod
 
-      - name: Deploy Evidence
-        run: curl -X POST '${{ secrets.evidence_deploy_hook_url }}'
-
       - name: Generate docs
         run: dbt docs generate
 
@@ -86,4 +83,5 @@ jobs:
     - name: Deploy the app
       uses: digitalocean/app_action/deploy@v2
       with:
+        app_name: lunsford-coffee
         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
