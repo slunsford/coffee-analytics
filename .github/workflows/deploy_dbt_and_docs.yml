@@ -46,12 +46,11 @@ jobs:
 
       - name: Deploy Evidence
         run: curl -X POST '${{ secrets.evidence_deploy_hook_url }}'
-        
+
       - name: Generate docs
         run: dbt docs generate
 
       # Configure Pages
-
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
@@ -59,6 +58,18 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: "target/"
+
+  deploy_evidence:
+    name: Deploy Evidence
+    # Add a dependency to the build job
+    needs: deploy_dbt
+
+    environment: prod
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy Evidence
+        run: curl -X POST '${{ secrets.evidence_deploy_hook_url }}'
 
   deploy_docs:
     name: Deploy docs
