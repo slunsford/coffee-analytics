@@ -1,3 +1,8 @@
+<Checkbox
+    title="Available only"
+    name=filter_available
+/>
+
 ```sql coffee_ratings_history
 select coffees.* exclude (rated_date, rating, rating_value, is_liked, is_disliked),
        ratings.* exclude (coffee_id, flavor_profile_key)
@@ -37,4 +42,9 @@ select country,
 ```sql filtered_coffees
   from ${filtered_ratings}
  where is_current
+   and (not ${inputs.filter_available} -- When True, Do not evaluate the next condition
+    or (
+            ${inputs.filter_available} -- Input is set to false
+        and is_available  -- Apply this condition
+    ))
 ```

@@ -65,6 +65,31 @@ select flavor_category,
     sort=false
 />
 
+### Net Score by Flavor Category
+
+```sql net_score_by_flavor_category
+select flavor_category,
+       sum(rating_value) as net_liked,
+       count(*) as coffees_rated,
+       net_liked/coffees_rated * 100 as net_score,
+  from ${flavor_ratings}
+  join md.flavor_categories
+ using (flavor_category_group_key)
+ where flavor_category != 'Uncategorized'
+ group by all
+ order by all
+```
+
+<BubbleChart
+    data={net_score_by_flavor_category}
+    x=flavor_category
+    y=net_score
+    size=coffees_rated
+    colorPalette={chartColors}
+    sort=false
+    yFmt=num0
+/>
+
 # Flavors
 
 ### Ratings by Flavor
