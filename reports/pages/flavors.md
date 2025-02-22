@@ -61,6 +61,7 @@ select flavor_category,
     series=rating
     swapXY=true
     sort=false
+    colorPalette=goodNeutralBad
 />
 
 ### Net Score by Flavor Category
@@ -108,6 +109,7 @@ select flavor,
     series=rating
     swapXY=true
     sort=false
+    colorPalette=goodNeutralBad
 />
 
 <LastRefreshed/>

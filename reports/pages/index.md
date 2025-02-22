@@ -102,6 +102,7 @@ select roaster,
     series=rating
     swapXY=true
     sort=false
+    colorPalette=goodNeutralBad
 />
 
 ### Net Score by Roaster
@@ -186,6 +187,7 @@ select distinct process
     series=rating
     swapXY=true
     sort=false
+    colorPalette=goodNeutralBad
 />
 
 ### Net Score by Process
@@ -305,6 +307,7 @@ select country,
     series=rating
     swapXY=true
     sort=false
+    colorPalette=goodNeutralBad
 />
 
 <LastRefreshed/>

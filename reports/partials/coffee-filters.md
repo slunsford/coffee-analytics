@@ -20,6 +20,11 @@ select country,
   from ${coffee_ratings_history}
  where rated_date between date_add('${inputs.dates.start}'::date, interval 1 day)
                       and date_add('${inputs.dates.end}'::date, interval 1 day)
+   and (not ${inputs.filter_available} -- When True, Do not evaluate the next condition
+    or (
+            ${inputs.filter_available} -- Input is set to false
+        and is_available  -- Apply this condition
+    ))
  group by all
 ```
 

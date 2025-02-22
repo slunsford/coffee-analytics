@@ -23,22 +23,30 @@ plugins:
     "@evidence-dev/motherduck": { }
 theme:
   colors:
+    primary: "#0A9396"
     positive: "#005F73"
     warning: "#EE9B00"
-    negative: "#AE2012"
+    neutral: "#E9D8A6"
+    negative: "#BB3E03"
   colorPalettes:
     default:
-      - "#005F73"
       - "#0A9396"
-      - "#94D2BD"
-      - "#E9D8A6"
+      - "#7C974B"
       - "#EE9B00"
-      - "#CA6702"
+      - "#F6511D"
+      - "#1DD3B0"
       - "#BB3E03"
-      - "#AE2012"
       - "#9B2226"
+      - "#70163C"
+      - "#005F73"
+    goodNeutralBad:
+      - "#005F73"
+      - "#E9D8A6"
+      - "#BB3E03"
   colorScales:
     default:
       - "#BB3E03"
+      - "#CA6702"
       - "#E9D8A6"
+      - "#0A9396"
       - "#005F73"
