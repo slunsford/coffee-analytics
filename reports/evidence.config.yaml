@@ -21,3 +21,24 @@ plugins:
     "@evidence-dev/sqlite": { }
     "@evidence-dev/trino": { }
     "@evidence-dev/motherduck": { }
+theme:
+  colors:
+    positive: "#005F73"
+    warning: "#EE9B00"
+    negative: "#AE2012"
+  colorPalettes:
+    default:
+      - "#005F73"
+      - "#0A9396"
+      - "#94D2BD"
+      - "#E9D8A6"
+      - "#EE9B00"
+      - "#CA6702"
+      - "#BB3E03"
+      - "#AE2012"
+      - "#9B2226"
+  colorScales:
+    default:
+      - "#BB3E03"
+      - "#E9D8A6"
+      - "#005F73"
