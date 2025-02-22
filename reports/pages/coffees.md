@@ -2,7 +2,6 @@
 title: Coffees
 ---
 
-{@partial "define-colors.md"}
 {@partial "date-picker.md"}
 {@partial "coffee-filters.md"}
 

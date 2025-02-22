@@ -2,7 +2,6 @@
 title: Roasters & Origins
 ---
 
-{@partial "define-colors.md"}
 {@partial "date-picker.md"}
 {@partial "coffee-filters.md"}
 
@@ -102,8 +101,8 @@ select roaster,
     y=ratings
     series=rating
     swapXY=true
-    colorPalette={chartColors}
     sort=false
+    colorPalette=goodNeutralBad
 />
 
 ### Net Score by Roaster
@@ -123,7 +122,6 @@ select roaster,
     x=roaster
     y=net_score
     size=coffees_rated
-    colorPalette={chartColors}
     yFmt=num0
     sort=false
 />
@@ -188,8 +186,8 @@ select distinct process
     y=ratings
     series=rating
     swapXY=true
-    colorPalette={chartColors}
     sort=false
+    colorPalette=goodNeutralBad
 />
 
 ### Net Score by Process
@@ -210,7 +208,6 @@ select process,
     x=process
     y=net_score
     size=coffees_rated
-    colorPalette={chartColors}
     sort=false
     yFmt=num0
 />
@@ -251,7 +248,7 @@ select country,
        count_if(is_disliked) as disliked,
        sum(rating_value) as net_liked,
        count(*) as coffees_rated,
-       liked/coffees_rated * 100 as net_score,
+       net_liked/coffees_rated * 100 as net_score,
   from ${filtered_coffees}
  where country not like '%Blend%'
  group by all
@@ -259,14 +256,13 @@ select country,
 ```
 
 <Tabs>
-  <Tab label="Map">
+  <Tab label="World Map">
     <AreaMap
         data={net_score_by_country}
         areaCol=country
         geoJsonUrl=https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_admin_0_countries.geojson
         geoId=name
         value=net_score
-        colorPalette={colorGradient}
         legend=false
         connectGroup="countries"
         tooltip={[
@@ -284,8 +280,7 @@ select country,
         x=country
         y=net_score
         size=coffees_rated
-        colorPalette={chartColors}
-        yFmt=num0
+            yFmt=num0
         sort=false
         connectGroup="countries"
     />
@@ -311,8 +306,8 @@ select country,
     y=ratings
     series=rating
     swapXY=true
-    colorPalette={chartColors}
     sort=false
+    colorPalette=goodNeutralBad
 />
 
 <LastRefreshed/>

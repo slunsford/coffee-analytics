@@ -9,7 +9,6 @@ select distinct flavor_category as flavor_category
  order by 1
 ```
 
-{@partial "define-colors.md"}
 {@partial "date-picker.md"}
 
 <Dropdown
@@ -61,8 +60,8 @@ select flavor_category,
     y=ratings
     series=rating
     swapXY=true
-    colorPalette={chartColors}
     sort=false
+    colorPalette=goodNeutralBad
 />
 
 ### Net Score by Flavor Category
@@ -85,7 +84,6 @@ select flavor_category,
     x=flavor_category
     y=net_score
     size=coffees_rated
-    colorPalette={chartColors}
     sort=false
     yFmt=num0
 />
@@ -110,8 +108,8 @@ select flavor,
     y=ratings
     series=rating
     swapXY=true
-    colorPalette={chartColors}
     sort=false
+    colorPalette=goodNeutralBad
 />
 
 <LastRefreshed/>
