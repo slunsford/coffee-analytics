@@ -1,7 +1,7 @@
 with
 
 collections_coffees as (
-    from {{ ref('int_coffees_filtered_to_current') }}
+    from {{ ref('stg_collections__coffees') }}
 ),
 
 airtable_coffees as (
