@@ -1,7 +1,0 @@
-models:
-  - name: int_coffees_filtered_to_current
-    columns: 
-      - name: coffee_id
-        data_tests:
-          - unique
-          - not_null
