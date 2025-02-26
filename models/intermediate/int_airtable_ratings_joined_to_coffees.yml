@@ -1,8 +1,21 @@
 models:
   - name: int_airtable_ratings_joined_to_coffees
+    description: Joins Airtable ratings to coffees and deduplicates by coffee_id and rated_date
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
             - coffee_id
             - rated_date
-            
+    columns:
+      - name: coffee_id
+        description: Unique identifier for the coffee
+      - name: flavor_profile_key
+        description: Key representing the coffee's flavor profile
+      - name: rated_date
+        description: Date when the coffee was rated
+      - name: rating
+        description: Raw rating value from Airtable
+      - name: modified_at
+        description: Timestamp when the record was last modified in Fivetran
+      - name: rating_value
+        description: Calculated rating value using the rating_value macro

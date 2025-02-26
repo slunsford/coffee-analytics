@@ -1,0 +1,55 @@
+models:
+  - name: stg_collections__coffees
+    columns:
+      - name: coffee_id
+        description: Unique identifier for the coffee
+        data_tests:
+          - unique
+          - not_null
+      - name: coffee_name
+        description: Name of the coffee
+      - name: origin_id
+        description: Unique identifier for the country of origin
+        data_tests:
+          - relationships:
+              field: origin_id
+              to: ref('stg_collections__origins')
+      - name: country_region
+        description: Region within the origin country where the coffee is grown
+      - name: roaster_id
+        description: Unique identifier for the roaster
+        data_tests:
+          - not_null
+          - relationships:
+              field: roaster_id
+              to: ref('stg_collections__roasters')
+      - name: roaster
+        description: Name of the roaster
+      - name: is_available
+        description: Boolean indicating if the coffee is currently available
+      - name: rating
+        description: Raw rating value for the coffee
+      - name: rating_value
+        description: Normalized rating value
+      - name: rated_date
+        description: Date when the coffee was rated
+      - name: is_decaf
+        description: Boolean indicating if the coffee is decaffeinated
+      - name: roast_darkness
+        description: Level of roast darkness
+      - name: varietals
+        description: Array of coffee varietals
+      - name: process
+        description: Processing method used for the coffee
+      - name: elevation_min
+        description: Minimum elevation where the coffee is grown
+      - name: elevation_max
+        description: Maximum elevation where the coffee is grown
+      - name: flavor_profile_key
+        description: Unique identifier for the flavor profile
+      - name: flavors
+        description: Array of flavor notes
+      - name: added_at
+        description: Timestamp when the coffee was added to the system
+      - name: modified_at
+        description: Timestamp when the coffee was last modified

@@ -1,0 +1,17 @@
+models:
+  - name: stg_collections__roasters
+    description: Staging table for coffee roasters
+    columns:
+      - name: roaster_id
+        description: Unique identifier for each roaster
+        data_tests:
+          - unique
+          - not_null
+      - name: roaster_name
+        description: Name of the coffee roasting company
+        data_tests:
+          - not_null
+      - name: website
+        description: URL of the roaster's website
+      - name: modified_at
+        description: Timestamp of when the roaster record was last modified
