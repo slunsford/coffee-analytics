@@ -1,0 +1,33 @@
+models:
+  - name: stg_collections__flavors
+    columns:
+      - name: flavor_id
+        description: Unique identifier for each flavor
+        data_tests:
+          - unique
+          - not_null
+      - name: flavor
+        description: Name of the flavor
+        data_tests:
+          - not_null
+      - name: flavor_categories
+        description: Comma-separated list of categories as a string
+        data_tests:
+          - not_null
+      - name: flavor_categories_list
+        description: Array of flavor categories split from the flavor_categories string
+        data_tests:
+          - not_null
+      - name: primary_flavor_category
+        description: First category from the flavor_categories_list array
+        data_tests:
+          - not_null
+      - name: flavor_category_group_key
+        description: Surrogate key generated from sorted flavor categories list
+        data_tests:
+          - unique
+          - not_null
+      - name: modified_at
+        description: Timestamp when the flavor record was last modified
+        data_tests:
+          - not_null

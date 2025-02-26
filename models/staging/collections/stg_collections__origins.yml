@@ -1,0 +1,16 @@
+models:
+  - name: stg_collections__origins
+    columns:
+      - name: origin_id
+        description: Unique identifier for each origin record
+        data_tests:
+          - unique
+          - not_null
+      - name: country
+        description: Country of origin
+        data_tests:
+          - not_null
+      - name: world_region
+        description: Geographic region of the world where the country is located
+      - name: modified_at
+        description: Timestamp of when the record was last modified
