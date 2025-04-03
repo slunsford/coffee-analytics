@@ -1,6 +1,7 @@
 Update or generate the YAML docs for the SQL model or folder of models $ARGUMENTS. Look for a matching YAML file or documentation for this model inside a combined YAML file in the same directory.
 
 - If a uniqueness test for more than one column is required, use `unique_combination_of_columns` from the dbt_utils package and put it after the model description and before `columns:`, under `data_tests:`. Only add such a test if I ask you to. A uniqueness/primary key test for a single column should be the standard `unique` and `not_null` tests on that column only.
+- Add tests for individual columns under `models.columns`; do not use the model-wide `models.data_tests` unless directed to do so.
 - Use the `data_tests:` syntax instead of the deprecated `tests:`
 - Don't include `version: 2` at the top; just start with `models:`
 - Do not make guesses about accepted values. Only include accepted values tests when the column's values are explicitly limited in the provided code.
