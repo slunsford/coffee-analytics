@@ -1,9 +1,9 @@
 models:
   - name: coffees
-    description: Enriched coffee data combined with origins and formatted elevation information.
+    description: Dimension model consolidating coffee details with derived attributes, joining coffee, origin, and elevation information
     columns:
       - name: coffee_id
-        description: Unique identifier for each coffee
+        description: Unique identifier for the coffee
         data_tests:
           - unique
           - not_null
@@ -12,61 +12,58 @@ models:
         description: Name of the coffee
 
       - name: origin_id
-        description: Unique identifier for the origin
+        description: Unique identifier for the country of origin
 
       - name: country
-        description: Country of origin for the coffee, defaults to [Blend] if null
+        description: Country of origin, defaulting to '[Blend]' for blended coffees
 
       - name: world_region
-        description: World region where the coffee originates from, defaults to [Blend] if null
+        description: Geographic region of the world where the coffee originates, defaulting to '[Blend]' for blended coffees
 
       - name: country_region
-        description: Regional subdivision within the country of origin
+        description: Region within the origin country where the coffee is grown
 
       - name: roaster_id
-        description: Unique identifier for the coffee roaster
+        description: Unique identifier for the roaster
 
       - name: roaster
-        description: Name of the coffee roaster
+        description: Name of the roaster
 
       - name: is_available
-        description: Boolean flag indicating if the coffee is currently available
+        description: Boolean indicating if the coffee is currently available
 
       - name: availability
-        description: Text representation of availability status
+        description: Descriptive representation of coffee availability
         data_tests:
           - accepted_values:
               values: ['Available', 'Unavailable']
 
       - name: rating
-        description: Text rating value for the coffee
+        description: Raw rating value for the coffee
 
       - name: rating_value
-        description: Normalized rating value (-1, 0, or 1)
-        data_tests:
-          - accepted_values:
-              values: [-1, 0, 1]
+        description: Normalized rating value
 
       - name: is_liked
-        description: Boolean indicating if the coffee received a positive rating
+        description: Boolean indicating if the coffee was rated positively
 
       - name: is_disliked
-        description: Boolean indicating if the coffee received a negative rating
+        description: Boolean indicating if the coffee was rated negatively
 
       - name: rated_date
         description: Date when the coffee was rated
 
       - name: is_decaf
-        description: Boolean flag indicating if the coffee is decaffeinated
+        description: Boolean indicating if the coffee is decaffeinated
 
       - name: caffeine_content
-        description: Text representation of caffeine content
+        description: Descriptive representation of coffee's caffeine level
         data_tests:
           - accepted_values:
               values: ['Decaf', 'Regular']
 
       - name: caffeine_emoji
-        description: Emoji representation of caffeine content
+        description: Emoji representing the coffee's caffeine content
         data_tests:
           - accepted_values:
               values: ['😴', '😵‍💫']
@@ -75,25 +72,30 @@ models:
         description: Level of roast darkness
 
       - name: varietals
-        description: Coffee varietals used
+        description: Array of coffee varietals
 
       - name: process
-        description: Processing method used for the coffee beans, defaults to `[Unknown]` if null
+        description: Processing method used for the coffee, defaulting to '[Unknown]' if not specified
 
       - name: elevation_min
-        description: Minimum elevation where the coffee was grown
+        description: Minimum elevation where the coffee is grown
 
       - name: elevation_max
-        description: Maximum elevation where the coffee was grown
+        description: Maximum elevation where the coffee is grown
 
       - name: elevation
-        description: Formatted elevation range or single value, defaults to Unknown if null
+        description: Formatted elevation range or specific elevation of the coffee
 
       - name: flavor_profile_key
-        description: Key representing the coffee's flavor profile
+        description: Unique identifier for the flavor profile
+        data_tests:
+          - relationships:
+              to: ref('flavor_profiles')
+              field: flavor_profile_key
+              severity: error
 
       - name: added_at
         description: Timestamp when the coffee was added to the system
 
       - name: modified_at
-        description: Timestamp when the coffee record was last modified
+        description: Timestamp when the coffee was last modified

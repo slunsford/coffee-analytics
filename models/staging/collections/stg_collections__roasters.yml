@@ -1,6 +1,6 @@
 models:
   - name: stg_collections__roasters
-    description: Staging table for coffee roasters
+    description: Staging model containing details of coffee roasters exported from Collections
     columns:
       - name: roaster_id
         description: Unique identifier for each roaster
