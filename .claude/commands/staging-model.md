@@ -2,7 +2,7 @@ $ARGUMENTS
 
 Generate the staging model(s) for the given source table(s). Perform these steps for each table, one at a time:
 
-1. Execute `dbt run-operation generate_base_model --args '{"source_name": "example_source", "table_name": "example_table"}'`
+1. Run the `generate_base_model` operation.
 2. Make updates to the existing staging model, if it exists.
 3. Add aliases to snake_case the column names, aligning all `as` keywords vertically.
   - Find the longest column name and align all `as` keywords to the next 4-space tab stop after that length.

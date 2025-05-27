@@ -3,90 +3,115 @@ models:
     description: Dimension model consolidating coffee details with derived attributes, joining coffee, origin, and elevation information
     columns:
       - name: coffee_id
+        data_type: varchar
         description: Unique identifier for the coffee
         data_tests:
           - unique
           - not_null
 
       - name: coffee_name
+        data_type: varchar
         description: Name of the coffee
 
       - name: origin_id
+        data_type: varchar
         description: Unique identifier for the country of origin
 
       - name: country
+        data_type: varchar
         description: Country of origin, defaulting to '[Blend]' for blended coffees
 
       - name: world_region
+        data_type: varchar
         description: Geographic region of the world where the coffee originates, defaulting to '[Blend]' for blended coffees
 
       - name: country_region
+        data_type: varchar
         description: Region within the origin country where the coffee is grown
 
       - name: roaster_id
+        data_type: varchar
         description: Unique identifier for the roaster
 
       - name: roaster
+        data_type: varchar
         description: Name of the roaster
 
       - name: is_available
+        data_type: boolean
         description: Boolean indicating if the coffee is currently available
 
       - name: availability
+        data_type: varchar
         description: Descriptive representation of coffee availability
         data_tests:
           - accepted_values:
               values: ['Available', 'Unavailable']
 
       - name: rating
+        data_type: varchar
         description: Raw rating value for the coffee
 
       - name: rating_value
+        data_type: integer
         description: Normalized rating value
 
       - name: is_liked
+        data_type: boolean
         description: Boolean indicating if the coffee was rated positively
 
       - name: is_disliked
+        data_type: boolean
         description: Boolean indicating if the coffee was rated negatively
 
       - name: rated_date
+        data_type: date
         description: Date when the coffee was rated
 
       - name: is_decaf
+        data_type: boolean
         description: Boolean indicating if the coffee is decaffeinated
 
       - name: caffeine_content
+        data_type: varchar
         description: Descriptive representation of coffee's caffeine level
         data_tests:
           - accepted_values:
               values: ['Decaf', 'Regular']
 
       - name: caffeine_emoji
+        data_type: varchar
         description: Emoji representing the coffee's caffeine content
         data_tests:
           - accepted_values:
               values: ['😴', '😵‍💫']
 
       - name: roast_darkness
+        data_type: varchar
         description: Level of roast darkness
 
       - name: varietals
+        data_type: varchar[]
         description: Array of coffee varietals
 
       - name: process
+        data_type: varchar
         description: Processing method used for the coffee, defaulting to '[Unknown]' if not specified
 
       - name: elevation_min
+        data_type: bigint
         description: Minimum elevation where the coffee is grown
 
       - name: elevation_max
+        data_type: bigint
         description: Maximum elevation where the coffee is grown
 
       - name: elevation
+        data_type: varchar
         description: Formatted elevation range or specific elevation of the coffee
 
       - name: flavor_profile_key
+        data_type: varchar
         description: Unique identifier for the flavor profile
         data_tests:
           - relationships:
@@ -94,8 +119,14 @@ models:
               field: flavor_profile_key
               severity: error
 
+      - name: flavors
+        data_type: varchar
+        description: Comma-separated list of flavor notes for the coffee
+
       - name: added_at
+        data_type: timestamp
         description: Timestamp when the coffee was added to the system
 
       - name: modified_at
+        data_type: timestamp
         description: Timestamp when the coffee was last modified

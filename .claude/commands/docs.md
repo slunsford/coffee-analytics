@@ -1,8 +1,8 @@
 $ARGUMENTS
 
-Update or generate the YAML docs for this SQL model or folder of models. Look for a matching YAML file or documentation for this model inside a combined YAML file in the same directory. If the YAML for the given SQL model is not included, generate it from scratch based on the SQL code and anything that can be inferred from the upstream files and their docs. Put the resulting YAML in a separate file matching the name of the model, and if necessary remove this model from any combined YAML files.
+Update or generate the YAML docs for this SQL model or folder of models. Look for a matching YAML file or documentation for this model inside a combined YAML file in the same directory. If the YAML for the given SQL model is not included, generate it from scratch based on the SQL code and anything that can be inferred from the upstream files and their YAML. Put the resulting YAML in a separate file matching the name of the model, and if necessary remove this model from any combined YAML files.
 
-If no existing YAML exists for this model(s), start with the dbt `generate_model_yaml` operation. These columns and data types should be considered canonical. Include all column names and data types and simply add descriptions (and tests, if necessary). In this case (and only this case), remove columns that have been commented out or excluded from the SQL.
+Use the `generate_model_yaml` operation to determine the canonical list of columns and data types. Add/update all data types in any existing YAML. If no there is no existing YAML file, add descriptions (and tests, if necessary) to the output of this operation. In this case (and only this case), remove columns that have been commented out or excluded from the SQL.
 
 - Make sure to add a brief description for the model. Infer the model type (staging, intermediate, or mart) and include information about its sources if important. (This doesn't mean adding a `source` property.)
 - Carry over descriptions and tests from any matching upstream columns, or update as necessary for derived columns. Ignore relationship tests to a different modeling layer. Ignore any included models or sources that are not directly referenced in this model.
@@ -22,6 +22,8 @@ If updating an existing file:
 - Preserve any tests already added to the model or individual columns, including relationship tests.
 - Columns can be commented out if they do not appear explicitly in the SQL and are not included implicitly from an upstream model via a `select *`. Do not delete the lines.
 
+**NOTE:** Do not confuse these docs with the `dbt docs generate` or `dbt docs serve` commands. Those commands generate and serve HTML from YAML files. Your task is to create the YAML.
+
 ## Relationship Tests
 
 Once columns have been determined, add relationship tests to the YAML:
@@ -34,6 +36,7 @@ Guidelines for adding relationship tests:
 - Use 'relationships' tests (from dbt) for foreign keys
 - Tests should be added under the column's 'data_tests:' section
 - Only add tests when confident there's a valid relationship
+- Only add relationships to models in the same modeling layer (e.g. marts)
 
 Example:
 ```
