@@ -1,5 +1,6 @@
 models:
   - name: stg_collections__flavors
+    description: Staging model for flavor data exported from Collections, transforming and preparing flavor information
     columns:
       - name: flavor_id
         description: Unique identifier for each flavor

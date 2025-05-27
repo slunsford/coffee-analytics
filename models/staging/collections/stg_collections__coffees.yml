@@ -1,5 +1,6 @@
 models:
   - name: stg_collections__coffees
+    description: Staging model for coffee data exported from Collections, transforming and cleaning raw coffee information with timestamp parsing and derived attributes
     columns:
       - name: coffee_id
         description: Unique identifier for the coffee

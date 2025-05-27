@@ -1,5 +1,6 @@
 models:
   - name: stg_collections__origins
+    description: Staging model for coffee origins, capturing key details about geographic locations in the coffee supply chain
     columns:
       - name: origin_id
         description: Unique identifier for each origin record
