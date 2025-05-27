@@ -7,7 +7,7 @@ source as (
 renamed as (
 
      select roaster_id,
-            name as roaster_name,
+            name          as roaster_name,
             website,
             modified_date as modified_at
 
