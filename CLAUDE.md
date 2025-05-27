@@ -22,6 +22,8 @@ This is a **Coffee Analytics** project, a dbt-powered data platform for tracking
 - `dbt deps` — Install dependencies from packages.yml
 - `dbt clean` — Clean the target directory
 - `dbt docs generate` — Generate documentation
+- `dbt run-operation generate_base_model --args '{"source_name": "collections", "table_name": "coffees"}'` — Generate base model for a specific source and table
+- `dbt run-operation generate_model_yaml --args '{"model_names": ["coffees"], "include_data_types": true}'` — Generate YAML for a specific model with data types
 
 ### Evidence Reports
 - `npm run dev --prefix ./reports` — Start Evidence dev server for interactive reports

@@ -19,6 +19,7 @@ title: Coffees
     <Column id='rated_date' title='Date' colGroup='Rating'/>
     <Column id='caffeine_content' title='Caffeine'/>
     <Column id='process'/>
+    <Column id='flavors'/>
     <Column id='availability'/>
 </DataTable>
 

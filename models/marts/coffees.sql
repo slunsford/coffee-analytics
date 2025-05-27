@@ -60,6 +60,7 @@ final as (
             elevation_max,
             elevation,
             flavor_profile_key,
+            array_to_string(flavors, ', ') as flavors,
             added_at,
             join_to_elevations.modified_at
 
