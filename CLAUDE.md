@@ -6,29 +6,32 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a **Coffee Analytics** project, a dbt-powered data platform for tracking and analyzing personal coffee tasting experiences. The project transforms coffee data from Collections (primary source) and Airtable (historic data) into dimensional models for personal reference and analysis. It follows a standard dbt medallion architecture with staging → intermediate → marts layers.
 
+## Individual Preferences
+- @~/.claude/coffee-analytics-instructions.md
+
 ## Essential Commands
 
 ### dbt Operations
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt build` — Compile, run, and test all models
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt build --select model_name` — Build a specific model
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt build --select model_name+` — Build a model and all downstream models
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt build --select +model_name` — Build a model and all upstream models
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt run` — Execute all models
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt test` — Run all tests
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt compile` — Compile SQL without executing
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt deps` — Install dependencies from packages.yml
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt clean` — Clean the target directory
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt docs generate` — Generate documentation
+- `dbt build` — Compile, run, and test all models
+- `dbt build --select model_name` — Build a specific model
+- `dbt build --select model_name+` — Build a model and all downstream models
+- `dbt build --select +model_name` — Build a model and all upstream models
+- `dbt run` — Execute all models
+- `dbt test` — Run all tests
+- `dbt compile` — Compile SQL without executing
+- `dbt deps` — Install dependencies from packages.yml
+- `dbt clean` — Clean the target directory
+- `dbt docs generate` — Generate documentation
 
 ### Evidence Reports
 - `npm run dev --prefix ./reports` — Start Evidence dev server for interactive reports
 - `npm run build --prefix ./reports` — Build Evidence reports for production
 
 ### Model Selection Patterns
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt build --select staging.collections` — Build all Collections staging models (primary source)
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt build --select staging.airtable` — Build all Airtable staging models (historic data)
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt build --select marts` — Build all mart tables
-- `/Users/sean/Developer/dbt-duckdb/bin/dbt build --select +coffees` — Build coffees model with all dependencies
+- `dbt build --select staging.collections` — Build all Collections staging models (primary source)
+- `dbt build --select staging.airtable` — Build all Airtable staging models (historic data)
+- `dbt build --select marts` — Build all mart tables
+- `dbt build --select +coffees` — Build coffees model with all dependencies
 
 ## Architecture Overview
 

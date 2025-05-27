@@ -9,7 +9,7 @@ renamed as (
      select origin_id,
             country,
             -- flag,
-            region as world_region,
+            region        as world_region,
             modified_date as modified_at
             
        from source
