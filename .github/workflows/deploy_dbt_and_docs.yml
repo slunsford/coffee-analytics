@@ -44,9 +44,6 @@ jobs:
       - name: Build dbt models
         run: dbt build --target prod
 
-      - name: Deploy Evidence
-        run: curl -X POST '${{ secrets.evidence_deploy_hook_url }}'
-
       - name: Generate docs
         run: dbt docs generate
 
