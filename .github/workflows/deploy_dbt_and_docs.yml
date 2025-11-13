@@ -24,7 +24,7 @@ jobs:
 
     env:
       DBT_PROFILES_DIR: ".github"
-      motherduck_token: ${{ secrets.motherduck_token }}
+      motherduck_token: ${{ secrets.MOTHERDUCK_TOKEN }}
 
     steps:
       - name: Check out
