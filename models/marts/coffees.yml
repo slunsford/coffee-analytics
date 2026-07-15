@@ -46,7 +46,8 @@ models:
         description: Descriptive representation of coffee availability
         data_tests:
           - accepted_values:
-              values: ['Available', 'Unavailable']
+              arguments:
+                values: ['Available', 'Unavailable']
 
       - name: rating
         data_type: varchar
@@ -77,14 +78,16 @@ models:
         description: Descriptive representation of coffee's caffeine level
         data_tests:
           - accepted_values:
-              values: ['Decaf', 'Regular']
+              arguments:
+                values: ['Decaf', 'Regular']
 
       - name: caffeine_emoji
         data_type: varchar
         description: Emoji representing the coffee's caffeine content
         data_tests:
           - accepted_values:
-              values: ['😴', '😵‍💫']
+              arguments:
+                values: ['😴', '😵‍💫']
 
       - name: roast_darkness
         data_type: varchar
@@ -115,10 +118,11 @@ models:
         description: Unique identifier for the flavor profile
         data_tests:
           - relationships:
-              to: ref('flavor_profiles')
-              field: flavor_profile_key
-              severity: error
-
+              config:
+                severity: error
+              arguments:
+                to: ref('flavor_profiles')
+                field: flavor_profile_key
       - name: flavors
         data_type: varchar
         description: Comma-separated list of flavor notes for the coffee

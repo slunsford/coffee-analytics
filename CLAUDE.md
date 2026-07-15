@@ -6,9 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a **Coffee Analytics** project, a dbt-powered data platform for tracking and analyzing personal coffee tasting experiences. The project transforms coffee data from Collections (primary source) and Airtable (historic data) into dimensional models for personal reference and analysis. It follows a standard dbt medallion architecture with staging → intermediate → marts layers.
 
-## Individual Preferences
-- @~/.claude/coffee-analytics-instructions.md
-
 ## Essential Commands
 
 ### dbt Operations

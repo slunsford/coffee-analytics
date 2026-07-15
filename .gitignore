@@ -5,3 +5,4 @@ logs/
 .nova
 .DS_Store
 .user.yml
+dbt_internal_packages/

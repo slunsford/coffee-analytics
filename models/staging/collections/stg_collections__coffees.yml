@@ -13,8 +13,9 @@ models:
         description: Unique identifier for the country of origin
         data_tests:
           - relationships:
-              field: origin_id
-              to: ref('stg_collections__origins')
+              arguments:
+                field: origin_id
+                to: ref('stg_collections__origins')
       - name: country_region
         description: Region within the origin country where the coffee is grown
       - name: roaster_id
@@ -22,8 +23,9 @@ models:
         data_tests:
           - not_null
           - relationships:
-              field: roaster_id
-              to: ref('stg_collections__roasters')
+              arguments:
+                field: roaster_id
+                to: ref('stg_collections__roasters')
       - name: roaster
         description: Name of the roaster
       - name: is_available

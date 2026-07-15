@@ -7,17 +7,17 @@ models:
         data_tests:
           - not_null
           - relationships:
-              to: ref('coffees')
-              field: coffee_id
-
+              arguments:
+                to: ref('coffees')
+                field: coffee_id
       - name: flavor_profile_key
         description: Key representing the flavor profile of the coffee
         data_tests:
           - not_null
           - relationships:
-              to: ref('flavor_profiles')
-              field: flavor_profile_key
-
+              arguments:
+                to: ref('flavor_profiles')
+                field: flavor_profile_key
       - name: rated_date
         description: Date when the rating was made
         data_tests:
@@ -33,7 +33,8 @@ models:
         data_tests:
           - not_null
           - accepted_values:
-              values: [-1, 0, 1]
+              arguments:
+                values: [-1, 0, 1]
 
       - name: is_liked
         description: Boolean flag indicating if the coffee was liked (rating_value = 1)

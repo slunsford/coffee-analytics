@@ -3,9 +3,10 @@ models:
     description: Joins Airtable ratings to coffees and deduplicates by coffee_id and rated_date
     data_tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - coffee_id
-            - rated_date
+          arguments:
+            combination_of_columns:
+              - coffee_id
+              - rated_date
     columns:
       - name: coffee_id
         description: Unique identifier for the coffee

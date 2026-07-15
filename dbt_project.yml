@@ -36,4 +36,6 @@ snapshots:
 
 data_tests:
   coffee_analytics:
-    severity: warn
+    +severity: warn
+flags:
+  require_generic_test_arguments_property: true

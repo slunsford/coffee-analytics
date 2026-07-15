@@ -8,9 +8,9 @@ models:
           - unique
           - not_null
           - relationships:
-              to: ref('flavor_profiles')
-              field: flavor_id
-
+              arguments:
+                to: ref('flavor_profiles')
+                field: flavor_id
       - name: flavor
         description: Description of the flavor
         data_tests:
@@ -21,9 +21,9 @@ models:
         data_tests:
           - not_null
           - relationships:
-              to: ref('flavor_categories')
-              field: flavor_category_group_key
-
+              arguments:
+                to: ref('flavor_categories')
+                field: flavor_category_group_key
       - name: primary_flavor_category
         description: First category listed
         data_tests:

@@ -1,7 +1,5 @@
 sources:
   - name: collections
-    meta:
-      external_location: "s3://slunsford-analytics/collections/coffee/{name}.csv"
     loader: shortcuts
     tables:
       - name: coffees
@@ -40,4 +38,7 @@ sources:
           - name: name
             data_tests:
               - not_null
-          
+
+    config:
+      meta:
+        external_location: "s3://slunsford-analytics/collections/coffee/{name}.csv"
