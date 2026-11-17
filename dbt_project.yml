@@ -23,10 +23,11 @@ models:
   +materialized: view
   coffee_analytics:
     staging:
-      +schema: stg
+      +schema: staging
     intermediate:
-      +schema: int
+      +schema: intermediate
     marts:
+      +schema: marts
       +materialized: table
       # report_views:
       #   +materialized: view
