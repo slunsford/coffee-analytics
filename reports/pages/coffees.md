@@ -6,20 +6,19 @@ title: Coffees
 {@partial "coffee-filters.md"}
 
 <DataTable
-    data={filtered_coffees}
+    data={filtered_cups}
     rows=50
     sortable
     rowShading>
-    <Column id='coffee_name'/>
-    <Column id='roaster'/>
+    <Column id='bean_name' title='Coffee'/>
+    <Column id='roaster_name' title='Roaster'/>
     <Column id='country' colGroup='Origin'/>
-    <Column id='world_region' colGroup='Origin'/>
-    <Column id='rating' colGroup='Rating'/>
-    <Column id='rated_date' title='Date' colGroup='Rating'/>
+    <Column id='process' colGroup='Origin'/>
+    <Column id='verdict' colGroup='Cup'/>
+    <Column id='brewed_date' title='Date' colGroup='Cup'/>
+    <Column id='brew_method' title='Method' colGroup='Cup'/>
     <Column id='caffeine_content' title='Caffeine'/>
-    <Column id='process'/>
-    <Column id='flavors'/>
-    <Column id='availability'/>
+    <Column id='roaster_notes' title='Roaster Notes'/>
 </DataTable>
 
 <LastRefreshed/>

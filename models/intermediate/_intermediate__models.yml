@@ -1,0 +1,46 @@
+models:
+  - name: int_beans_origins_summarized
+    description: >-
+      One row per bean summarizing its zero-or-more origin rows into a single country, process and elevation for
+      analysis. Blends are labelled `[Blend]` regardless of how many components are disclosed; beans with no origin
+      data are `[Unknown]`.
+    columns:
+      - name: bean_id
+        description: Primary key; one row per bean, including beans with no origin rows.
+        data_tests:
+          - unique
+          - not_null
+      - name: origin_count
+        description: Number of origin rows recorded for the bean.
+      - name: countries
+        description: Sorted distinct countries across the bean's origins.
+      - name: country
+        description: >-
+          Single country for a non-blend with one country, otherwise `[Blend]`, `[Multiple]` or `[Unknown]`.
+      - name: countries_list
+        description: Comma-separated countries, or `[Unknown]` when none are recorded.
+      - name: process
+        description: >-
+          Humanized base process when all origins share one, `[Multiple]` when they differ, or `[Unknown]` when
+          not recorded.
+      - name: elevation_min_m
+        description: Lowest growing elevation across origins, in meters.
+      - name: elevation_max_m
+        description: Highest growing elevation across origins, in meters.
+      - name: elevation
+        description: Display elevation such as `950–1040m` or `1200m`. Null when unknown.
+
+  - name: int_tasting_notes_resolved
+    description: >-
+      Tasting notes with bean_id resolved for every note. Roaster notes already carry it; notes tasted in a cup get
+      it through the cup.
+    columns:
+      - name: note_id
+        description: Primary key.
+        data_tests:
+          - unique
+          - not_null
+      - name: bean_id
+        description: Bean the note describes, resolved through the cup when the note was tasted.
+        data_tests:
+          - not_null

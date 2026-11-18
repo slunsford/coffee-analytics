@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a **Coffee Analytics** project, a dbt-powered data platform for tracking and analyzing personal coffee tasting experiences. The project transforms coffee data from Collections (primary source) and Airtable (historic data) into dimensional models for personal reference and analysis. It follows a standard dbt medallion architecture with staging → intermediate → marts layers.
+This is a **Coffee Analytics** project, a dbt-powered data platform for tracking and analyzing personal coffee tasting experiences. The project transforms data exported from the Bean Counter app (loaded into MotherDuck's `ingest.bean_counter` schema) into dimensional models for personal reference and analysis. Collections and Airtable were earlier sources; their data was imported into Bean Counter and is no longer modeled here (`beans.legacy_coffee_id` keeps the old coffee_id). It follows a standard dbt medallion architecture with staging → intermediate → marts layers.
 
 ## Essential Commands
 
@@ -19,71 +19,65 @@ This is a **Coffee Analytics** project, a dbt-powered data platform for tracking
 - `dbt deps` — Install dependencies from packages.yml
 - `dbt clean` — Clean the target directory
 - `dbt docs generate` — Generate documentation
-- `dbt run-operation generate_base_model --args '{"source_name": "collections", "table_name": "coffees"}'` — Generate base model for a specific source and table
-- `dbt run-operation generate_model_yaml --args '{"model_names": ["coffees"], "include_data_types": true}'` — Generate YAML for a specific model with data types
+- `dbt run-operation generate_base_model --args '{"source_name": "bean_counter", "table_name": "beans"}'` — Generate base model for a specific source and table
+- `dbt run-operation generate_model_yaml --args '{"model_names": ["beans"], "include_data_types": true}'` — Generate YAML for a specific model with data types
 
 ### Evidence Reports
 - `npm run dev --prefix ./reports` — Start Evidence dev server for interactive reports
 - `npm run build --prefix ./reports` — Build Evidence reports for production
 
 ### Model Selection Patterns
-- `dbt build --select staging.collections` — Build all Collections staging models (primary source)
-- `dbt build --select staging.airtable` — Build all Airtable staging models (historic data)
+- `dbt build --select staging.bean_counter` — Build all Bean Counter staging models
 - `dbt build --select marts` — Build all mart tables
-- `dbt build --select +coffees` — Build coffees model with all dependencies
+- `dbt build --select +cups` — Build the cups mart with all dependencies
 
 ## Architecture Overview
 
 ### Data Sources
-- **Collections**: Primary coffee database for current coffee tracking and ratings
-- **Airtable**: Historic coffee data source, maintained for legacy data and some reference information
+- **Bean Counter**: The only source. An export of the app's tables (`beans`, `cups`, `origins`, `roasters`, `tasting_notes`, `tasting_note_flavors`, `flavor_nodes`, `export_info`). Tables and columns carry comments in the source database; check them (`duckdb_tables()`/`duckdb_columns()` `comment`) before modeling.
+  - `beans`: one row per coffee, not per bag. Nothing per-bag (roast date, price) exists.
+  - `cups`: one row per drink; the verdict (good/fine/bad) is optional. `verdict_value` (1/0/-1) sums to net score.
+  - `origins`: zero or more rows per bean (one per disclosed blend component). `is_blend` is declared by the roaster, not derived.
+  - `tasting_notes`: roaster notes carry `bean_id`; notes tasted in a cup carry `cup_id` only. `tasting_note_flavors` maps notes onto the `flavor_nodes` tree; roll up with `root_slug`/path, not `slug` (which can go stale after a re-parent).
 
 ### Model Layers
 
 **Staging (`models/staging/`)**
 - Clean and standardize source data
-- Naming: `stg_source__entity.sql` (e.g., `stg_collections__coffees`, `stg_airtable__ratings`)
+- Naming: `stg_source__entity.sql` (e.g., `stg_bean_counter__beans`, `stg_bean_counter__cups`)
 - Materialized as views
 - Handle data type conversions and basic transformations
 
 **Intermediate (`models/intermediate/`)**
 - Business logic transformations and joins
-- Naming: `int_entity_action.sql` (e.g., `int_flavor_profiles_unnested`)
+- Naming: `int_entity_action.sql` (e.g., `int_beans_origins_summarized`)
 - Materialized as views
 - Denormalization and data enrichment
 
 **Marts (`models/marts/`)**
 - Final dimensional models for personal coffee analytics
-- Naming: entity-focused tables (e.g., `coffees`, `ratings`, `flavors`)
+- Naming: entity-focused tables (e.g., `beans`, `cups`, `bean_flavors`)
 - Materialized as tables
 - Only marts layer is exposed to end users via Evidence reports
 
 ### Key Domains
-- **Coffees**: Coffee records with roasters, origins, and characteristics
-- **Ratings**: Personal coffee ratings and tasting notes
-- **Flavors**: Flavor profiles and categories
-- **Origins**: Geographic coffee origins and regions
-- **Roasters**: Coffee roasting companies
+- **Beans**: One row per coffee, with roaster, an origin summary, roaster notes, and cup totals
+- **Cups**: Logged drinks and their verdicts; the fact table reports are built on, denormalized with bean attributes
+- **Origins**: Per-component growing origin and process detail
+- **Roasters**: Coffee roasting companies with rolled-up totals
+- **Flavors**: The `flavor_nodes` tree, `tasting_notes`, and the `bean_flavors` bridge (one row per bean and flavor)
 
 ## Data Modeling Patterns
 
 ### Key Identifiers
-- Primary keys use `_id` suffix (e.g., `coffee_id`, `roaster_id`)
-- Surrogate keys for flavor profiles use `_key` suffix
-- Boolean fields use `is_` prefix (e.g., `is_available`, `is_decaf`)
+- Primary keys use `_id` suffix (e.g., `bean_id`, `cup_id`, `roaster_id`); flavor nodes are keyed by `flavor_slug`
+- Boolean fields use `is_` prefix (e.g., `is_blend`, `is_decaf`, `is_liked`)
 - Cross-references maintained via relationship tests
-
-### Primary Entities
-- **Coffees**: Central entity representing individual coffee records
-- **Ratings**: Individual coffee ratings and evaluations
-- **Flavors**: Flavor categories and profiles
-- **Origins**: Geographic origins and regions
+- Verdicts: `verdict` is Good/Fine/Bad (Unrated when missing); `verdict_value` is 1/0/-1; net score is `sum(verdict_value)`
 
 ### Custom Macros (`macros/`)
-- `rating_value.sql` — Converts rating text to numeric values (-1, 0, 1)
-- `extract_id.sql` — Extracts ID from Airtable relationship fields
-- `extract_ids.sql` — Extracts multiple IDs from Airtable array fields
-- `dedupe.sql` — Deduplication logic for source data
+- `generate_schema_name.sql` — Uses a custom `+schema` as-is instead of prefixing the target schema
+- `humanize.sql` — Turns camelCase enum values (`mediumLight`) and lowercase words (`good`) into labels
 
 ## Development Standards
 
@@ -110,7 +104,7 @@ This is a **Coffee Analytics** project, a dbt-powered data platform for tracking
 with
 
 source as (
-    from {{ source('collections', 'coffees') }}
+    from {{ source('bean_counter', 'beans') }}
 ),
 
 final as (
@@ -125,11 +119,11 @@ from final
 - Place aliases on same line with `as` keyword
 - Example:
 ```sql
-     select coffee_id,
-            coffee_name,
+     select bean_id,
+            bean_name,
             roaster_id,
-            coalesce(country, '[Blend]') as country,
-            rating_value
+            coalesce(country, '[Unknown]') as country,
+            verdict_value
 ```
 
 **Join and Keyword Alignment**
@@ -138,12 +132,12 @@ from final
 - Use `using` keyword when possible for natural joins on identical column names
 - Example:
 ```sql
-       from coffees
+       from beans
   left join origins
-      using (origin_id)
+      using (bean_id)
   left join roasters
       using (roaster_id)
-      where is_available = true
+      where is_decaf = true
 ```
 
 **CTE Structure**
@@ -153,10 +147,10 @@ from final
 - Separate CTEs with blank lines and clear comments
 
 ### Field Naming Conventions
-- **Identifiers**: Use `_id` suffix (coffee_id, roaster_id)
-- **Booleans**: Use `is_` prefix (is_available, is_decaf, is_favorite)
+- **Identifiers**: Use `_id` suffix (bean_id, roaster_id)
+- **Booleans**: Use `is_` prefix (is_blend, is_decaf, is_liked)
 - **Dates**: Use clear suffixes (`_at` for timestamps, `_date` for dates)
-- **Categorical**: Use descriptive names (availability, caffeine_content)
+- **Categorical**: Use descriptive names (verdict, caffeine_content)
 - **Nulls**: Handle with coalesce and meaningful defaults
 
 ### Model Materialization

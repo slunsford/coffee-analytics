@@ -6,10 +6,10 @@ title: Roasters & Origins
 {@partial "coffee-filters.md"}
 
 ```sql coffee_counts
-select count(distinct country) as countries,
+select count(distinct country) filter (where country not like '[%') as countries,
        count(distinct roaster_id) as roasters,
-       count(distinct coffee_id) as coffees,
-  from ${filtered_coffees}
+       count(distinct bean_id) as coffees,
+  from ${filtered_cups}
  group by all
 ```
 
@@ -35,25 +35,25 @@ select count(distinct country) as countries,
 
 ```sql coffee_sankey
 select country,
-       roaster,
-       count(distinct coffee_id) as coffees
-  from ${filtered_coffees}
+       roaster_name,
+       count(distinct bean_id) as coffees
+  from ${filtered_cups}
  group by all
 ```
 
 ```sql coffee_sankey_with_process
 select country as source,
        process as target,
-       count(distinct coffee_id) as coffees
-  from ${filtered_coffees}
+       count(distinct bean_id) as coffees
+  from ${filtered_cups}
  group by all
 
 union all
 
 select process as source,
-       roaster as target,
-       count(distinct coffee_id) as coffees
-  from ${filtered_coffees}
+       roaster_name as target,
+       count(distinct bean_id) as coffees
+  from ${filtered_cups}
  group by all
 ```
 
@@ -63,7 +63,7 @@ select process as source,
     <SankeyDiagram
       data={coffee_sankey}
       sourceCol=country
-      targetCol=roaster
+      targetCol=roaster_name
       valueCol=coffees
       linkColor=gradient
     />
@@ -82,24 +82,24 @@ select process as source,
 
 # Roasters
 
-### Ratings by Roaster
+### Verdicts by Roaster
 
-```sql ratings_by_roaster
-select roaster,
-       rating,
-       rating_value,
-       count(*) as ratings,
-  from ${filtered_coffees}
+```sql verdicts_by_roaster
+select roaster_name,
+       verdict,
+       verdict_value,
+       count(*) as cups,
+  from ${filtered_cups}
  group by all
- order by rating_value desc
+ order by verdict_value desc
 ```
 
 <BarChart
-    data={ratings_by_roaster}
+    data={verdicts_by_roaster}
     connectGroup="roasters"
-    x=roaster
-    y=ratings
-    series=rating
+    x=roaster_name
+    y=cups
+    series=verdict
     swapXY=true
     sort=false
     colorPalette=goodNeutralBad
@@ -108,51 +108,51 @@ select roaster,
 ### Net Score by Roaster
 
 ```sql net_score_by_roaster
-select roaster,
-       sum(rating_value) as net_liked,
-       count(*) as coffees_rated,
-       net_liked/coffees_rated * 100 as net_score,
-  from ${filtered_coffees}
+select roaster_name,
+       sum(verdict_value) as net_liked,
+       count(*) as cups_rated,
+       net_liked/cups_rated * 100 as net_score,
+  from ${filtered_cups}
  group by all
  order by all
 ```
 
 <BubbleChart
     data={net_score_by_roaster}
-    x=roaster
+    x=roaster_name
     y=net_score
-    size=coffees_rated
+    size=cups_rated
     yFmt=num0
     sort=false
 />
 
-```sql historical_ratings_by_roaster
-select roaster,
-       date_trunc('year', rated_date) as date_year,
-       year(rated_date)::string as year,
+```sql historical_verdicts_by_roaster
+select roaster_name,
+       date_trunc('year', brewed_date) as date_year,
+       year(brewed_date)::string as year,
        count_if(is_liked) as liked,
        count_if(is_disliked) as disliked,
-       sum(rating_value) as net_liked,
-       count(*) as coffees_rated,
-       net_liked/coffees_rated * 100 as net_score,
-  from ${filtered_ratings}
+       sum(verdict_value) as net_liked,
+       count(*) as cups_rated,
+       net_liked/cups_rated * 100 as net_score,
+  from ${filtered_cups}
  group by all
- order by year, roaster
+ order by year, roaster_name
 ```
 
 ```sql roasters_list
-select distinct roaster
-  from ${historical_ratings_by_roaster}
+select distinct roaster_name
+  from ${historical_verdicts_by_roaster}
  order by all
 ```
 
 <LineChart
-    data={historical_ratings_by_roaster}
+    data={historical_verdicts_by_roaster}
     connectGroup="roasters"
     x=year
     y=net_score
     yMax=100
-    series=roaster
+    series=roaster_name
     seriesOrder={roasters_list}
     sort=false
     markers=true
@@ -160,31 +160,31 @@ select distinct roaster
 
 # Processes
 
-### Ratings by Process
+### Verdicts by Process
 
-```sql ratings_by_process
+```sql verdicts_by_process
 select process,
-       rating,
-       rating_value,
-       count(*) as ratings,
-  from ${filtered_coffees}
+       verdict,
+       verdict_value,
+       count(*) as cups,
+  from ${filtered_cups}
  where process not like '%Unknown%'
  group by all
- order by rating_value desc
+ order by verdict_value desc
 ```
 
 ```sql processes_list
 select distinct process
-  from ${historical_ratings_by_process}
+  from ${historical_verdicts_by_process}
  order by all
 ```
 
 <BarChart
-    data={ratings_by_process}
+    data={verdicts_by_process}
     connectGroup="processes"
     x=process
-    y=ratings
-    series=rating
+    y=cups
+    series=verdict
     swapXY=true
     sort=false
     colorPalette=goodNeutralBad
@@ -194,10 +194,10 @@ select distinct process
 
 ```sql net_score_by_process
 select process,
-       sum(rating_value) as net_liked,
-       count(*) as coffees_rated,
-       net_liked/coffees_rated * 100 as net_score,
-  from ${filtered_coffees}
+       sum(verdict_value) as net_liked,
+       count(*) as cups_rated,
+       net_liked/cups_rated * 100 as net_score,
+  from ${filtered_cups}
  where process not like '%Unknown%'
  group by all
  order by all
@@ -207,28 +207,28 @@ select process,
     data={net_score_by_process}
     x=process
     y=net_score
-    size=coffees_rated
+    size=cups_rated
     sort=false
     yFmt=num0
 />
 
-```sql historical_ratings_by_process
+```sql historical_verdicts_by_process
 select process,
-       date_trunc('year', rated_date) as date_year,
-       year(rated_date)::string as year,
+       date_trunc('year', brewed_date) as date_year,
+       year(brewed_date)::string as year,
        count_if(is_liked) as liked,
        count_if(is_disliked) as disliked,
-       sum(rating_value) as net_liked,
-       count(*) as coffees_rated,
-       liked/coffees_rated * 100 as net_score,
-  from ${filtered_ratings}
+       sum(verdict_value) as net_liked,
+       count(*) as cups_rated,
+       liked/cups_rated * 100 as net_score,
+  from ${filtered_cups}
  where process not like '%Unknown%'
  group by all
  order by year, process
 ```
 
 <LineChart
-    data={historical_ratings_by_process}
+    data={historical_verdicts_by_process}
     connectGroup="processes"
     x=year
     y=net_score
@@ -246,10 +246,10 @@ select process,
 select country,
        count_if(is_liked) as liked,
        count_if(is_disliked) as disliked,
-       sum(rating_value) as net_liked,
-       count(*) as coffees_rated,
-       net_liked/coffees_rated * 100 as net_score,
-  from ${filtered_coffees}
+       sum(verdict_value) as net_liked,
+       count(*) as cups_rated,
+       net_liked/cups_rated * 100 as net_score,
+  from ${filtered_cups}
  where country not like '%Blend%'
  group by all
  order by all
@@ -270,7 +270,7 @@ select country,
             {id: 'net_score', fieldClass: 'text-[grey]', valueClass: 'text-[#236aa4] font-bold'},
             {id: 'liked', fieldClass: 'text-[grey]', valueClass: 'text-[#236aa4]'},
             {id: 'disliked', fieldClass: 'text-[grey]', valueClass: 'text-[#a45c23]'},
-            {id: 'coffees_rated', fieldClass: 'text-[grey]'},
+            {id: 'cups_rated', fieldClass: 'text-[grey]'},
         ]}
     />
   </Tab>
@@ -279,7 +279,7 @@ select country,
         data={net_score_by_country}
         x=country
         y=net_score
-        size=coffees_rated
+        size=cups_rated
             yFmt=num0
         sort=false
         connectGroup="countries"
@@ -287,24 +287,24 @@ select country,
   </Tab>
 </Tabs>
 
-```sql ratings_by_country
+```sql verdicts_by_country
 select country,
-       rating,
-       rating_value,
-       count(*) as ratings,
-  from ${filtered_coffees}
+       verdict,
+       verdict_value,
+       count(*) as cups,
+  from ${filtered_cups}
  group by all
- order by rating_value desc
+ order by verdict_value desc
 ```
 
-### Ratings by Country
+### Verdicts by Country
 
 <BarChart
-    data={ratings_by_country}
+    data={verdicts_by_country}
     connectGroup="countries"
     x=country
-    y=ratings
-    series=rating
+    y=cups
+    series=verdict
     swapXY=true
     sort=false
     colorPalette=goodNeutralBad

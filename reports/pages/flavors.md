@@ -4,8 +4,8 @@ queries:
 ---
 
 ```sql flavor_categories_list
-select distinct flavor_category as flavor_category
-  from md.flavor_categories
+select distinct flavor_category
+  from md.flavor_nodes
  order by 1
 ```
 
@@ -20,45 +20,41 @@ select distinct flavor_category as flavor_category
 />
 
 ```sql flavor_ratings
-with filter_flavor_categories as (
-     select distinct flavor_category_group_key
-       from md.flavor_categories
-      where flavor_category in ${inputs.flavor_categories.value}
-)
-
-  from md.flavors
-  join md.flavor_profiles
- using (flavor_id)
-  join md.coffees
- using (flavor_profile_key)
- where flavor_category_group_key in (from filter_flavor_categories)
-   and rated_date between date_add('${inputs.dates.start}'::date, interval 1 day)
-                      and date_add('${inputs.dates.end}'::date, interval 1 day)
+-- One row per rated cup and flavor named on the roaster's bag or in the cup
+select cups.cup_id,
+       cups.verdict,
+       cups.verdict_value,
+       bean_flavors.flavor_name as flavor,
+       bean_flavors.flavor_category,
+  from md.cups
+  join md.bean_flavors
+ using (bean_id)
+ where cups.is_rated
+   and bean_flavors.flavor_category in ${inputs.flavor_categories.value}
+   and cups.brewed_date between date_add('${inputs.dates.start}'::date, interval 1 day)
+                            and date_add('${inputs.dates.end}'::date, interval 1 day)
  order by flavor
 ```
 
 # Flavor Categories
 
-### Ratings by Flavor Category
+### Verdicts by Flavor Category
 
-```sql ratings_by_flavor_category
+```sql verdicts_by_flavor_category
 select flavor_category,
-       rating,
-       rating_value,
-       count(*) as ratings,
+       verdict,
+       verdict_value,
+       count(*) as cups,
   from ${flavor_ratings}
-  join md.flavor_categories
- using (flavor_category_group_key)
- where flavor_category != 'Uncategorized'
  group by all
- order by rating_value desc
+ order by verdict_value desc
 ```
 
 <BarChart
-    data={ratings_by_flavor_category}
+    data={verdicts_by_flavor_category}
     x=flavor_category
-    y=ratings
-    series=rating
+    y=cups
+    series=verdict
     swapXY=true
     sort=false
     colorPalette=goodNeutralBad
@@ -68,13 +64,10 @@ select flavor_category,
 
 ```sql net_score_by_flavor_category
 select flavor_category,
-       sum(rating_value) as net_liked,
-       count(*) as coffees_rated,
-       net_liked/coffees_rated * 100 as net_score,
+       sum(verdict_value) as net_liked,
+       count(*) as cups_rated,
+       net_liked/cups_rated * 100 as net_score,
   from ${flavor_ratings}
-  join md.flavor_categories
- using (flavor_category_group_key)
- where flavor_category != 'Uncategorized'
  group by all
  order by all
 ```
@@ -83,30 +76,30 @@ select flavor_category,
     data={net_score_by_flavor_category}
     x=flavor_category
     y=net_score
-    size=coffees_rated
+    size=cups_rated
     sort=false
     yFmt=num0
 />
 
 # Flavors
 
-### Ratings by Flavor
+### Verdicts by Flavor
 
-```sql ratings_by_flavor
+```sql verdicts_by_flavor
 select flavor,
-       rating,
-       rating_value,
-       count(*) as ratings,
+       verdict,
+       verdict_value,
+       count(*) as cups,
   from ${flavor_ratings}
  group by all
- order by rating_value desc
+ order by verdict_value desc
 ```
 
 <BarChart
-    data={ratings_by_flavor}
+    data={verdicts_by_flavor}
     x=flavor
-    y=ratings
-    series=rating
+    y=cups
+    series=verdict
     swapXY=true
     sort=false
     colorPalette=goodNeutralBad

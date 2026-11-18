@@ -1,0 +1,455 @@
+models:
+  - name: roasters
+    description: >-
+      Dimension of coffee roasters, one row per roaster, with totals rolled up from their beans and the cups brewed
+      from them.
+    columns:
+      - name: roaster_id
+        data_type: varchar
+        description: Primary key.
+        data_tests:
+          - unique
+          - not_null
+      - name: roaster_name
+        data_type: varchar
+        description: Roaster name.
+        data_tests:
+          - not_null
+      - name: website
+        data_type: varchar
+        description: Roaster website URL.
+      - name: location
+        data_type: varchar
+        description: Where the roaster is based.
+      - name: notes
+        data_type: varchar
+        description: Free-text notes about the roaster.
+      - name: beans
+        data_type: bigint
+        description: Number of coffees in the library from this roaster.
+      - name: cups
+        data_type: hugeint
+        description: Number of cups brewed from this roaster's coffees.
+      - name: liked_cups
+        data_type: hugeint
+        description: Cups with a good verdict.
+      - name: disliked_cups
+        data_type: hugeint
+        description: Cups with a bad verdict.
+      - name: net_score
+        data_type: hugeint
+        description: Sum of verdict values (good = 1, fine = 0, bad = -1) across all cups.
+
+  - name: beans
+    description: >-
+      Dimension of coffees in the library, one row per coffee (not per bag), enriched with roaster, a single-row
+      summary of origins, roaster tasting notes and cup totals. Use `origins` for per-component detail.
+    columns:
+      - name: bean_id
+        data_type: varchar
+        description: Primary key.
+        data_tests:
+          - unique
+          - not_null
+      - name: legacy_coffee_id
+        data_type: varchar
+        description: The coffee_id from the legacy Collections/Airtable data. Null for coffees added in the app.
+      - name: bean_name
+        data_type: varchar
+        description: Coffee name as sold.
+        data_tests:
+          - not_null
+      - name: roaster_id
+        data_type: varchar
+        description: Foreign key to roasters. Null for a coffee with no recorded roaster.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('roasters')
+                field: roaster_id
+      - name: roaster_name
+        data_type: varchar
+        description: Roaster name, or `[Unknown]` when no roaster is recorded.
+      - name: is_blend
+        data_type: boolean
+        description: Declared by the roaster, not derived from origin count.
+      - name: origin_count
+        data_type: bigint
+        description: Number of origin rows recorded. Zero when components are undisclosed or unknown.
+      - name: country
+        data_type: varchar
+        description: Single country of origin, or `[Blend]`, `[Multiple]` or `[Unknown]`.
+      - name: countries
+        data_type: varchar
+        description: Comma-separated countries across all origins, or `[Unknown]`.
+      - name: process
+        data_type: varchar
+        description: Base process when all origins share one, otherwise `[Multiple]` or `[Unknown]`.
+      - name: elevation
+        data_type: varchar
+        description: Growing elevation as a display string, e.g. `950–1040m`. Null when unknown.
+      - name: roast_level
+        data_type: varchar
+        description: Roast level label (Light through Dark). Usually null.
+      - name: is_decaf
+        data_type: boolean
+        description: Whether the coffee is decaffeinated.
+      - name: caffeine_content
+        data_type: varchar
+        description: Decaf or Regular.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Decaf', 'Regular']
+      - name: decaf_method
+        data_type: varchar
+        description: Decaffeination method label. Null when not decaf.
+      - name: purchased_date
+        data_type: date
+        description: Date of first purchase.
+      - name: roaster_notes
+        data_type: varchar
+        description: Comma-separated tasting notes printed on the bag, in printed order.
+      - name: cups
+        data_type: bigint
+        description: Number of cups logged for this coffee.
+      - name: rated_cups
+        data_type: bigint
+        description: Cups with a verdict.
+      - name: liked_cups
+        data_type: bigint
+        description: Cups with a good verdict.
+      - name: disliked_cups
+        data_type: bigint
+        description: Cups with a bad verdict.
+      - name: net_score
+        data_type: hugeint
+        description: Sum of verdict values (good = 1, fine = 0, bad = -1) across cups.
+      - name: first_brewed_date
+        data_type: date
+        description: Date of the earliest cup. Null when no cups are logged.
+      - name: last_brewed_date
+        data_type: date
+        description: Date of the most recent cup. Null when no cups are logged.
+      - name: latest_verdict
+        data_type: varchar
+        description: Verdict on the most recent rated cup.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Good', 'Fine', 'Bad']
+      - name: comment
+        data_type: varchar
+        description: Free-text comment.
+
+  - name: cups
+    description: >-
+      Fact table of logged drinks, one row per cup, denormalized with the coffee, roaster, country and process so
+      reports can filter and group without joins. The verdict is optional; unrated cups are labelled `Unrated`.
+    columns:
+      - name: cup_id
+        data_type: varchar
+        description: Primary key.
+        data_tests:
+          - unique
+          - not_null
+      - name: bean_id
+        data_type: varchar
+        description: Foreign key to beans.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('beans')
+                field: bean_id
+      - name: bean_name
+        data_type: varchar
+        description: Coffee name.
+      - name: roaster_id
+        data_type: varchar
+        description: Foreign key to roasters.
+      - name: roaster_name
+        data_type: varchar
+        description: Roaster name.
+      - name: country
+        data_type: varchar
+        description: Country of origin of the coffee, or `[Blend]`, `[Multiple]` or `[Unknown]`.
+      - name: process
+        data_type: varchar
+        description: Base process of the coffee, or `[Multiple]` or `[Unknown]`.
+      - name: is_decaf
+        data_type: boolean
+        description: Whether the coffee is decaffeinated.
+      - name: caffeine_content
+        data_type: varchar
+        description: Decaf or Regular.
+      - name: brewed_date
+        data_type: date
+        description: Local calendar date the cup was brewed.
+      - name: brew_method
+        data_type: varchar
+        description: Brew method, e.g. v60, chemex, aeropress, espresso.
+      - name: verdict
+        data_type: varchar
+        description: Good, Fine, Bad, or Unrated.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Good', 'Fine', 'Bad', 'Unrated']
+      - name: verdict_value
+        data_type: integer
+        description: 1 (good), 0 (fine) or -1 (bad). Null when unrated. Summed, this is net score.
+      - name: is_rated
+        data_type: boolean
+        description: Whether the cup has a verdict.
+      - name: is_liked
+        data_type: boolean
+        description: True when the verdict is good. Null when unrated.
+      - name: is_disliked
+        data_type: boolean
+        description: True when the verdict is bad. Null when unrated.
+      - name: dose_g
+        data_type: double
+        description: Coffee dose in grams.
+      - name: yield_g
+        data_type: double
+        description: Beverage yield in grams.
+      - name: brew_ratio
+        data_type: double
+        description: Yield divided by dose. Null when either is missing.
+      - name: water_temp_c
+        data_type: double
+        description: Water temperature in degrees Celsius.
+      - name: brew_time_s
+        data_type: integer
+        description: Total brew time in seconds.
+      - name: grinder
+        data_type: varchar
+        description: Grinder used.
+      - name: grind_setting
+        data_type: varchar
+        description: Grinder setting as written.
+      - name: acidity_score
+        data_type: integer
+        description: Acidity, 1–5.
+      - name: body_score
+        data_type: integer
+        description: Body, 1–5.
+      - name: sweetness_score
+        data_type: integer
+        description: Sweetness, 1–5.
+      - name: bitterness_score
+        data_type: integer
+        description: Bitterness, 1–5.
+      - name: comment
+        data_type: varchar
+        description: Free-text comment.
+
+  - name: origins
+    description: >-
+      Where a coffee was grown and how it was processed. Zero or more rows per bean: one for a single origin, one per
+      disclosed component for a blend.
+    columns:
+      - name: origin_id
+        data_type: varchar
+        description: Primary key.
+        data_tests:
+          - unique
+          - not_null
+      - name: bean_id
+        data_type: varchar
+        description: Foreign key to beans.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('beans')
+                field: bean_id
+      - name: bean_name
+        data_type: varchar
+        description: Coffee name.
+      - name: origin_position
+        data_type: integer
+        description: 0-based order of the origin within its bean.
+      - name: country
+        data_type: varchar
+        description: Country of origin.
+      - name: region
+        data_type: varchar
+        description: Growing region.
+      - name: farm
+        data_type: varchar
+        description: Farm, estate, washing station or co-operative.
+      - name: producer
+        data_type: varchar
+        description: Producer name.
+      - name: elevation_min_m
+        data_type: integer
+        description: Lower bound of growing elevation in meters, or the single stated elevation.
+      - name: elevation_max_m
+        data_type: integer
+        description: Upper bound of growing elevation in meters.
+      - name: varietals
+        data_type: varchar[]
+        description: Coffee varietals, in printed order.
+      - name: process
+        data_type: varchar
+        description: Base process label (Washed, Natural, Honey, Wet Hulled or Other).
+      - name: fermentation_modifiers
+        data_type: varchar[]
+        description: Fermentation technique labels layered on the base process.
+      - name: process_note
+        data_type: varchar
+        description: Verbatim process wording from the bag.
+      - name: proportion
+        data_type: double
+        description: Share of a blend, 0–1, when stated.
+
+  - name: flavor_nodes
+    description: >-
+      The flavor tree: the SCA flavor wheel plus nodes added by the app. Every node carries its top-level category
+      and second-level subcategory so notes can be rolled up without walking the tree.
+    columns:
+      - name: flavor_slug
+        data_type: varchar
+        description: >-
+          Primary key. Derived from the path when the node was created and never changed, so use `flavor_path` for
+          the current location.
+        data_tests:
+          - unique
+          - not_null
+      - name: flavor_name
+        data_type: varchar
+        description: Display name.
+      - name: parent_flavor_slug
+        data_type: varchar
+        description: Parent node. Null for the nine top-level categories.
+      - name: root_flavor_slug
+        data_type: varchar
+        description: Top-level category node this node falls under.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('flavor_nodes')
+                field: flavor_slug
+      - name: flavor_category
+        data_type: varchar
+        description: Name of the top-level SCA category.
+        data_tests:
+          - not_null
+      - name: flavor_path
+        data_type: varchar
+        description: Current path from the root, e.g. Fruity → Stone Fruit → Plum.
+      - name: flavor_subcategory
+        data_type: varchar
+        description: Name of the second-level ancestor. Null for top-level categories.
+      - name: flavor_depth
+        data_type: integer
+        description: 1 for a top-level category, 2 for its children, and so on.
+      - name: node_origin
+        data_type: varchar
+        description: sca, seedExtension, promoted or user.
+      - name: aliases
+        data_type: varchar[]
+        description: Alternate spellings that map to this node.
+
+  - name: tasting_notes
+    description: >-
+      Tasting descriptors exactly as written, from the roaster's bag or from a cup. Every note is tied to a bean;
+      notes tasted in a cup also carry the cup. Use `bean_flavors` for notes mapped onto the flavor tree.
+    columns:
+      - name: note_id
+        data_type: varchar
+        description: Primary key.
+        data_tests:
+          - unique
+          - not_null
+      - name: bean_id
+        data_type: varchar
+        description: Foreign key to beans, resolved through the cup for notes tasted in a cup.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('beans')
+                field: bean_id
+      - name: cup_id
+        data_type: varchar
+        description: Foreign key to cups. Null for roaster notes.
+      - name: note_source
+        data_type: varchar
+        description: Roaster (printed on the bag) or Me (perceived in the cup).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Roaster', 'Me']
+      - name: note_position
+        data_type: integer
+        description: 0-based printed or typed order.
+      - name: verbatim
+        data_type: varchar
+        description: Exact wording.
+      - name: normalized
+        data_type: varchar
+        description: Lowercased, diacritic-folded, whitespace-collapsed form of the wording.
+      - name: facets
+        data_type: varchar[]
+        description: Texture, acidity and finish attributes that are not flavors, e.g. juicy, bright, clean.
+      - name: is_confirmed
+        data_type: boolean
+        description: Whether the flavor mapping has been accepted.
+      - name: resolution_confidence
+        data_type: double
+        description: Confidence of the flavor mapping, 0–1, when one was recorded.
+      - name: flavors
+        data_type: bigint
+        description: Number of flavor nodes the note maps to.
+      - name: is_mapped
+        data_type: boolean
+        description: Whether the note maps to at least one flavor node.
+
+  - name: bean_flavors
+    description: >-
+      Bridge between coffees and the flavor tree, one row per bean and flavor node. Collapses the note-level mapping
+      so a coffee that names a flavor more than once (e.g. Cherry and Cherry Liqueur) counts it once.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [bean_id, flavor_slug]
+    columns:
+      - name: bean_id
+        data_type: varchar
+        description: Foreign key to beans.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('beans')
+                field: bean_id
+      - name: flavor_slug
+        data_type: varchar
+        description: Foreign key to flavor_nodes.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('flavor_nodes')
+                field: flavor_slug
+      - name: flavor_name
+        data_type: varchar
+        description: Display name of the flavor.
+      - name: flavor_category
+        data_type: varchar
+        description: Top-level SCA category.
+      - name: flavor_subcategory
+        data_type: varchar
+        description: Second-level ancestor. Null for top-level categories.
+      - name: flavor_path
+        data_type: varchar
+        description: Current path from the root.
+      - name: notes
+        data_type: bigint
+        description: Number of notes on the coffee that map to this flavor.
+      - name: note_sources
+        data_type: varchar[]
+        description: Distinct sources of those notes (Roaster, Me).
