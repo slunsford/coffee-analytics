@@ -1,0 +1,79 @@
+sources:
+  - name: bean_counter
+    description: >-
+      Export from the Bean Counter app, loaded into the MotherDuck `ingest` database. Bean Counter tracks a coffee
+      library (beans), the cups brewed from it, roaster tasting notes printed on the bag, and a flavor tree that
+      notes are mapped onto.
+    database: ingest
+    schema: bean_counter
+    loader: bean_counter
+    tables:
+      - name: beans
+        description: >-
+          The coffee library. One row per coffee, not per bag: re-buying a coffee reuses its row, so nothing per-bag
+          (roast date, price, weight) is recorded.
+        columns:
+          - name: bean_id
+            data_tests:
+              - unique
+              - not_null
+          - name: name
+            data_tests:
+              - not_null
+      - name: cups
+        description: >-
+          Logged drinks. One row per cup; the verdict is optional, so a cup can be logged without being rated.
+        columns:
+          - name: cup_id
+            data_tests:
+              - unique
+              - not_null
+          - name: bean_id
+            data_tests:
+              - not_null
+      - name: export_info
+        description: One row describing the export that wrote these tables.
+      - name: flavor_nodes
+        description: >-
+          The flavor tree: the SCA flavor wheel plus nodes added by the app. Depth varies by branch; roll a note up
+          by joining on slug and grouping by root_slug or an ancestor.
+        columns:
+          - name: slug
+            data_tests:
+              - unique
+              - not_null
+      - name: origins
+        description: >-
+          Where a coffee was grown and how it was processed. Zero or more rows per bean: one for a single origin, one
+          per disclosed component for a blend.
+        columns:
+          - name: origin_id
+            data_tests:
+              - unique
+              - not_null
+          - name: bean_id
+            data_tests:
+              - not_null
+      - name: roasters
+        description: Coffee roasters. One row per roaster, referenced by beans.roaster_id.
+        columns:
+          - name: roaster_id
+            data_tests:
+              - unique
+              - not_null
+          - name: name
+            data_tests:
+              - not_null
+      - name: tasting_note_flavors
+        description: >-
+          Bridge from tasting notes to flavor nodes. A compound note such as Cherry Liqueur has one row per node it
+          maps to; an unmapped note has none.
+      - name: tasting_notes
+        description: >-
+          Tasting descriptors exactly as written. Roaster notes come from the bag and carry bean_id; notes you tasted
+          carry cup_id. Mapping onto the flavor tree is in tasting_note_flavors.
+        columns:
+          - name: note_id
+            data_tests:
+              - unique
+              - not_null

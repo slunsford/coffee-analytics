@@ -1,11 +1,11 @@
-```sql rating_dates
-select distinct rated_date
-  from md.ratings
+```sql cup_dates
+select distinct brewed_date
+  from md.cups
+ where is_rated
 ```
 
 <DateRange
     name=dates
-    data={rating_dates}
-    dates=rated_date
+    data={cup_dates}
+    dates=brewed_date
 />
-

@@ -1,0 +1,284 @@
+models:
+  - name: stg_bean_counter__roasters
+    description: Coffee roasters from Bean Counter. One row per roaster.
+    columns:
+      - name: roaster_id
+        description: Primary key. UUID, stable across exports.
+        data_tests:
+          - unique
+          - not_null
+      - name: roaster_name
+        description: Roaster name.
+        data_tests:
+          - not_null
+      - name: website
+        description: Roaster website URL.
+      - name: location
+        description: Where the roaster is based.
+      - name: notes
+        description: Free-text notes about the roaster.
+      - name: added_at
+        description: When the roaster was added to the app.
+
+  - name: stg_bean_counter__beans
+    description: >-
+      The coffee library from Bean Counter. One row per coffee, not per bag, so nothing per-bag (roast date, price,
+      weight) is recorded.
+    columns:
+      - name: bean_id
+        description: Primary key. UUID, stable across exports.
+        data_tests:
+          - unique
+          - not_null
+      - name: legacy_coffee_id
+        description: The coffee_id from the legacy Collections/Airtable data, set by the CSV import. Null for coffees added in the app.
+      - name: bean_name
+        description: Coffee name as sold.
+        data_tests:
+          - not_null
+      - name: roaster_id
+        description: Foreign key to roasters. Null for a coffee with no recorded roaster.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_bean_counter__roasters')
+                field: roaster_id
+      - name: is_blend
+        description: Declared by the roaster, not derived from origin count. A blend may have zero origins when components are undisclosed.
+      - name: roast_level
+        description: Raw roast level (light, mediumLight, medium, mediumDark or dark). Usually null.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['light', 'mediumLight', 'medium', 'mediumDark', 'dark']
+      - name: is_decaf
+        description: Whether the coffee is decaffeinated.
+      - name: decaf_method
+        description: Raw decaf method (co2, swissWater, ethylAcetate, methyleneChloride or unknown). Null when not decaf.
+      - name: purchased_at
+        description: First purchase. Later bags of the same coffee do not move it.
+      - name: purchased_date
+        description: First purchase as a local calendar date.
+      - name: comment
+        description: Free-text comment.
+      - name: added_at
+        description: When the row was created in the app.
+      - name: modified_at
+        description: When the row was last edited in the app.
+
+  - name: stg_bean_counter__cups
+    description: Logged drinks from Bean Counter. One row per cup; the verdict is optional, so a cup can be logged without being rated.
+    columns:
+      - name: cup_id
+        description: Primary key. UUID, stable across exports.
+        data_tests:
+          - unique
+          - not_null
+      - name: legacy_cup_ref
+        description: The cup_ref from the CSV import (bean ref and date). Null for cups logged in the app.
+      - name: bean_id
+        description: Foreign key to beans.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_bean_counter__beans')
+                field: bean_id
+      - name: brewed_at
+        description: When the cup was brewed.
+      - name: brewed_date
+        description: Local calendar date the cup was brewed.
+      - name: brew_method
+        description: Brew method, e.g. v60, chemex, aeropress, espresso.
+      - name: verdict
+        description: good, fine or bad. Null when the cup was not rated.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['good', 'fine', 'bad']
+      - name: verdict_value
+        description: Verdict as 1 (good), 0 (fine) or -1 (bad). Summed, this is net score.
+      - name: dose_g
+        description: Coffee dose in grams.
+      - name: yield_g
+        description: Beverage yield in grams.
+      - name: water_temp_c
+        description: Water temperature in degrees Celsius.
+      - name: brew_time_s
+        description: Total brew time in seconds.
+      - name: grind_setting
+        description: Grinder setting as written.
+      - name: grinder
+        description: Grinder used.
+      - name: acidity_score
+        description: Acidity, 1–5.
+      - name: body_score
+        description: Body, 1–5.
+      - name: sweetness_score
+        description: Sweetness, 1–5.
+      - name: bitterness_score
+        description: Bitterness, 1–5.
+      - name: comment
+        description: Free-text comment.
+      - name: added_at
+        description: When the row was created in the app.
+      - name: modified_at
+        description: When the row was last edited in the app.
+
+  - name: stg_bean_counter__origins
+    description: >-
+      Where a coffee was grown and how it was processed. Zero or more rows per bean: one for a single origin, one per
+      disclosed component for a blend.
+    columns:
+      - name: origin_id
+        description: Primary key. UUID, stable across exports.
+        data_tests:
+          - unique
+          - not_null
+      - name: bean_id
+        description: Foreign key to beans.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_bean_counter__beans')
+                field: bean_id
+      - name: origin_position
+        description: 0-based order of the origin within its bean.
+      - name: country
+        description: Country of origin.
+      - name: region
+        description: Growing region, e.g. Chikmagalur.
+      - name: farm
+        description: Farm, estate, washing station or co-operative.
+      - name: producer
+        description: Producer name.
+      - name: elevation_min_m
+        description: Lower bound of growing elevation in meters, or the single stated elevation.
+      - name: elevation_max_m
+        description: Upper bound of growing elevation in meters.
+      - name: varietals
+        description: Coffee varietals, in printed order.
+      - name: process
+        description: Raw base process only (washed, natural, honey, wetHulled or other).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['washed', 'natural', 'honey', 'wetHulled', 'other']
+      - name: fermentation_modifiers
+        description: Fermentation techniques layered on the base process (anaerobic, carbonicMaceration, coldFermentation, cultured, extended, lactic, thermalShock).
+      - name: process_note
+        description: Verbatim process wording from the bag, e.g. 40h Pichia Culture Washed.
+      - name: proportion
+        description: Share of a blend, 0–1, when stated.
+
+  - name: stg_bean_counter__flavor_nodes
+    description: >-
+      The flavor tree: the SCA flavor wheel plus nodes added by the app. Depth varies by branch; roll a note up by
+      joining on flavor_slug and grouping by root_flavor_slug or an ancestor.
+    columns:
+      - name: flavor_slug
+        description: >-
+          Primary key. Derived from the path when the node was created and never changed, so it can look stale after
+          a re-parent; use flavor_path for the current location.
+        data_tests:
+          - unique
+          - not_null
+      - name: flavor_name
+        description: Display name.
+        data_tests:
+          - not_null
+      - name: parent_flavor_slug
+        description: Foreign key to flavor_slug. Null for the nine top-level SCA categories.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_bean_counter__flavor_nodes')
+                field: flavor_slug
+      - name: root_flavor_slug
+        description: Slug of the top-level SCA category this node falls under.
+      - name: flavor_depth
+        description: 1 for a top-level category, 2 for its children, and so on.
+      - name: flavor_path
+        description: Current path from the root, e.g. Fruity → Stone Fruit → Plum.
+      - name: node_origin
+        description: sca (canonical wheel), seedExtension (shipped by the app), promoted (accepted grouping) or user (created by note mapping or by hand).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['sca', 'seedExtension', 'promoted', 'user']
+      - name: aliases
+        description: Alternate spellings that map to this node, e.g. Cacao for Cocoa.
+      - name: added_at
+        description: When the node was created in the app.
+
+  - name: stg_bean_counter__tasting_notes
+    description: >-
+      Tasting descriptors exactly as written. Roaster notes come from the bag and carry bean_id; notes tasted in a
+      cup carry cup_id.
+    columns:
+      - name: note_id
+        description: Primary key. UUID, stable across exports.
+        data_tests:
+          - unique
+          - not_null
+      - name: bean_id
+        description: Foreign key to beans. Set for notes printed on the bag.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_bean_counter__beans')
+                field: bean_id
+      - name: cup_id
+        description: Foreign key to cups. Set for notes perceived in a cup.
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_bean_counter__cups')
+                field: cup_id
+      - name: note_source
+        description: roaster (printed on the bag) or me (perceived in the cup).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['roaster', 'me']
+      - name: note_position
+        description: 0-based printed or typed order.
+      - name: verbatim
+        description: Exact wording, never normalized or corrected.
+      - name: normalized
+        description: Lowercased, diacritic-folded, whitespace-collapsed form of verbatim.
+      - name: facets
+        description: Texture, acidity and finish attributes that are not flavors, e.g. juicy, bright, clean.
+      - name: is_confirmed
+        description: Whether the flavor mapping has been accepted.
+      - name: resolution_confidence
+        description: Confidence of the flavor mapping, 0–1, when one was recorded.
+      - name: added_at
+        description: When the note was created in the app.
+
+  - name: stg_bean_counter__tasting_note_flavors
+    description: >-
+      Bridge from tasting notes to flavor nodes. A compound note such as Cherry Liqueur has one row per node it maps
+      to; an unmapped note has none.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: [note_id, flavor_slug]
+    columns:
+      - name: note_id
+        description: Foreign key to tasting notes.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_bean_counter__tasting_notes')
+                field: note_id
+      - name: flavor_slug
+        description: Foreign key to flavor nodes.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_bean_counter__flavor_nodes')
+                field: flavor_slug

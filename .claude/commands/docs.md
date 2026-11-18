@@ -40,13 +40,13 @@ Guidelines for adding relationship tests:
 
 Example:
 ```
-  - name: coffee_id
-    description: Foreign key to the coffees table
+  - name: bean_id
+    description: Foreign key to the beans table
     data_tests:
       - not_null
       - relationships:
-          to: ref('coffees')
-          field: coffee_id
+          to: ref('beans')
+          field: bean_id
 ```
 
 ## Coffee Analytics Project Context
@@ -54,18 +54,23 @@ Example:
 When working with this coffee analytics project, consider these domain-specific patterns:
 
 ### Common Entity Relationships
-- `coffee_id` typically references the main coffees mart table
-- `roaster_id` references roaster entities from Collections or Airtable sources
-- `origin_id` references geographic origin data
-- `flavor_profile_key` is a surrogate key for flavor combinations
+- `bean_id` references the beans mart; `cups`, `origins`, `tasting_notes` and `bean_flavors` all point at it
+- `roaster_id` references the roasters mart
+- `flavor_slug` references the flavor_nodes mart
 
-### Rating System
-- Ratings use text values ('Good', 'Fine', 'Bad') converted to numeric via the `rating_value` macro
-- Rating dates are stored as `rated_date`
-- Boolean preferences use `is_favorite`, `is_liked`, `is_disliked`
+### Verdict System
+- Verdicts are `good`/`fine`/`bad` (labelled Good/Fine/Bad in marts, plus Unrated), with `verdict_value` of 1/0/-1
+- Cup dates are stored as `brewed_date`
+- Boolean preferences use `is_liked`, `is_disliked`, `is_rated`
 
 ### Coffee Characteristics
-- Use `is_` prefix for boolean coffee attributes (is_decaf, is_available)
-- Geographic data includes country, world_region, and elevation ranges
-- Process and roast information may have '[Unknown]' defaults
-- Blend coffees use '[Blend]' for country/region fields
+- Use `is_` prefix for boolean coffee attributes (is_decaf, is_blend)
+- Process and country may have '[Unknown]' or '[Multiple]' defaults
+- Blend coffees use '[Blend]' for country
+
+### Key Domains
+- **Beans**: Coffee records with roasters, origins, and cup totals
+- **Cups**: Logged drinks and verdicts
+- **Flavors**: Flavor tree, tasting notes and the bean-to-flavor bridge
+- **Origins**: Geographic origins and processes
+- **Roasters**: Coffee roasting companies

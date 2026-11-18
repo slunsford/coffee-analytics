@@ -29,11 +29,11 @@ models:
     marts:
       +schema: marts
       +materialized: table
+      +persist_docs:
+        relation: true
+        columns: true
       # report_views:
       #   +materialized: view
-
-snapshots:
-  +schema: snapshots
 
 data_tests:
   coffee_analytics:

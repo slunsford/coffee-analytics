@@ -1,30 +1,22 @@
-<Checkbox
-    title="Available only"
-    name=filter_available
-/>
-
-```sql coffee_ratings_history
-select coffees.* exclude (rated_date, rating, rating_value, is_liked, is_disliked),
-       ratings.* exclude (coffee_id, flavor_profile_key)
-  from md.coffees
-  join md.ratings
- using (coffee_id)
+```sql brewed_cups
+-- Only rated cups: every report here is about verdicts
+select cups.*,
+       beans.roaster_notes
+  from md.cups
+  join md.beans
+ using (bean_id)
+ where cups.is_rated
 ```
 
 ```sql dimensions
 select country,
-       roaster,
+       roaster_name,
        process,
-       rating,
-       count(distinct coffee_id) as coffees
-  from ${coffee_ratings_history}
- where rated_date between date_add('${inputs.dates.start}'::date, interval 1 day)
-                      and date_add('${inputs.dates.end}'::date, interval 1 day)
-   and (not ${inputs.filter_available} -- When True, Do not evaluate the next condition
-    or (
-            ${inputs.filter_available} -- Input is set to false
-        and is_available  -- Apply this condition
-    ))
+       verdict,
+       count(distinct bean_id) as coffees
+  from ${brewed_cups}
+ where brewed_date between date_add('${inputs.dates.start}'::date, interval 1 day)
+                       and date_add('${inputs.dates.end}'::date, interval 1 day)
  group by all
 ```
 
@@ -35,21 +27,11 @@ select country,
     multiple
 />
 
-```sql filtered_ratings
-  from ${coffee_ratings_history}
+```sql filtered_cups
+  from ${brewed_cups}
  where ${inputs.selected_dimensions}
-   and rated_date between date_add('${inputs.dates.start}'::date, interval 1 day)
-                      and date_add('${inputs.dates.end}'::date, interval 1 day)
+   and brewed_date between date_add('${inputs.dates.start}'::date, interval 1 day)
+                       and date_add('${inputs.dates.end}'::date, interval 1 day)
        -- For some reason the dates are being set one day before the start/end dates in the picker
- order by coffee_name
-```
-
-```sql filtered_coffees
-  from ${filtered_ratings}
- where is_current
-   and (not ${inputs.filter_available} -- When True, Do not evaluate the next condition
-    or (
-            ${inputs.filter_available} -- Input is set to false
-        and is_available  -- Apply this condition
-    ))
+ order by bean_name, brewed_date
 ```
